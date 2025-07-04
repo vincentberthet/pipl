@@ -1,0 +1,29 @@
+{
+	"$schema": "https://biomejs.dev/schemas/2.0.6/schema.json",
+	"files": {
+		"includes": [
+			"packages/*/*.html",
+			"packages/*/*.json",
+			"packages/*/*.ts",
+			"packages/*/public/**/*.css",
+			"packages/*/src/**/*.css",
+			"packages/*/src/**/*.json",
+			"packages/*/src/**/*.ts",
+			"packages/*/src/**/*.tsx",
+			"*.md",
+			"*.json"
+		]
+	},
+	"linter": {
+		"rules": {
+			"correctness": {
+				"noUnusedImports": "error"
+			}
+		}
+	},
+	"html": {
+		"formatter": {
+			"enabled": true
+		}
+	}
+}

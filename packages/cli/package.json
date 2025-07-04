@@ -1,0 +1,20 @@
+{
+	"name": "@pipl-analytics/cli",
+	"type": "module",
+	"version": "0.1.0",
+	"description": "The CLI for Pipl Analytics",
+	"license": "UNLICENSED",
+	"private": true,
+	"scripts": {
+		"build": "tsc",
+		"dev": "tsc --watch",
+		"typecheck": "tsc --noEmit"
+	},
+	"exports": {
+		".": {
+			"import": "./dist/main.js"
+		}
+	},
+	"dependencies": {},
+	"devDependencies": {}
+}

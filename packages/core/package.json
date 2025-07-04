@@ -1,0 +1,27 @@
+{
+	"name": "@pipl-analytics/core",
+	"type": "module",
+	"version": "0.1.0",
+	"description": "The core for Pipl Analytics",
+	"license": "UNLICENSED",
+	"private": true,
+	"scripts": {
+		"build": "tsc",
+		"dev": "tsc --watch",
+		"typecheck": "tsc --noEmit"
+	},
+	"main": "./dist/index.js",
+	"exports": {
+		".": {
+			"import": "./dist/index.js"
+		},
+		"./analytics": {
+			"import": "./dist/analytics/index.js"
+		},
+		"./grid": {
+			"import": "./dist/grid/index.js"
+		}
+	},
+	"dependencies": {},
+	"devDependencies": {}
+}

@@ -1,0 +1,5 @@
+#!/bin/env node
+
+import { main } from "@pipl-analytics/cli";
+
+main();

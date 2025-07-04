@@ -1,0 +1,14 @@
+{
+	"name": "@pipl-analytics/grid-endpoint",
+	"type": "module",
+	"version": "0.1.0",
+	"description": "The grid endpoint for Pipl Analytics",
+	"license": "UNLICENSED",
+	"private": true,
+	"scripts": {
+		"build": "vite build",
+		"typecheck": "tsc --noEmit"
+	},
+	"dependencies": {},
+	"devDependencies": {}
+}
