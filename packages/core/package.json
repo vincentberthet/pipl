@@ -22,6 +22,7 @@
 			"import": "./dist/grid/index.js"
 		}
 	},
-	"dependencies": {},
-	"devDependencies": {}
+	"dependencies": {
+		"@openai/agents": "^0.0.10"
+	}
 }
