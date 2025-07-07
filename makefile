@@ -6,14 +6,14 @@ help:									## Show this help
 install:
 	@npm install
 
-compile:
-	npx turbo run compile
-
-build:
+build:									## Build the project
 	npx turbo run build
 
-dev:
-	npx turbo run dev
+dev:									## Start the development server
+	npx turbo run build:dev dev
+
+typecheck:								## Run type checks
+	npx turbo run typecheck
 
 lint-check:								## Run lint checks
 	npx turbo run lint:check

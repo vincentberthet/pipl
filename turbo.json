@@ -6,18 +6,21 @@
 			"outputs": ["dist/**"],
 			"dependsOn": ["^build"]
 		},
+		"build:dev": {
+			"outputs": ["dist/**"],
+			"cache": false,
+			"persistent": true
+		},
 		"dev": {
 			"outputs": ["dist/**"],
 			"cache": false,
-			"persistent": true,
-			"dependsOn": ["^dev"]
+			"persistent": true
 		},
 		"typecheck": {
 			"dependsOn": ["^build"]
 		},
 		"//#lint:check": {
-			"cache": false,
-			"dependsOn": ["^build"]
+			"cache": false
 		}
 	}
 }

@@ -6,8 +6,8 @@
 	"license": "UNLICENSED",
 	"private": true,
 	"scripts": {
-		"build": "tsc",
-		"dev": "tsc --watch",
+		"build": "tsc --build --force",
+		"build:dev": "tsc --watch",
 		"typecheck": "tsc --noEmit"
 	},
 	"exports": {
