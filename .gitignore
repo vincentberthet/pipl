@@ -15,3 +15,8 @@
 # Misc
 **/.DS_Store
 **/*.pem
+
+# CLI
+data/**/*
+*.out.md
+*.out.doc*

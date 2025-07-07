@@ -23,6 +23,6 @@
 		}
 	},
 	"dependencies": {
-		"@openai/agents": "^0.0.10"
+		"openai": "^5.8.2"
 	}
 }

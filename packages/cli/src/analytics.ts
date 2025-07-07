@@ -1,20 +1,32 @@
 import { parseArgs } from "node:util";
 
 export function runAnalytics(args: string[]) {
-	const { positionals } = parseArgs({
+	const { values, positionals } = parseArgs({
 		args,
-		options: {},
+		options: {
+			audio: {
+				type: "string",
+				description: "Path to the audio file to analyze",
+			},
+			grid: {
+				type: "string",
+				description: "Path to the grid file to use for the analysis",
+			},
+		},
 		allowPositionals: true,
 	});
 
-	if (positionals.length < 2) {
-		console.log("Usage: pipl-analytics analytics <files>");
-		console.log("Arguments:");
+	if (!values.audio || !values.grid) {
 		console.log(
-			"  <files>  Two or more files including the audio to generate the analytics report with",
+			"Usage: pipl-analytics analytics --audio <audio_file> --grid <grid_file>",
+		);
+		console.log("Arguments:");
+		console.log("  --audio <audio_file>  Path to the audio file to analyze");
+		console.log(
+			"  --grid <grid_file>    Path to the grid file to use for the analysis",
 		);
 		process.exit(0);
 	}
 
-	console.log({ positionals });
+	console.log({ values, positionals });
 }

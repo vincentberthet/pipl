@@ -1,4 +1,4 @@
-#!/bin/env node
+#!/bin/env -S node --env-file .env
 
 import { main } from "@pipl-analytics/cli";
 
