@@ -1,18 +1,4 @@
-import * as fs from "node:fs";
-import type { ChatCompletionContentPart } from "openai/resources";
-
-export const readFile = (path: string): ChatCompletionContentPart => {
-	return {
-		type: "file",
-		file: {
-			filename: path.split("/").pop() || path,
-			file_data: Buffer.from(fs.readFileSync(path)).toString("base64"),
-		},
-		// 	mimeType: "application/pdf",
-	};
-};
-
-export const prompt = `Dans le recrutement, l’entretien structuré consiste à s’entretenir avec les candidats en utilisant une même grille d’entretien. Celle-ci comporte :
+export const PROMPT = `Dans le recrutement, l’entretien structuré consiste à s’entretenir avec les candidats en utilisant une même grille d’entretien. Celle-ci comporte :
 les connaissances (savoirs), les compétences techniques (savoir-faire), et les compétences comportementales (savoir-être) à évaluer
 les questions à poser pour chacune
 les critères de notation pour évaluer les réponses à chaque question
