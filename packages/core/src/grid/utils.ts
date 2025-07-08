@@ -1,4 +1,10 @@
-export const PROMPT = `Dans le recrutement, l’entretien structuré consiste à s’entretenir avec les candidats en utilisant une même grille d’entretien. Celle-ci comporte :
+export const prompt = ({
+	nbDocuments,
+	jobName,
+}: {
+	nbDocuments: number;
+	jobName: string;
+}) => `Dans le recrutement, l’entretien structuré consiste à s’entretenir avec les candidats en utilisant une même grille d’entretien. Celle-ci comporte :
 les connaissances (savoirs), les compétences techniques (savoir-faire), et les compétences comportementales (savoir-être) à évaluer
 les questions à poser pour chacune
 les critères de notation pour évaluer les réponses à chaque question
@@ -16,7 +22,7 @@ Résultat : les résultats obtenus par les actions réalisées sont-ils satisfai
 
 Les critères binaires utilisés pour les questions de connaissances et les questions situationnelles sont spécifiques à chaque question.
 
-Voici 3 documents relatifs au métier de Chef de chantier Ferroviaire. A partir de ces documents, je voudrais que tu génères une grille d’entretien pour évaluer des candidats à ce poste :
+Voici ${nbDocuments} documents relatifs au métier de ${jobName}. A partir de ces documents, je voudrais que tu génères une grille d’entretien pour évaluer des candidats à ce poste :
 3 questions de connaissances liées à ce poste (savoirs)
 3 compétences techniques (savoir-faire) et 3 compétences comportementales (savoir-être). Pour chaque compétence, génère 2 questions comportementales et 2 questions situationnelles 
 les critères de notation pour évaluer les réponses à chaque question : utilise 3 critères binaires pour les questions de connaissances et les questions situationnelles`;
