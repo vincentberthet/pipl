@@ -19,3 +19,6 @@
 # CLI
 data/**/*
 *.out.*
+
+# Test
+/test
