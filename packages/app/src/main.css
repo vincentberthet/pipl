@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+@plugin "daisyui" {
+	themes: corporate;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+
+html {
+	height: 100%;
+	width: 100%;
+}
+
+body {
+	min-height: 100%;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+}
+
+main {
+	@apply max-w-5xl mx-auto grow w-auto flex p-2;
+	width: 100%;
+}
