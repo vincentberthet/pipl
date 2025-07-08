@@ -31,45 +31,45 @@ Voici la grille d'entretien au format JSON à utiliser pour l'analyse : {{grid}}
 
 Voici la transcription de l'entretien au format JSON à utiliser pour l'analyse : {{transcript}}`;
 
-const analyticsSchema = z.object({
-	questions: z.array(
-		z.object({
-			question: z.string().meta({
-				description: "La question de la grille d'évaluation",
-			}),
-			criterias: z.array(
-				z.object({
-					criteria: z.string().meta({
-						description: "Le critère analysé",
-					}),
-					passes: z.boolean().meta({
-						description: "Si le candidat valide le critère",
-					}),
-					answer: z
-						.object({
-							text: z.string().meta({
-								description:
-									"La transcription de la réponse du candidat permettant de valider le critère",
-							}),
-							answerTimeCode: z.string().meta({
-								description:
-									"Le timecode de la réponse du candidat, sous la forme hh:mm:ss",
-							}),
-						})
-						.nullable()
-						.meta({
-							description:
-								"Si le candidat valide le critère, la réponse du candidat, sinon null",
-						}),
-				}),
-			),
-			questionTimeCode: z.string().nullable().meta({
-				description:
-					"Si la question a été posée par le recruteur, le timecode de la question du recruteur, sous la forme hh:mm:ss, sinon null",
-			}),
+const filledGridSchema = z.array(
+	z.object({
+		question: z.string().meta({
+			description: "La question de la grille d'évaluation",
 		}),
-	),
-});
+		criterias: z.array(
+			z.object({
+				criteria: z.string().meta({
+					description: "Le critère analysé",
+				}),
+				passes: z.boolean().meta({
+					description: "Si le candidat valide le critère",
+				}),
+				answer: z
+					.object({
+						text: z.string().meta({
+							description:
+								"La transcription de la réponse du candidat permettant de valider le critère",
+						}),
+						answerTimeCode: z.string().meta({
+							description:
+								"Le timecode de la réponse du candidat, sous la forme hh:mm:ss",
+						}),
+					})
+					.nullable()
+					.meta({
+						description:
+							"Si le candidat valide le critère, la réponse du candidat, sinon null",
+					}),
+			}),
+		),
+		questionTimeCode: z.string().nullable().meta({
+			description:
+				"Si la question a été posée par le recruteur, le timecode de la question du recruteur, sous la forme hh:mm:ss, sinon null",
+		}),
+	}),
+);
+
+export type FilledGrid = z.infer<typeof filledGridSchema>;
 
 export async function fillGridWithInterview(
 	questions: Questions,
@@ -89,7 +89,7 @@ export async function fillGridWithInterview(
 			},
 			maxOutputTokens: 256_000,
 			responseMimeType: "application/json",
-			responseJsonSchema: z.toJSONSchema(analyticsSchema),
+			responseJsonSchema: z.toJSONSchema(filledGridSchema),
 			temperature: 0,
 			systemInstruction: ANALYTICS_SYSTEM_PROMPT,
 		},
@@ -100,7 +100,7 @@ export async function fillGridWithInterview(
 		chunks.push(chunk.text ?? "");
 	}
 
-	const { data, error } = analyticsSchema.safeParse(
+	const { data, error } = filledGridSchema.safeParse(
 		JSON.parse(chunks.join("") || "null"),
 	);
 
