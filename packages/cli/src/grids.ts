@@ -2,9 +2,18 @@ import { parseArgs } from "node:util";
 import { generateGridAgent } from "@pipl-analytics/core/grid";
 
 export async function runGrids(args: string[]) {
-	const { positionals: files } = parseArgs({
+	const { positionals: files, values } = parseArgs({
 		args,
-		options: {},
+		options: {
+			jobName: {
+				type: "string",
+				short: "j",
+				default: "Chef de chantier Ferroviaire",
+				alias: "job",
+				description:
+					"Le nom du poste pour lequel générer la grille d'entretien",
+			},
+		},
 		allowPositionals: true,
 	});
 
@@ -15,14 +24,13 @@ export async function runGrids(args: string[]) {
 		process.exit(0);
 	}
 
-	const grid = await generateGridAgent(files);
+	const grid = await generateGridAgent(files, values.jobName);
 
 	if (!grid) {
 		console.error("Failed to generate grid.");
 		process.exit(1);
 	}
 
-	console.log("Generated grid:");
 	console.log(grid);
 
 	process.exit(0);
