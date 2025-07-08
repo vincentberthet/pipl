@@ -24,6 +24,8 @@ Résultat : les résultats obtenus par les actions réalisées sont-ils satisfai
 
 Les critères binaires utilisés pour les questions de connaissances et les questions situationnelles sont spécifiques à chaque question.
 
+Les questions ne doivent faire que 1 phrase. Les questions doivent être courtes et concises.
+
 Voici ${nbDocuments} documents relatifs au métier de ${jobName}. A partir de ces documents, je voudrais que tu génères une grille d’entretien pour évaluer des candidats à ce poste :
 3 questions de connaissances liées à ce poste (savoirs)
 3 compétences techniques (savoir-faire) et 3 compétences comportementales (savoir-être). Pour chaque compétence, génère 2 questions comportementales et 2 questions situationnelles 
@@ -60,7 +62,9 @@ export const printGrid = (grid: GridSchema, jobName: string) => {
 	let output = `# Grille d’entretien – ${jobName}\n`;
 
 	grid.forEach((element, index) => {
-		output += `\n## Question ${index + 1}. ${element.question}\n`;
+		console.warn();
+		console.warn(element);
+		output += `\n## Question ${index + 1}. ${element.question}\n\n`;
 
 		if ("criterias" in element && element.criterias) {
 			element.criterias.forEach((criteria, criteriaIndex) => {
