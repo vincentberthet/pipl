@@ -71,8 +71,6 @@ export const printGrid = (grid: GridSchema, jobName: string) => {
 	let output = `# Grille d’entretien – ${jobName}\n`;
 
 	grid.forEach((element, index) => {
-		console.warn();
-		console.warn(element);
 		output += `\n## Question ${index + 1}. ${element.question}\n\n`;
 
 		if ("criterias" in element && element.criterias) {

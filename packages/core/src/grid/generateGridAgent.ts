@@ -20,7 +20,7 @@ export const generateGridAgent = async (
 		prompt({ nbDocuments: readedFiles.length, jobName }),
 	]);
 
-	console.warn("Generating grid...");
+	console.debug("Generating grid...");
 	const response = await gemini.models.generateContentStream({
 		model: "gemini-2.5-flash",
 		contents,
@@ -30,7 +30,7 @@ export const generateGridAgent = async (
 		},
 	});
 
-	console.warn("Grid generated, parsing response...");
+	console.debug("Grid generated, parsing response...");
 
 	const chunks = [];
 	for await (const chunk of response) {
@@ -46,5 +46,5 @@ export const generateGridAgent = async (
 		throw new Error("parse_message_error");
 	}
 
-	return printGrid(data, jobName);
+	printGrid(data, jobName);
 };
