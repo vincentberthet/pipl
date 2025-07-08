@@ -15,14 +15,13 @@ export async function runGrids(args: string[]) {
 		process.exit(0);
 	}
 
-	const grid = await generateGridAgent(files);
+	const grid = await generateGridAgent(files, "Chef de chantier Ferroviaire");
 
 	if (!grid) {
 		console.error("Failed to generate grid.");
 		process.exit(1);
 	}
 
-	console.log("Generated grid:");
 	console.log(grid);
 
 	process.exit(0);

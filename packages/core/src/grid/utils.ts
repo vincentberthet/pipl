@@ -1,3 +1,5 @@
+import { z } from "zod/v4";
+
 export const prompt = ({
 	nbDocuments,
 	jobName,
@@ -26,3 +28,49 @@ Voici ${nbDocuments} documents relatifs au métier de ${jobName}. A partir de ce
 3 questions de connaissances liées à ce poste (savoirs)
 3 compétences techniques (savoir-faire) et 3 compétences comportementales (savoir-être). Pour chaque compétence, génère 2 questions comportementales et 2 questions situationnelles 
 les critères de notation pour évaluer les réponses à chaque question : utilise 3 critères binaires pour les questions de connaissances et les questions situationnelles`;
+
+const question = z.string().meta({
+	description: "La question de la grille d'évaluation",
+});
+
+const binaryCriteriaSchema = z.object({
+	question,
+	criterias: z.array(
+		z.string().meta({
+			description: "Un critère binaire pour évaluer une réponse",
+		}),
+	),
+});
+
+const STARCriteriaSchema = z.object({ question });
+
+export const gridSchema = z
+	.array(z.union([binaryCriteriaSchema, STARCriteriaSchema]))
+	.meta({
+		description: "La grille d'entretien structurée",
+	});
+
+export type GridSchema = z.infer<typeof gridSchema>;
+
+export const printGrid = (grid: GridSchema, jobName: string) => {
+	if (grid.length === 0) {
+		return "Aucune question trouvée dans la grille.";
+	}
+
+	let output = `# Grille d’entretien – ${jobName}\n\n`;
+
+	grid.forEach((element, index) => {
+		output += `## Question ${index + 1}. ${element.question}\n\n`;
+
+		if ("criterias" in element && element.criterias) {
+			element.criterias.forEach((criteria, criteriaIndex) => {
+				output += `- Critère ${criteriaIndex + 1} (Oui/Non): ${criteria}\n`;
+			});
+		} else {
+			output +=
+				"Critères de la méthode STAR :\n\n- Critère 1 : Situation\n- Critère 2 : Tâche\n- Critère 3 : Actions\n- Critère 4 : Résultats\n";
+		}
+	});
+
+	return output;
+};

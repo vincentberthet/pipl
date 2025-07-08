@@ -1,9 +1,13 @@
 import * as fs from "node:fs/promises";
 import { createPartFromBase64, createUserContent } from "@google/genai";
+import { z } from "zod/v4";
 import { gemini } from "../commons/gemini.js";
-import { prompt } from "./utils.js";
+import { gridSchema, printGrid, prompt } from "./utils.js";
 
-export const generateGridAgent = async (pathToFiles: string[]) => {
+export const generateGridAgent = async (
+	pathToFiles: string[],
+	jobName: string,
+) => {
 	const readedFiles = await Promise.all(
 		pathToFiles.map(async (pathToFile) => await fs.readFile(pathToFile)),
 	);
@@ -13,16 +17,34 @@ export const generateGridAgent = async (pathToFiles: string[]) => {
 
 	const contents = createUserContent([
 		...encodedFiles,
-		prompt({
-			nbDocuments: readedFiles.length,
-			jobName: "Chef de chantier Ferroviaire",
-		}),
+		prompt({ nbDocuments: readedFiles.length, jobName }),
 	]);
 
-	const response = await gemini.models.generateContent({
-		model: "gemini-2.0-flash",
+	console.warn("Generating grid...");
+	const response = await gemini.models.generateContentStream({
+		model: "gemini-2.5-flash",
 		contents,
+		config: {
+			responseMimeType: "application/json",
+			responseJsonSchema: z.toJSONSchema(gridSchema),
+		},
 	});
 
-	return response.text;
+	console.warn("Grid generated, parsing response...");
+
+	const chunks = [];
+	for await (const chunk of response) {
+		chunks.push(chunk.text ?? "");
+	}
+
+	const { data, error } = gridSchema.safeParse(
+		JSON.parse(chunks.join("") || "null"),
+	);
+
+	if (!data) {
+		console.error("Failed to parse model reponse", error);
+		throw new Error("parse_message_error");
+	}
+
+	return printGrid(data, jobName);
 };
