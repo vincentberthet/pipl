@@ -2,7 +2,7 @@ import * as fs from "node:fs/promises";
 import { createPartFromBase64, createUserContent } from "@google/genai";
 import { z } from "zod/v4";
 import { gemini } from "../commons/gemini.js";
-import { gridSchema, printGrid, prompt } from "./utils.js";
+import { gridSchema, printGridDocx, prompt } from "./utils.js";
 
 export const generateGridAgent = async (
 	pathToFiles: string[],
@@ -46,5 +46,5 @@ export const generateGridAgent = async (
 		throw new Error("parse_message_error");
 	}
 
-	printGrid(data, jobName);
+	await printGridDocx(data, jobName);
 };
