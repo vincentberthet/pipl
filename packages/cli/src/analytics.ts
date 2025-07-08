@@ -1,7 +1,9 @@
 import { parseArgs } from "node:util";
 
-export function runAnalytics(args: string[]) {
-	const { values, positionals } = parseArgs({
+import { runAnalyticsAgent } from "@pipl-analytics/core/analytics";
+
+export async function runAnalytics(args: string[]) {
+	const { values } = parseArgs({
 		args,
 		options: {
 			audio: {
@@ -28,5 +30,5 @@ export function runAnalytics(args: string[]) {
 		process.exit(0);
 	}
 
-	console.log({ values, positionals });
+	await runAnalyticsAgent(values.audio, values.grid);
 }

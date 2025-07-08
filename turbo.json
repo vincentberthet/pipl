@@ -9,7 +9,8 @@
 		"build:dev": {
 			"outputs": ["dist/**"],
 			"cache": false,
-			"persistent": true
+			"persistent": true,
+			"dependsOn": ["^build"]
 		},
 		"dev": {
 			"outputs": ["dist/**"],
