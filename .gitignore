@@ -16,9 +16,10 @@
 **/.DS_Store
 **/*.pem
 
-# CLI
-data/**/*
-*.out.*
-
 # Test
 /test
+**/data/**/*
+!data/.gitkeep
+**/out/**/*
+!**/out/.gitkeep
+*.out.*
