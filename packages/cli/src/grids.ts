@@ -24,14 +24,7 @@ export async function runGrids(args: string[]) {
 		process.exit(0);
 	}
 
-	const grid = await generateGridAgent(files, values.jobName);
-
-	if (!grid) {
-		console.error("Failed to generate grid.");
-		process.exit(1);
-	}
-
-	console.log(grid);
+	await generateGridAgent(files, values.jobName);
 
 	process.exit(0);
 }
