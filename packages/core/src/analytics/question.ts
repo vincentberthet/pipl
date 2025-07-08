@@ -14,16 +14,28 @@ Tu respectes les instructions suivantes :
 - Ne modifie pas les questions existantes ni les critères, tu dois les reprendre tels quels.
 - Ne réponds pas aux questions, tu dois uniquement extraire les questions et les critères de validation.
 
-Liste les questions et les critères de validation pour chaque question du document joint. Le document contient une grille d'entretien structuré.`;
+Liste les questions et les critères de validation pour chaque catégorie du document joint. Le document contient une grille d'entretien structuré.`;
 
 const questionsSchema = z.array(
 	z.object({
-		question: z.string().meta({
-			description: "La question",
+		category: z.string().meta({
+			description: "La catégorie de la question",
 		}),
-		criterias: z.array(z.string()).meta({
-			description: "Les critères de validation de la question",
-		}),
+		questions: z
+			.array(
+				z.object({
+					question: z.string().meta({
+						description: "La question",
+					}),
+					criterias: z.array(z.string()).meta({
+						description: "Les critères de validation de la question",
+					}),
+				}),
+			)
+			.meta({
+				description:
+					"Les questions de la catégorie et leurs critères de validation",
+			}),
 	}),
 );
 
@@ -55,20 +67,26 @@ export async function extractQuestionsFromGrid(gridPath: string) {
 		throw new Error("parse_message_error");
 	}
 
-	return data.map(({ question, criterias }) => {
+	return data.map(({ category, questions }) => {
 		return {
-			question: question.trim(),
-			criterias: criterias.flatMap((criteria) => {
-				const trimmedCriteria = criteria.trim();
-				if (trimmedCriteria.toLocaleUpperCase().includes("STAR")) {
-					return [
-						"Situation: Le candidat doit décrire une situation ou un contexte spécifique.",
-						"Tâche: Le candidat doit expliquer la tâche ou le défi qu'il a rencontré dans cette situation.",
-						"Action: Le candidat doit décrire l'action qu'il a entreprise pour résoudre le problème.",
-						"Résultat: Le candidat doit expliquer le résultat de ses actions.",
-					];
-				}
-				return trimmedCriteria ? [trimmedCriteria] : [];
+			category,
+			questions: questions.map(({ question, criterias }) => {
+				return {
+					question: question.trim(),
+					criterias: criterias.flatMap((criteria) => {
+						const trimmedCriteria = criteria.trim();
+						if (trimmedCriteria.toLocaleUpperCase().includes("STAR")) {
+							return [
+								"Situation: Le candidat doit décrire une situation ou un contexte spécifique.",
+								"Tâche: Le candidat doit expliquer la tâche ou le défi qu'il a rencontré dans cette situation.",
+								"Action: Le candidat doit décrire l'action qu'il a entreprise pour résoudre le problème.",
+								"Résultat: Le candidat doit expliquer le résultat de ses actions.",
+							];
+						}
+
+						return trimmedCriteria ? [trimmedCriteria] : [];
+					}),
+				};
 			}),
 		};
 	});

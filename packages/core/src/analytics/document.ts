@@ -16,18 +16,24 @@ ${transcript
 			`* **${line.speaker === "recruiter" ? "Recruteur" : "Candidat"} :** ${line.text}`,
 	)
 	.join("\n")}
+
 ## Grille d'évaluation
 ${filledGrid
-	.map((question) => {
-		return `* ${question.question}\n${question.criterias
-			.map(
-				(criteria) =>
-					`  * **Critère :** ${criteria.criteria} ${criteria.passes ? "✅" : "❌"}\n` +
-					(criteria.passes
-						? `	**Réponse du candidat :** ${criteria.answer?.text}`
-						: ""),
-			)
-			.join("\n")}`;
+	.map(({ category, questions }) => {
+		return `### ${category}
+		${questions
+			.map(({ question, criterias }, i) => {
+				return `#### Question ${i + 1} : ${question}
+${criterias
+	.map(
+		({ criteria, passes, answer }, i) =>
+			`* ${passes ? "✅" : "❌"} **Critère ${i + 1} :** ${criteria}` +
+			(passes ? `**\nRéponse du candidat :** ${answer?.text}` : ""),
+	)
+	.join("\n")}`;
+			})
+			.join("\n")}
+`;
 	})
 	.join("\n\n")}`;
 
@@ -85,48 +91,80 @@ export async function writeDocxOutput(
 						],
 						heading: docx.HeadingLevel.HEADING_2,
 					}),
-					...filledGrid.flatMap((question, i) => {
+					...filledGrid.flatMap(({ category, questions }) => {
+						const passedCriteriaCount = questions.reduce(
+							(count, question) =>
+								count +
+								question.criterias.filter((criteria) => criteria.passes).length,
+							0,
+						);
+						const totalCriteriaCount = questions.reduce(
+							(count, question) => count + question.criterias.length,
+							0,
+						);
 						return [
 							new docx.Paragraph({
 								children: [
 									new docx.TextRun({
-										text: `Question ${i + 1} : ${question.question}`,
+										text: `${category} (${passedCriteriaCount} / ${totalCriteriaCount})`,
 										bold: true,
 									}),
 								],
 								heading: docx.HeadingLevel.HEADING_3,
 							}),
-							...question.criterias.flatMap((criteria, i) => {
+
+							...questions.flatMap((question, i) => {
 								return [
 									new docx.Paragraph({
-										numbering: {
-											reference: "criteria",
-											level: 0,
-										},
 										children: [
 											new docx.TextRun({
-												text: criteria.passes ? "✅" : "❌",
+												text: `Question ${i + 1} : ${question.question}`,
 												bold: true,
 											}),
-											new docx.TextRun({
-												text: ` Critère ${i + 1} : `,
-												bold: true,
+										],
+										heading: docx.HeadingLevel.HEADING_4,
+									}),
+									...question.criterias.flatMap((criteria, i) => {
+										return [
+											new docx.Paragraph({
+												numbering: {
+													reference: "criteria",
+													level: 0,
+												},
+												children: [
+													new docx.TextRun({
+														text: criteria.passes ? "✅" : "❌",
+														bold: true,
+													}),
+													new docx.TextRun({
+														text: ` Critère ${i + 1} : `,
+														bold: true,
+													}),
+													new docx.TextRun({
+														text: `${criteria.criteria}`,
+													}),
+													...(criteria.passes
+														? [
+																new docx.TextRun({
+																	text: `Réponse du candidat : \n`,
+																	bold: true,
+																	break: 1,
+																}),
+																new docx.TextRun({
+																	text: `${criteria.answer?.text || "Aucune réponse"}`,
+																}),
+															]
+														: []),
+												],
 											}),
+										];
+									}),
+									new docx.Paragraph({
+										children: [
 											new docx.TextRun({
-												text: `${criteria.criteria}`,
+												text: "",
+												break: 1,
 											}),
-											...(criteria.passes
-												? [
-														new docx.TextRun({
-															text: `Réponse du candidat : \n`,
-															bold: true,
-															break: 1,
-														}),
-														new docx.TextRun({
-															text: `${criteria.answer?.text || "Aucune réponse"}`,
-														}),
-													]
-												: []),
 										],
 									}),
 								];
