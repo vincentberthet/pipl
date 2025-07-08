@@ -15,12 +15,15 @@ export async function runGrids(args: string[]) {
 		process.exit(0);
 	}
 
-	console.log("Generating grids with the following files:");
-	for (const file of files) {
-		console.log(`  - ${file}`);
+	const grid = await generateGridAgent(files);
+
+	if (!grid) {
+		console.error("Failed to generate grid.");
+		process.exit(1);
 	}
 
-	await generateGridAgent(files);
+	console.log("Generated grid:");
+	console.log(grid);
 
 	process.exit(0);
 }
