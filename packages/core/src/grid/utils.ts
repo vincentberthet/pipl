@@ -17,6 +17,7 @@ Pour évaluer les compétences, on distingue deux types de questions :
 2) Les questions situationnelles placent le candidat dans un scénario hypothétique, et lui demandent ce qu’il ferait. Par exemple : « Imaginez une situation où vous êtes commercial. Le mois se clôture dans 2 jours et vous êtes loin de votre objectif. Votre collègue vient vous voir parce qu’il est bloqué avec un nouvel outil. Que faites-vous ? ».
 
 Les questions doivent être concises.
+Les questions doivent avoir moins de 20 mots.
 
 Les réponses aux questions sont évaluées suivant des critères binaires. Les réponses aux questions comportementales sont évaluées avec la méthode STAR : 
 Situation : la situation décrite renvoie-t-elle bien à la question ?
@@ -36,6 +37,7 @@ Voici ${nbDocuments} documents relatifs au métier de ${jobName}. A partir de ce
 les critères de notation pour évaluer les réponses à chaque question : utilise 3 critères binaires pour les questions de connaissances et les questions situationnelles
 
 Fais des questions concises.
+Fais des questions de moins de 20 mots.
 `;
 
 const question = z.string().meta({
