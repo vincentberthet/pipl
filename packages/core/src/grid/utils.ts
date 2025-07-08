@@ -28,6 +28,7 @@ Les critères binaires utilisés pour les questions de connaissances et les ques
 
 Les questions ne doivent faire que 1 phrase.
 IMPORTANT: Les questions doivent être courtes et concises.
+IMPORTANT: Les questions doivent faire maximum 20 mots.
 
 Voici ${nbDocuments} documents relatifs au métier de ${jobName}. A partir de ces documents, je voudrais que tu génères une grille d’entretien pour évaluer des candidats à ce poste :
 3 questions de connaissances liées à ce poste (savoirs)
