@@ -57,10 +57,10 @@ export const printGrid = (grid: GridSchema, jobName: string) => {
 		return "Aucune question trouvée dans la grille.";
 	}
 
-	let output = `# Grille d’entretien – ${jobName}\n\n`;
+	let output = `# Grille d’entretien – ${jobName}\n`;
 
 	grid.forEach((element, index) => {
-		output += `## Question ${index + 1}. ${element.question}\n\n`;
+		output += `\n## Question ${index + 1}. ${element.question}\n`;
 
 		if ("criterias" in element && element.criterias) {
 			element.criterias.forEach((criteria, criteriaIndex) => {
