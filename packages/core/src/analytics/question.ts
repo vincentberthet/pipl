@@ -1,6 +1,7 @@
-import { createPartFromBase64, createUserContent } from "@google/genai";
 import * as fs from "node:fs/promises";
+import { createPartFromBase64, createUserContent } from "@google/genai";
 import { z } from "zod/v4";
+import { getMimeTypeFromFileName } from "../commons/file.js";
 import { gemini } from "../commons/gemini.js";
 
 const QUESTIONS_PROMPT = `Tu es un responsable des ressources humaines.
@@ -26,26 +27,27 @@ const questionsSchema = z.array(
 	}),
 );
 
+export type Questions = z.infer<typeof questionsSchema>;
+
 export async function extractQuestionsFromGrid(gridPath: string) {
+	const gridFileMimeType = getMimeTypeFromFileName(gridPath);
 	const gridFile = await fs.readFile(gridPath);
 
 	const response = await gemini.models.generateContent({
 		model: "gemini-2.0-flash",
 		contents: createUserContent([
-			createPartFromBase64(gridFile.toString("base64"), "application/pdf"),
+			createPartFromBase64(gridFile.toString("base64"), gridFileMimeType),
 			QUESTIONS_PROMPT,
 		]),
 		config: {
 			responseMimeType: "application/json",
-			responseJsonSchema: questionsSchema,
-			temperature: 0,
+			responseJsonSchema: z.toJSONSchema(questionsSchema),
+			temperature: 1,
 		},
 	});
 
-	console.log(response.candidates?.[0]?.content);
-
 	const { data, error } = questionsSchema.safeParse(
-		JSON.parse(response.text ?? "null"),
+		JSON.parse(response.candidates?.[0]?.content?.parts?.[0]?.text ?? "null"),
 	);
 
 	if (!data) {
@@ -53,5 +55,21 @@ export async function extractQuestionsFromGrid(gridPath: string) {
 		throw new Error("parse_message_error");
 	}
 
-	return data;
+	return data.map(({ question, criterias }) => {
+		return {
+			question: question.trim(),
+			criterias: criterias.flatMap((criteria) => {
+				const trimmedCriteria = criteria.trim();
+				if (trimmedCriteria.toLocaleUpperCase().includes("STAR")) {
+					return [
+						"Situation: Le candidat doit décrire une situation ou un contexte spécifique.",
+						"Tâche: Le candidat doit expliquer la tâche ou le défi qu'il a rencontré dans cette situation.",
+						"Action: Le candidat doit décrire l'action qu'il a entreprise pour résoudre le problème.",
+						"Résultat: Le candidat doit expliquer le résultat de ses actions.",
+					];
+				}
+				return trimmedCriteria ? [trimmedCriteria] : [];
+			}),
+		};
+	});
 }

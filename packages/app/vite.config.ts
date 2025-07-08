@@ -8,5 +8,9 @@ export default defineConfig({
 	server: {
 		port: 3000,
 	},
-	plugins: [tsConfigPaths(), devtoolsJson()],
+	plugins: [
+		tsConfigPaths(),
+		// @ts-ignore
+		devtoolsJson(),
+	],
 });
