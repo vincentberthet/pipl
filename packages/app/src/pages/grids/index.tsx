@@ -27,7 +27,7 @@ export function GridsPage() {
 	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		console.log("submit", e.currentTarget);
-		setStep("loading"); // FIXME: fix the bad handleSubmit call on "suivant" click
+		// setStep("loading"); // FIXME: fix the bad handleSubmit call on "suivant" click
 	};
 
 	const steps = useMemo(
