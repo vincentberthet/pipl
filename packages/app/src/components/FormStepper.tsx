@@ -47,8 +47,12 @@ function FormStepperFieldset({
 				className={`flex flex-row ${isFirstStep ? "justify-end" : "justify-between"} items-center mt-4`}
 			>
 				{!isFirstStep && (
-					<button type="button" className="btn" onClick={onPrevious}>
-						Précédent
+					<button
+						type="button"
+						className="btn btn-outline border-none text-gray-500 hover:text-gray-700"
+						onClick={onPrevious}
+					>
+						&#x3C; Précédent
 					</button>
 				)}
 
@@ -57,8 +61,12 @@ function FormStepperFieldset({
 						{submitLabel}
 					</button>
 				) : (
-					<button type="button" className="btn" onClick={onNext}>
-						Suivant
+					<button
+						type="button"
+						className="btn btn-primary rounded-md"
+						onClick={onNext}
+					>
+						Suivant &#x3E;
 					</button>
 				)}
 			</div>
