@@ -4,13 +4,18 @@
 	themes: corporate;
 }
 
+:root {
+	--color-primary: #240cf2;
+	--color-secondary: #0064ff;
+}
+
 * {
 	box-sizing: border-box;
 }
 
 html,
 body {
-	background: url("./assets/mountains.jpg");
+	background: #f5f6f7;
 	margin: 0;
 	padding: 0;
 }
@@ -26,7 +31,7 @@ body {
 }
 
 header {
-	@apply w-full flex justify-between items-center p-2 bg-sky-700 text-white font-bold;
+	@apply w-full flex justify-between items-center p-2 bg-primary text-white font-bold;
 }
 
 .container {
@@ -34,20 +39,21 @@ header {
 	width: 100%;
 }
 
-.card {
-	@apply bg-white shadow-md rounded-lg;
+.card,
+form {
+	@apply bg-white shadow-md rounded-lg border border-[rgba(0,0,0,0.1)];
 }
 
 form {
-	@apply w-full flex flex-col gap-2 bg-white p-4 rounded-lg;
+	@apply w-full flex flex-col gap-2 p-4;
 }
 
 h1 {
-	@apply text-2xl font-bold text-sky-700;
+	@apply text-2xl font-bold text-primary;
 }
 
 h2 {
-	@apply text-xl font-bold text-sky-600;
+	@apply text-xl font-bold text-secondary;
 }
 
 h3 {
