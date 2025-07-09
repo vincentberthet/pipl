@@ -3,6 +3,7 @@ import { createPartFromBase64, createUserContent } from "@google/genai";
 import { z } from "zod/v4";
 import { getMimeTypeFromFileName } from "../commons/file.js";
 import { gemini } from "../commons/gemini.js";
+import { transcriptSchema } from "./generateTranscript.schema.js";
 
 const GENERATE_TRANSCRIPT_SYSTEM_PROMPT = `Tu es un responsable des ressources humaines. Ton rôle est de retranscrire des entretiens d'embauche structuré entre un recruteur et un candidat.
 
@@ -16,29 +17,6 @@ const GENERATE_TRANSCRIPT_PROMPT = `Le fichier audio joint est un entretien d'em
 - le candidat, qui répond aux questions du recruteur
 
 Retranscrit l'intégralité de l'entretien en indiquant si la personne qui parle est le recruteur ou le candidat, ainsi que le timecode associé à la prise de parole.`;
-
-const transcriptSchema = z
-	.array(
-		z.object({
-			speaker: z.enum(["recruiter", "candidate"]).meta({
-				description:
-					"La personne qui parle, soit le recruteur, soit le candidat",
-			}),
-			text: z.string().meta({
-				description: "Le texte de la prise de parole",
-			}),
-			timeCode: z.string().meta({
-				description:
-					"Le timecode de la prise de parole, sous la forme hh:mm:ss",
-			}),
-		}),
-	)
-	.meta({
-		description:
-			"La retranscription de l'entretien, avec les timecodes et les intervenants",
-	});
-
-export type Transcript = z.infer<typeof transcriptSchema>;
 
 export async function generateTranscript(audioPath: string) {
 	const audioFileMimeType = getMimeTypeFromFileName(audioPath);

@@ -13,7 +13,7 @@ make install
 To run the CLI application, you will first need to build the project with the following command line:
 
 ```bash
-make build
+make pull build
 ```
 
 Then you can run the CLI using the following command:

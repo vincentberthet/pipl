@@ -18,8 +18,14 @@
 		"./analytics": {
 			"import": "./dist/analytics/index.js"
 		},
+		"./analytics/*": {
+			"import": "./dist/analytics/*.js"
+		},
 		"./grid": {
 			"import": "./dist/grid/index.js"
+		},
+		"./commons/*": {
+			"import": "./dist/commons/*.js"
 		}
 	},
 	"dependencies": {

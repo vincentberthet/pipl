@@ -6,6 +6,12 @@ help:									## Show this help
 install:
 	@npm install
 
+pull:
+	@(git stash > /dev/null || true)
+	git pull origin main
+	@(git stash pop > /dev/null || true)
+	@npm install
+
 build:									## Build the project
 	npx turbo run build
 	@(cd packages/app/dist && zip -r ../dist.zip . > /dev/null)

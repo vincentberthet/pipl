@@ -3,7 +3,6 @@ import { parseArgs } from "node:util";
 
 import {
 	runAnalyticsAgent,
-	writeDocxOutput,
 	writeMarkdownOutput,
 } from "@pipl-analytics/core/analytics";
 
@@ -25,13 +24,28 @@ export async function runAnalytics(args: string[]) {
 				description:
 					"Emulate the agent without actually running the analysis. Useful for testing.",
 			},
+			email: {
+				type: "string",
+				description: "The email to receive the report to",
+			},
+			job: {
+				type: "string",
+				default: "TEST JOB",
+				description: "Name of the job to use for the analysis",
+			},
 		},
 		allowPositionals: true,
 	});
 
 	const candidateName = positionals.join(" ").trim();
 
-	if (!values.audio || !values.grid || !candidateName) {
+	if (
+		!values.audio ||
+		!values.grid ||
+		!values.job ||
+		!values.email ||
+		!candidateName
+	) {
 		console.log(
 			"Usage: pipl-analytics analytics --audio <audio_file> --grid <grid_file> <candidate_name>",
 		);
@@ -40,6 +54,10 @@ export async function runAnalytics(args: string[]) {
 		console.log(
 			"  --grid <grid_file>    Path to the grid file to use for the analysis",
 		);
+		console.log(
+			"  --job <job_name>      Name of the job to use for the analysis",
+		);
+		console.log("  --email <email>	The email to receive the report to");
 		console.log(
 			"  --emulate		Emulate the agent without running the analysis (default: false)",
 		);
@@ -60,19 +78,32 @@ export async function runAnalytics(args: string[]) {
 				)
 		: await runAnalyticsAgent(values.audio, values.grid);
 
-	await Promise.all([
+	const [response] = await Promise.all([
+		fetch(process.env.ANALYTICS_ENDPOINT ?? "", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({
+				accessToken: process.env.LAMBDA_ACCESS_TOKEN,
+				candidateName,
+				jobName: values.job,
+				email: values.email,
+				transcript,
+				filledGrid,
+			}),
+		}),
 		fs.writeFile(
 			jsonOutFile,
 			JSON.stringify({ questions, transcript, filledGrid }, null, 2),
 		),
 		writeMarkdownOutput(`out/${outputBaseName}.md`, transcript, filledGrid),
-		writeDocxOutput(
-			`out/${outputBaseName}.docx`,
-			candidateName,
-			transcript,
-			filledGrid,
-		),
 	]);
+
+	if (!response.ok) {
+		console.error(
+			`Error: ${response.status} ${response.statusText} - ${await response.text()}`,
+		);
+		process.exit(1);
+	}
 
 	process.exit(0);
 }

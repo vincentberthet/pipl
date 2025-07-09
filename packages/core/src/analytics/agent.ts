@@ -1,4 +1,4 @@
-import { fillGridWithInterview } from "./analyseInterview.js";
+import { fillGridWithInterview } from "./analyzeInterview.js";
 import { generateTranscript } from "./generateTranscript.js";
 import { extractQuestionsFromGrid } from "./question.js";
 
