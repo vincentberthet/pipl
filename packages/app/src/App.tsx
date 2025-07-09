@@ -1,6 +1,6 @@
 import { createHashRouter, RouterProvider } from "react-router";
 import { Layout } from "./Layout.js";
-import { AnalyticsPage } from "./pages/analytics/index.js";
+import { AnalyticsForm } from "./pages/analytics/index.js";
 import { GridsPage } from "./pages/grids/index.js";
 import { HomePage } from "./pages/home/index.js";
 
@@ -14,7 +14,7 @@ const router = createHashRouter([
 			},
 			{
 				path: "/analytics",
-				Component: AnalyticsPage,
+				Component: AnalyticsForm,
 			},
 			{
 				path: "/grids",
