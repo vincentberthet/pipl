@@ -1,0 +1,22 @@
+{
+	"name": "@pipl-analytics/mailer-lambda",
+	"type": "module",
+	"version": "0.1.0",
+	"description": "The grid endpoint for Pipl Analytics",
+	"license": "UNLICENSED",
+	"private": true,
+	"scripts": {
+		"build": "vite build --minify",
+		"dev": "vite build --watch --minify",
+		"typecheck": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@aws-sdk/client-s3": "^3.842.0",
+		"@aws-sdk/client-sesv2": "^3.840.0"
+	},
+	"devDependencies": {
+		"@types/nodemailer": "^6.4.17",
+		"i": "^0.3.7",
+		"npm": "^11.4.2"
+	}
+}
