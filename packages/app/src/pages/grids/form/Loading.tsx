@@ -1,10 +1,9 @@
-export const Loading = () => {
-	return (
-		<div className="flex flex-col items-center justify-center h-full">
-			<h1 className="text-2xl font-bold mb-4">Loading...</h1>
-			<p className="text-gray-600">
-				Please wait while we load the necessary data for the grid.
-			</p>
-		</div>
-	);
-};
+import { LoaderCircle } from "lucide-react";
+
+export const Loading = () => (
+	<div className="flex flex-col items-center justify-center">
+		<LoaderCircle className="animate-spin w-12 h-12 text-primary mt-3" />
+		<h2 className="my-3">En cours de création...</h2>
+		<p>Plus que quelques minutes et vous recevrez la grille par mail</p>
+	</div>
+);

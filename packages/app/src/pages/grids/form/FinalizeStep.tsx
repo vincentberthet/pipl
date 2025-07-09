@@ -1,11 +1,20 @@
-export const FinalizeStep = () => {
-	return (
-		<div className="flex flex-col items-center justify-center h-full">
-			<h1 className="text-2xl font-bold mb-4">Finalize Step</h1>
-			<p className="text-gray-600">
-				This is the final step of the grid creation process. Here you can review
-				and finalize your grid before submission.
-			</p>
-		</div>
-	);
-};
+export const FinalizeStep = () => (
+	<>
+		<legend className="fieldset-legend">
+			<h2>Étape 3/3 : Finalisez la grille</h2>
+		</legend>
+
+		<input
+			type="text"
+			className="input mt-4"
+			name="job-name"
+			placeholder="Nom du poste"
+		/>
+		<input
+			type="email"
+			className="input mt-4"
+			name="email"
+			placeholder="Email (pour recevoir la grille)"
+		/>
+	</>
+);
