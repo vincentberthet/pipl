@@ -1,0 +1,31 @@
+export function ImportFilesStep() {
+	return (
+		<>
+			<legend className="fieldset-legend">
+				<h2>Étape 1/2 : Importez les documents de l'entretien</h2>
+			</legend>
+
+			<label htmlFor="analytics-audio">
+				Sélectionner l'audio de l'entretien
+			</label>
+			<input
+				type="file"
+				className="file-input"
+				id="analytics-audio"
+				name="audio"
+				accept="audio/*"
+			/>
+
+			<label htmlFor="analytics-grid">
+				Sélectionner la grille d'évaluation à compléter
+			</label>
+			<input
+				type="file"
+				className="file-input"
+				id="analytics-grid"
+				name="grid"
+				accept=".pdf,.doc,.docx"
+			/>
+		</>
+	);
+}
