@@ -28,7 +28,7 @@ Résultat : les résultats obtenus par les actions réalisées sont-ils satisfai
 
 Les critères binaires utilisés pour les questions de connaissances et les questions situationnelles sont spécifiques à chaque question.
 
-Les questions ne doivent faire que 1 phrase.
+IMPORTANT: Les questions ne doivent pas dépasser 1 phrase.
 IMPORTANT: Les questions doivent être courtes et concises.
 IMPORTANT: Les questions doivent faire maximum 20 mots.
 
@@ -41,12 +41,17 @@ Fais des questions concises.
 Fais des questions de moins de 20 mots.
 `;
 
-const question = z.string().meta({
-	description: "La question de la grille d'évaluation",
-});
+const question = z
+	.string()
+	.meta({ description: "La question de la grille d'évaluation" });
+
+const category = z
+	.string()
+	.meta({ description: "La catégorie de la question" });
 
 const binaryCriteriaSchema = z.object({
 	question,
+	category,
 	criterias: z.array(
 		z.string().meta({
 			description: "Un critère binaire pour évaluer une réponse",
@@ -54,15 +59,17 @@ const binaryCriteriaSchema = z.object({
 	),
 });
 
-const STARCriteriaSchema = z.object({ question });
+const STARCriteriaSchema = z.object({ question, category });
+
+const questionSchema = z.union([binaryCriteriaSchema, STARCriteriaSchema]);
+export type QuestionSchema = z.infer<typeof questionSchema>;
 
 export const gridSchema = z
-	.array(z.union([binaryCriteriaSchema, STARCriteriaSchema]))
-	.meta({
-		description: "La grille d'entretien structurée",
-	});
-
+	.array(questionSchema)
+	.meta({ description: "La grille d'entretien structurée" });
 export type GridSchema = z.infer<typeof gridSchema>;
+
+export type GroupedData = { category: string; questions: QuestionSchema[] }[];
 
 export const printGrid = (grid: GridSchema, jobName: string) => {
 	if (grid.length === 0) {
@@ -87,7 +94,7 @@ export const printGrid = (grid: GridSchema, jobName: string) => {
 	return output;
 };
 
-export const printGridDocx = async (grid: GridSchema, jobName: string) => {
+export const printGridDocx = async (grid: GroupedData, jobName: string) => {
 	const document = new docx.Document({
 		sections: [
 			{
@@ -101,98 +108,123 @@ export const printGridDocx = async (grid: GridSchema, jobName: string) => {
 						],
 						heading: docx.HeadingLevel.HEADING_1,
 					}),
-					...grid.flatMap((element, index) => {
-						const questionText = `Question ${index + 1} : ${element.question}`;
-						if ("criterias" in element && element.criterias) {
+					...grid.flatMap((element) => {
+						if (element.questions.length === 0) {
 							return [
 								new docx.Paragraph({
 									children: [
 										new docx.TextRun({
-											text: questionText,
+											text: `Aucune question trouvée pour la catégorie ${element.category}.`,
 											bold: true,
 										}),
 									],
-									heading: docx.HeadingLevel.HEADING_2,
-								}),
-								...element.criterias.flatMap((criteria, criteriaIndex) => {
-									return new docx.Paragraph({
-										children: [
-											new docx.TextRun({
-												text: `Critère ${criteriaIndex + 1} (Oui/Non): `,
-												bold: true,
-											}),
-											new docx.TextRun({
-												text: criteria,
-											}),
-										],
-									});
-								}),
-							];
-						} else {
-							return [
-								new docx.Paragraph({
-									children: [
-										new docx.TextRun({
-											text: questionText,
-											bold: true,
-										}),
-									],
-									heading: docx.HeadingLevel.HEADING_2,
-								}),
-								new docx.Paragraph({
-									children: [
-										new docx.TextRun({
-											text: "Critères de la méthode STAR :",
-											bold: true,
-										}),
-									],
-								}),
-								new docx.Paragraph({
-									children: [
-										new docx.TextRun({
-											text: "Critère 1 : ",
-											bold: true,
-										}),
-										new docx.TextRun({
-											text: "Situation",
-										}),
-									],
-								}),
-								new docx.Paragraph({
-									children: [
-										new docx.TextRun({
-											text: "Critère 2 : ",
-											bold: true,
-										}),
-										new docx.TextRun({
-											text: "Tâche",
-										}),
-									],
-								}),
-								new docx.Paragraph({
-									children: [
-										new docx.TextRun({
-											text: "Critère 3 : ",
-											bold: true,
-										}),
-										new docx.TextRun({
-											text: "Actions",
-										}),
-									],
-								}),
-								new docx.Paragraph({
-									children: [
-										new docx.TextRun({
-											text: "Critère 4 : ",
-											bold: true,
-										}),
-										new docx.TextRun({
-											text: "Résultats",
-										}),
-									],
+									heading: docx.HeadingLevel.HEADING_3,
 								}),
 							];
 						}
+						const categoryText = `Catégorie : ${element.category}`;
+						return [
+							new docx.Paragraph({
+								children: [
+									new docx.TextRun({
+										text: categoryText,
+										bold: true,
+									}),
+								],
+								heading: docx.HeadingLevel.HEADING_2,
+							}),
+							...element.questions.flatMap((element, index) => {
+								const questionText = `Question ${index + 1} : ${element.question}`;
+								if ("criterias" in element && element.criterias) {
+									return [
+										new docx.Paragraph({
+											children: [
+												new docx.TextRun({
+													text: questionText,
+												}),
+											],
+											heading: docx.HeadingLevel.HEADING_3,
+										}),
+										...element.criterias.flatMap((criteria, criteriaIndex) => {
+											return new docx.Paragraph({
+												children: [
+													new docx.TextRun({
+														text: `Critère ${criteriaIndex + 1} (Oui/Non): `,
+														bold: true,
+													}),
+													new docx.TextRun({
+														text: criteria,
+													}),
+												],
+											});
+										}),
+									];
+								} else {
+									return [
+										new docx.Paragraph({
+											children: [
+												new docx.TextRun({
+													text: questionText,
+												}),
+											],
+											heading: docx.HeadingLevel.HEADING_3,
+										}),
+										new docx.Paragraph({
+											children: [
+												new docx.TextRun({
+													text: "Critères de la méthode STAR :",
+													bold: true,
+												}),
+											],
+										}),
+										new docx.Paragraph({
+											children: [
+												new docx.TextRun({
+													text: "Critère 1 : ",
+													bold: true,
+												}),
+												new docx.TextRun({
+													text: "Situation",
+												}),
+											],
+										}),
+										new docx.Paragraph({
+											children: [
+												new docx.TextRun({
+													text: "Critère 2 : ",
+													bold: true,
+												}),
+												new docx.TextRun({
+													text: "Tâche",
+												}),
+											],
+										}),
+										new docx.Paragraph({
+											children: [
+												new docx.TextRun({
+													text: "Critère 3 : ",
+													bold: true,
+												}),
+												new docx.TextRun({
+													text: "Actions",
+												}),
+											],
+										}),
+										new docx.Paragraph({
+											children: [
+												new docx.TextRun({
+													text: "Critère 4 : ",
+													bold: true,
+												}),
+												new docx.TextRun({
+													text: "Résultats",
+												}),
+											],
+										}),
+									];
+								}
+							}),
+						];
 					}),
 				],
 			},
@@ -200,5 +232,5 @@ export const printGridDocx = async (grid: GridSchema, jobName: string) => {
 	});
 
 	const buffer = await docx.Packer.toBuffer(document);
-	await fs.writeFile("test/grid/result.docx", buffer);
+	await fs.writeFile("out/grid-result.docx", buffer);
 };

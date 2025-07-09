@@ -2,7 +2,12 @@ import * as fs from "node:fs/promises";
 import { createPartFromBase64, createUserContent } from "@google/genai";
 import { z } from "zod/v4";
 import { gemini } from "../commons/gemini.js";
-import { gridSchema, printGridDocx, prompt } from "./utils.js";
+import {
+	type GroupedData,
+	gridSchema,
+	printGridDocx,
+	prompt,
+} from "./utils.js";
 
 export const generateGridAgent = async (
 	pathToFiles: string[],
@@ -46,5 +51,14 @@ export const generateGridAgent = async (
 		throw new Error("parse_message_error");
 	}
 
-	await printGridDocx(data, jobName);
+	const categrories = data
+		.map((item) => item.category || "Sans catégorie")
+		.filter((category, index, self) => self.indexOf(category) === index);
+
+	const groupedData: GroupedData = categrories.map((category) => ({
+		category,
+		questions: data.filter((item) => item.category === category),
+	}));
+
+	await printGridDocx(groupedData, jobName);
 };
