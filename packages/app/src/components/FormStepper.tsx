@@ -4,7 +4,7 @@ import {
 	useFormStepperContext,
 } from "./FormStepperContext.js";
 
-type FormStepperProps = {
+export type FormStepperProps = {
 	steps: ReactNode[];
 	submitLabel: string;
 };
