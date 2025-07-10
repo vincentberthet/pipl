@@ -2,20 +2,23 @@ import { randomUUID } from "node:crypto";
 import fs from "node:fs/promises";
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { getMimeTypeFromFileName } from "@pipl-analytics/core/commons/file";
-import { documentSchema } from "@pipl-analytics/core/grid/document.schema";
+import {
+	documentSchema,
+	type GridEndpoint,
+} from "@pipl-analytics/core/grid/document.schema";
 import { printGridDocx } from "@pipl-analytics/core/grid/utils";
 
 const s3 = new S3Client({ region: process.env.AWS_REGION });
 
-export const handler = async ({ body }: { body: string }) => {
-	const { success, data, error } = documentSchema.safeParse(JSON.parse(body));
+export const handler = async (event: GridEndpoint) => {
+	const { success, data, error } = documentSchema.safeParse(event);
 	if (!success) {
 		throw new Error(`Invalid input data, error: ${JSON.stringify(error)}`);
 	}
 
 	await fs.mkdir("/tmp", { recursive: true });
 
-	const filename = `grid-${data.jobName.toLocaleLowerCase().replace(/\s+/g, "-")}.docx`; // TODO: condidatName
+	const filename = `grid-${data.jobName.toLocaleLowerCase().replace(/\s+/g, "-")}.docx`;
 	const tmpFilePath = `/tmp/${filename}`;
 	console.log(`Writing DOCX output to ${tmpFilePath}`);
 	await printGridDocx(tmpFilePath, data.grid, data.jobName);

@@ -54,11 +54,8 @@ export const handler = async ({ body }: { body: string }) => {
 	const grid = await parseResponse(response);
 
 	return {
-		statusCode: 200,
-		body: JSON.stringify({
-			email,
-			jobName,
-			grid,
-		}),
+		email,
+		jobName,
+		grid,
 	};
 };
