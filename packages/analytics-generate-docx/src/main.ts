@@ -8,17 +8,12 @@ import {
 } from "@pipl-analytics/core/analytics/document.schema";
 import { getMimeTypeFromFileName } from "@pipl-analytics/core/commons/file";
 
-const s3 = new S3Client({ region: import.meta.env.VITE_AWS_REGION });
+const s3 = new S3Client({ region: process.env.AWS_REGION });
 
 export const handler = async (event: Document) => {
-	const { success, data } = documentSchema.safeParse(event);
+	const { success, data, error } = documentSchema.safeParse(event);
 	if (!success) {
-		return {
-			statusCode: 400,
-			body: JSON.stringify({
-				error: "invalid_input",
-			}),
-		};
+		throw new Error(`Invalid input: ${JSON.stringify(error)}`);
 	}
 
 	await fs.mkdir("/tmp", { recursive: true });
@@ -38,17 +33,17 @@ export const handler = async (event: Document) => {
 	const readStream = await fs.readFile(tmpFilePath);
 	await s3.send(
 		new PutObjectCommand({
-			Bucket: import.meta.env.VITE_S3_BUCKET,
+			Bucket: process.env.S3_BUCKET,
 			Key: outputKey,
 			Body: readStream,
 			ContentType: getMimeTypeFromFileName(filename),
 		}),
 	);
 
-	return JSON.stringify({
+	return {
 		recipient: data.email,
 		subject: `Analyse d'entretien pour le poste de ${data.jobName}: ${data.candidateName}`,
 		body: `Voici le compte rendu de l'entretien pour le poste de ${data.jobName}.`,
 		attachments: [outputKey],
-	});
+	};
 };

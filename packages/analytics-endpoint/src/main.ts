@@ -1,17 +1,21 @@
 import { SFNClient, StartExecutionCommand } from "@aws-sdk/client-sfn";
-import {
-	type Document,
-	documentSchema,
-} from "@pipl-analytics/core/analytics/document.schema";
+import { documentSchema } from "@pipl-analytics/core/analytics/document.schema";
 import type { APIGatewayProxyHandlerV2 } from "aws-lambda";
+import * as z from "zod/v4";
 
 const sfn = new SFNClient({
-	region: import.meta.env.VITE_AWS_REGION,
+	region: process.env.AWS_REGION,
 });
 
-export type Payload = {
-	accessToken: string;
-} & Document;
+const analyticsEndpointInputSchema = documentSchema
+	.omit({ filledGrid: true, transcript: true })
+	.extend({
+		accessToken: z.string(),
+		gridObjectKey: z.string(),
+		transcriptObjectKey: z.string(),
+	});
+
+export type Payload = z.infer<typeof analyticsEndpointInputSchema>;
 
 export const handler: APIGatewayProxyHandlerV2 = async (event) => {
 	if (!event.body) {
@@ -21,13 +25,10 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
 		};
 	}
 
-	const parsedBody = JSON.parse(event.body) as Payload;
-	const authToken = process.env.LAMBDA_ACCESS_TOKEN;
-	if (!parsedBody.accessToken || parsedBody.accessToken !== authToken) {
-		return { statusCode: 401, body: JSON.stringify({ error: "unauthorized" }) };
-	}
+	const { success, data } = analyticsEndpointInputSchema.safeParse(
+		JSON.parse(event.body),
+	);
 
-	const { success, data } = documentSchema.safeParse(parsedBody);
 	if (!success) {
 		return {
 			statusCode: 400,
@@ -37,10 +38,16 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
 		};
 	}
 
+	const { accessToken, ...rest } = data;
+	const authToken = process.env.LAMBDA_ACCESS_TOKEN;
+	if (accessToken !== authToken) {
+		return { statusCode: 401, body: JSON.stringify({ error: "unauthorized" }) };
+	}
+
 	const { executionArn } = await sfn.send(
 		new StartExecutionCommand({
-			stateMachineArn: import.meta.env.VITE_STATE_MACHINE_ARM,
-			input: JSON.stringify(data),
+			stateMachineArn: process.env.STATE_MACHINE_ARM,
+			input: JSON.stringify(rest),
 		}),
 	);
 

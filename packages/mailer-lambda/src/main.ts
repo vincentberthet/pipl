@@ -5,8 +5,8 @@ import {
 	SendEmailCommand,
 } from "@aws-sdk/client-sesv2";
 
-const ses = new SESv2Client({ region: import.meta.env.VITE_AWS_REGION });
-const s3 = new S3Client({ region: import.meta.env.VITE_AWS_REGION });
+const ses = new SESv2Client({ region: process.env.AWS_REGION });
+const s3 = new S3Client({ region: process.env.AWS_REGION });
 
 type MailEvent = {
 	recipient: string;
@@ -27,7 +27,7 @@ export const handler = async (event: MailEvent) => {
 
 				const { Body } = await s3.send(
 					new GetObjectCommand({
-						Bucket: import.meta.env.VITE_S3_BUCKET,
+						Bucket: process.env.S3_BUCKET,
 						Key: attachment,
 					}),
 				);
@@ -71,24 +71,17 @@ export const handler = async (event: MailEvent) => {
 				),
 			},
 		},
-		FromEmailAddress: import.meta.env.VITE_SOURCE_ADDRESS,
+		FromEmailAddress: process.env.SOURCE_ADDRESS,
 	});
 
 	try {
 		await ses.send(command);
 		return {
-			statusCode: 200,
-			body: JSON.stringify({
-				ok: true,
-			}),
+			ok: true,
 		};
 	} catch (error) {
-		return {
-			statusCode: 500,
-			body: JSON.stringify({
-				error: "Failed to send email",
-				details: error instanceof Error ? error.message : "Unknown error",
-			}),
-		};
+		throw new Error(
+			`Failed to send email: ${error instanceof Error ? error.message : "Unknown error"}`,
+		);
 	}
 };

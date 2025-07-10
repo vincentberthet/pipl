@@ -1,4 +1,6 @@
 import * as z from "zod/v4";
+import { transcriptSchema } from "./generateTranscript.schema.js";
+import { questionsSchema } from "./question.schema.js";
 
 export const filledGridSchema = z.array(
 	z.object({
@@ -51,3 +53,13 @@ export const filledGridSchema = z.array(
 );
 
 export type FilledGrid = z.infer<typeof filledGridSchema>;
+
+export const fillGridInputSchema = z.object({
+	email: z.email(),
+	jobName: z.string().min(1).max(100),
+	candidateName: z.string().min(1).max(100),
+	questions: questionsSchema,
+	transcript: transcriptSchema,
+});
+
+export type FillGridInput = z.infer<typeof fillGridInputSchema>;

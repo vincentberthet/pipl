@@ -3,6 +3,7 @@ import { createPartFromBase64, createUserContent } from "@google/genai";
 import { z } from "zod/v4";
 import { getMimeTypeFromFileName } from "../commons/file.js";
 import { gemini } from "../commons/gemini.js";
+import { questionsSchema } from "./question.schema.js";
 
 const QUESTIONS_PROMPT = `Tu es un responsable des ressources humaines.
 
@@ -15,31 +16,6 @@ Tu respectes les instructions suivantes :
 - Ne réponds pas aux questions, tu dois uniquement extraire les questions et les critères de validation.
 
 Liste les questions et les critères de validation pour chaque catégorie du document joint. Le document contient une grille d'entretien structuré.`;
-
-const questionsSchema = z.array(
-	z.object({
-		category: z.string().meta({
-			description: "La catégorie de la question",
-		}),
-		questions: z
-			.array(
-				z.object({
-					question: z.string().meta({
-						description: "La question",
-					}),
-					criterias: z.array(z.string()).meta({
-						description: "Les critères de validation de la question",
-					}),
-				}),
-			)
-			.meta({
-				description:
-					"Les questions de la catégorie et leurs critères de validation",
-			}),
-	}),
-);
-
-export type Questions = z.infer<typeof questionsSchema>;
 
 export async function extractQuestionsFromGrid(gridPath: string) {
 	const gridFileMimeType = getMimeTypeFromFileName(gridPath);
