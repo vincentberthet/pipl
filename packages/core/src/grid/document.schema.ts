@@ -8,3 +8,11 @@ export const documentSchema = z.object({
 });
 
 export type Document = z.infer<typeof documentSchema>;
+
+export const agentPropsSchema = z.object({
+	pathToFiles: z.array(z.string()),
+	jobName: z.string(),
+	email: z.email(),
+});
+
+export type AgentProps = z.infer<typeof agentPropsSchema>;
