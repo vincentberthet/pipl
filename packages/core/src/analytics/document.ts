@@ -1,7 +1,7 @@
 import * as fs from "node:fs/promises";
 import * as docx from "docx";
-import type { FilledGrid } from "./analyseInterview.js";
-import type { Transcript } from "./generateTranscript.js";
+import type { FilledGrid } from "./analyzeInterview.schema.js";
+import type { Transcript } from "./generateTranscript.schema.js";
 
 export async function writeMarkdownOutput(
 	filePath: string,

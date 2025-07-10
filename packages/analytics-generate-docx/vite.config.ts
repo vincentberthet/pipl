@@ -4,7 +4,7 @@ import tsConfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
 	root: __dirname,
-	cacheDir: `${__dirname}/../../node_modules/.vite/packages/analytics-endpoint`,
+	cacheDir: `${__dirname}/../../node_modules/.vite/packages/analytics-generate-docx`,
 	plugins: [tsConfigPaths()],
 	esbuild: {
 		minifyWhitespace: true,
@@ -13,12 +13,17 @@ export default defineConfig({
 		minify: true,
 		lib: {
 			entry: path.resolve(__dirname, "src/main.js"),
-			name: "analytics-endpoint",
+			name: "analytics-generate-docx",
 			fileName: "main",
 			formats: ["es"],
 		},
 		rollupOptions: {
-			external: ["aws-lambda", "@aws-sdk/client-s3", "@aws-sdk/client-sfn"],
+			external: [
+				"aws-lambda",
+				"@aws-sdk/client-s3",
+				"node:crypto",
+				"node:fs/promises",
+			],
 		},
 	},
 });
