@@ -2,23 +2,15 @@ import { randomUUID } from "node:crypto";
 import fs from "node:fs/promises";
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { getMimeTypeFromFileName } from "@pipl-analytics/core/commons/file";
-import {
-	type Document,
-	documentSchema,
-} from "@pipl-analytics/core/grid/document.schema";
+import { documentSchema } from "@pipl-analytics/core/grid/document.schema";
 import { printGridDocx } from "@pipl-analytics/core/grid/utils";
 
-const s3 = new S3Client({ region: import.meta.env.VITE_AWS_REGION });
+const s3 = new S3Client({ region: process.env.AWS_REGION });
 
-export const handler = async (event: Document) => {
-	const { success, data } = documentSchema.safeParse(event);
+export const handler = async ({ body }: { body: string }) => {
+	const { success, data, error } = documentSchema.safeParse(JSON.parse(body));
 	if (!success) {
-		return {
-			statusCode: 400,
-			body: JSON.stringify({
-				error: "invalid_input",
-			}),
-		};
+		throw new Error(`Invalid input data, error: ${JSON.stringify(error)}`);
 	}
 
 	await fs.mkdir("/tmp", { recursive: true });
@@ -33,7 +25,7 @@ export const handler = async (event: Document) => {
 	const readStream = await fs.readFile(tmpFilePath);
 	await s3.send(
 		new PutObjectCommand({
-			Bucket: import.meta.env.VITE_S3_BUCKET,
+			Bucket: process.env.S3_BUCKET,
 			Key: outputKey,
 			Body: readStream,
 			ContentType: getMimeTypeFromFileName(filename),
