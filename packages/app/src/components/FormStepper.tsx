@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import {
 	FormStepperContextProvider,
 	useFormStepperContext,
@@ -35,9 +35,27 @@ function FormStepperFieldset({
 }: FormStepperFieldsetProps) {
 	const { currentStep, isFirstStep, isLastStep, onPrevious, onNext } =
 		useFormStepperContext();
+
 	const style = {
 		transform: `translateX(-${currentStep * 100}%)`,
 	};
+
+	const [disableSubmit, setDisableSubmit] = useState(true);
+	useEffect(() => {
+		if (!isLastStep) {
+			setDisableSubmit(true);
+			return;
+		}
+
+		const timer = setTimeout(() => {
+			setDisableSubmit(false);
+		}, 1);
+
+		return () => {
+			clearTimeout(timer);
+			setDisableSubmit(true);
+		};
+	}, [isLastStep]);
 
 	return (
 		<fieldset className="fieldset" style={style}>
@@ -57,7 +75,11 @@ function FormStepperFieldset({
 				)}
 
 				{isLastStep ? (
-					<button type="submit" className="btn btn-primary">
+					<button
+						type="submit"
+						className="btn btn-primary"
+						disabled={disableSubmit}
+					>
 						{submitLabel}
 					</button>
 				) : (
