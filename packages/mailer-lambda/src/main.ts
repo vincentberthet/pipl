@@ -77,18 +77,11 @@ export const handler = async (event: MailEvent) => {
 	try {
 		await ses.send(command);
 		return {
-			statusCode: 200,
-			body: JSON.stringify({
-				ok: true,
-			}),
+			ok: true,
 		};
 	} catch (error) {
-		return {
-			statusCode: 500,
-			body: JSON.stringify({
-				error: "Failed to send email",
-				details: error instanceof Error ? error.message : "Unknown error",
-			}),
-		};
+		throw new Error(
+			`Failed to send email: ${error instanceof Error ? error.message : "Unknown error"}`,
+		);
 	}
 };

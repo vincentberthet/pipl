@@ -17,14 +17,10 @@ export type ExtractTranscriptInput = z.infer<
 >;
 
 export const handler = async (event: ExtractTranscriptInput) => {
-	const { success, data } = extractTranscriptInputSchema.safeParse(event);
+	const { success, data, error } =
+		extractTranscriptInputSchema.safeParse(event);
 	if (!success) {
-		return {
-			statusCode: 400,
-			body: JSON.stringify({
-				error: "invalid_input",
-			}),
-		};
+		throw new Error(`Invalid input: ${JSON.stringify(error)}`);
 	}
 
 	const { transcriptObjectKey, ...rest } = data;
@@ -55,10 +51,10 @@ export const handler = async (event: ExtractTranscriptInput) => {
 
 		const transcript = await generateTranscript(audioFileName);
 
-		return JSON.stringify({
+		return {
 			...rest,
 			transcript,
-		});
+		};
 	} finally {
 		await fs
 			.unlink(audioFileName)

@@ -5,22 +5,17 @@ import {
 } from "@pipl-analytics/core/analytics/analyzeInterview.schema";
 
 export const handler = async (event: FillGridInput) => {
-	const { success, data } = fillGridInputSchema.safeParse(event);
+	const { success, data, error } = fillGridInputSchema.safeParse(event);
 	if (!success) {
-		return {
-			statusCode: 400,
-			body: JSON.stringify({
-				error: "invalid_input",
-			}),
-		};
+		throw new Error(`Invalid input: ${JSON.stringify(error)}`);
 	}
 
 	const { questions, ...rest } = data;
 
 	const filledGrid = await fillGridWithInterview(questions, data.transcript);
 
-	return JSON.stringify({
+	return {
 		...rest,
 		filledGrid,
-	});
+	};
 };
