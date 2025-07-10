@@ -5,7 +5,13 @@ export function Layout() {
 	return (
 		<>
 			<header>
-				<div className="container">Pipl Analytics</div>
+				<div className="container items-start">
+					<img
+						src="./assets/logo_white.svg"
+						alt="Pipl Analytics Logo"
+						className="logo h-8"
+					/>
+				</div>
 			</header>
 			<main className="container">{children}</main>
 		</>

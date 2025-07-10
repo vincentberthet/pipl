@@ -1,7 +1,5 @@
-import { X } from "lucide-react";
 import { type FormEvent, useMemo } from "react";
-import { Link } from "react-router";
-import { FormStepper } from "../../components/FormStepper.js";
+import { Form } from "../../components/Form.js";
 import { ImportFilesStep } from "./form/ImportFilesStep.js";
 import { InformationStep } from "./form/InformationStep.js";
 
@@ -20,15 +18,11 @@ export function AnalyticsForm() {
 	);
 
 	return (
-		<form onSubmit={handleSubmit}>
-			<h1 className="flex flex-row justify-between items-center">
-				Analyser un entretien
-				<Link to="/">
-					<X />
-				</Link>
-			</h1>
-
-			<FormStepper steps={steps} submitLabel="Analyser l'entretien" />
-		</form>
+		<Form
+			handleSubmit={handleSubmit}
+			steps={steps}
+			pageTitle="Analyser un entretien"
+			submitLabel="Analyser l'entretien"
+		/>
 	);
 }
