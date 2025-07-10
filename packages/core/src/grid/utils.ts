@@ -69,7 +69,16 @@ export const gridSchema = z
 	.meta({ description: "La grille d'entretien structurée" });
 export type GridSchema = z.infer<typeof gridSchema>;
 
-export type GroupedData = { category: string; questions: QuestionSchema[] }[];
+export const groupedDataSchema = z.array(
+	z.object({
+		category: z.string().meta({ description: "La catégorie de la question" }),
+		questions: z.array(questionSchema).meta({
+			description: "Les questions de la catégorie",
+		}),
+	}),
+);
+
+export type GroupedData = z.infer<typeof groupedDataSchema>;
 
 export const printGrid = (grid: GridSchema, jobName: string) => {
 	if (grid.length === 0) {
@@ -94,7 +103,11 @@ export const printGrid = (grid: GridSchema, jobName: string) => {
 	return output;
 };
 
-export const printGridDocx = async (grid: GroupedData, jobName: string) => {
+export const printGridDocx = async (
+	filePath: string,
+	grid: GroupedData,
+	jobName: string,
+) => {
 	const document = new docx.Document({
 		sections: [
 			{
@@ -232,5 +245,5 @@ export const printGridDocx = async (grid: GroupedData, jobName: string) => {
 	});
 
 	const buffer = await docx.Packer.toBuffer(document);
-	await fs.writeFile("out/grid-result.docx", buffer);
+	await fs.writeFile(filePath, buffer);
 };
