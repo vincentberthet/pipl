@@ -33,8 +33,8 @@ IMPORTANT: Les questions doivent être courtes et concises.
 IMPORTANT: Les questions doivent faire maximum 20 mots.
 
 Voici ${nbDocuments} documents relatifs au métier de ${jobName}. A partir de ces documents, je voudrais que tu génères une grille d’entretien pour évaluer des candidats à ce poste :
-3 questions de connaissances liées à ce poste (savoirs)
-3 compétences techniques (savoir-faire) et 3 compétences comportementales (savoir-être). Pour chaque compétence, génère 2 questions comportementales et 2 questions situationnelles 
+3 questions de connaissances liées à ce poste ("Connaissances liées au poste")
+3 compétences techniques ("Hard skills") et 3 compétences comportementales ("Soft skills"). Pour chaque compétence, génère 2 questions comportementales et 2 questions situationnelles 
 les critères de notation pour évaluer les réponses à chaque question : utilise 3 critères binaires pour les questions de connaissances et les questions situationnelles
 
 Fais des questions concises.
@@ -49,8 +49,13 @@ const category = z
 	.string()
 	.meta({ description: "La catégorie de la question" });
 
+const questionType = z.enum(["comportementale", "situationnelle"]).meta({
+	description: "Le type de la question (comportementale ou situationnelle)",
+});
+
 const binaryCriteriaSchema = z.object({
 	question,
+	questionType,
 	category,
 	criterias: z.array(
 		z.string().meta({
@@ -59,7 +64,7 @@ const binaryCriteriaSchema = z.object({
 	),
 });
 
-const STARCriteriaSchema = z.object({ question, category });
+const STARCriteriaSchema = z.object({ question, questionType, category });
 
 const questionSchema = z.union([binaryCriteriaSchema, STARCriteriaSchema]);
 export type QuestionSchema = z.infer<typeof questionSchema>;
@@ -134,7 +139,11 @@ export const printGridDocx = async (grid: GroupedData, jobName: string) => {
 								heading: docx.HeadingLevel.HEADING_2,
 							}),
 							...element.questions.flatMap((element, index) => {
-								const questionText = `Question ${index + 1} : ${element.question}`;
+								const questionTypeText =
+									element.category === "Connaissances liées au poste"
+										? ""
+										: `(question ${element.questionType}) `;
+								const questionText = `Question ${index + 1} ${questionTypeText}: ${element.question}`;
 								if ("criterias" in element && element.criterias) {
 									return [
 										new docx.Paragraph({
@@ -184,7 +193,7 @@ export const printGridDocx = async (grid: GroupedData, jobName: string) => {
 													bold: true,
 												}),
 												new docx.TextRun({
-													text: "Situation",
+													text: "Situation pertinente",
 												}),
 											],
 										}),
@@ -195,7 +204,7 @@ export const printGridDocx = async (grid: GroupedData, jobName: string) => {
 													bold: true,
 												}),
 												new docx.TextRun({
-													text: "Tâche",
+													text: "Tâche clairement définie",
 												}),
 											],
 										}),
@@ -206,7 +215,7 @@ export const printGridDocx = async (grid: GroupedData, jobName: string) => {
 													bold: true,
 												}),
 												new docx.TextRun({
-													text: "Actions",
+													text: "Actions efficaces",
 												}),
 											],
 										}),
@@ -217,7 +226,7 @@ export const printGridDocx = async (grid: GroupedData, jobName: string) => {
 													bold: true,
 												}),
 												new docx.TextRun({
-													text: "Résultats",
+													text: "Résultat positif",
 												}),
 											],
 										}),
