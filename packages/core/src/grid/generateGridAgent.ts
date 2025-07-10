@@ -60,5 +60,5 @@ export const generateGridAgent = async (
 		questions: data.filter((item) => item.category === category),
 	}));
 
-	await printGridDocx(groupedData, jobName);
+	await printGridDocx("out/grid-result.docx", groupedData, jobName);
 };

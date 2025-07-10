@@ -24,6 +24,9 @@
 		"./grid": {
 			"import": "./dist/grid/index.js"
 		},
+		"./grid/*": {
+			"import": "./dist/grid/*.js"
+		},
 		"./commons/*": {
 			"import": "./dist/commons/*.js"
 		}
