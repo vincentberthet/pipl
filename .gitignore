@@ -17,6 +17,7 @@
 **/*.pem
 
 # Test
+**/dist.zip
 /test
 **/data/**/*
 !data/.gitkeep

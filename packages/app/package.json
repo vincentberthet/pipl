@@ -6,8 +6,8 @@
 	"license": "UNLICENSED",
 	"private": true,
 	"scripts": {
-		"dev": "vite dev",
 		"build": "vite build",
+		"dev": "vite dev",
 		"typecheck": "tsc --noEmit"
 	},
 	"dependencies": {

@@ -8,6 +8,7 @@ install:
 
 build:									## Build the project
 	npx turbo run build
+	@(cd packages/app/dist && zip -r ../dist.zip . > /dev/null)
 
 dev:									## Start the development server
 	npx turbo run build:dev dev

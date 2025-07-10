@@ -36,12 +36,12 @@ export function FormStepperContextProvider({
 	);
 
 	const onPrevious = useCallback(
-		() => setCurrentStepStep((prev) => Math.min(prev - 1, 0)),
+		() => setCurrentStepStep((prev) => Math.max(prev - 1, 0)),
 		[],
 	);
 
 	const onNext = useCallback(() => {
-		setCurrentStepStep((prev) => Math.max(prev + 1, totalSteps - 1));
+		setCurrentStepStep((prev) => Math.min(prev + 1, totalSteps - 1));
 	}, [totalSteps]);
 
 	return (
