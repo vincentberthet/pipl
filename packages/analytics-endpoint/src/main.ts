@@ -6,7 +6,7 @@ import {
 import type { APIGatewayProxyHandlerV2 } from "aws-lambda";
 
 const sfn = new SFNClient({
-	region: import.meta.env.VITE_AWS_REGION,
+	region: process.env.AWS_REGION,
 });
 
 export type Payload = {
@@ -39,7 +39,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
 
 	const { executionArn } = await sfn.send(
 		new StartExecutionCommand({
-			stateMachineArn: import.meta.env.VITE_STATE_MACHINE_ARM,
+			stateMachineArn: process.env.STATE_MACHINE_ARM,
 			input: JSON.stringify(data),
 		}),
 	);

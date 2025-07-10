@@ -3,7 +3,7 @@ import { z } from "zod/v4";
 import { gemini } from "../commons/gemini.js";
 import { filledGridSchema } from "./analyzeInterview.schema.js";
 import type { Transcript } from "./generateTranscript.schema.js";
-import type { Questions } from "./question.js";
+import type { Questions } from "./question.schema.js";
 
 const ANALYTICS_SYSTEM_PROMPT = `Tu es un responsable des ressources humaines. Ton rôle est d'analyser des entretiens d'embauche structuré et de vérifier que les candidats sont qualifiés pour le poste.
 
