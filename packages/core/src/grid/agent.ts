@@ -21,7 +21,7 @@ export const generateGrid = async (contents: Content) =>
 
 export const parseResponse = async (
 	response: AsyncIterable<{ text?: string }>,
-) => {
+): Promise<GroupedByCompetence> => {
 	const chunks = [];
 	for await (const chunk of response) {
 		chunks.push(chunk.text ?? "");

@@ -5,12 +5,15 @@ import { generateGrid, parseResponse } from "@pipl-analytics/core/grid/agent";
 import {
 	type AgentProps,
 	agentPropsSchema,
+	type GenerateGridProps,
 } from "@pipl-analytics/core/grid/document.schema";
 import { prompt } from "@pipl-analytics/core/grid/utils";
 
 const s3 = new S3Client({ region: process.env.AWS_REGION });
 
-export const handler = async (event: AgentProps) => {
+export const handler = async (
+	event: AgentProps,
+): Promise<GenerateGridProps> => {
 	const { success, data, error } = agentPropsSchema.safeParse(event);
 	if (!success) {
 		throw new Error(`Invalid input: ${JSON.stringify(error)}`);
