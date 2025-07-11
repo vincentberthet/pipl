@@ -26,7 +26,8 @@ export const ImportStep = () => (
 		</legend>
 
 		<label htmlFor="grid-files">
-			Fiche de poste, fiches de compétences, offre d'emploi...
+			Fiche de poste, offre d'emploi, fiche de compétences, tâches clés du
+			poste, etc.
 		</label>
 		<input
 			type="file"
