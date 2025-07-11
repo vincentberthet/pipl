@@ -206,7 +206,7 @@ export const printGridDocx = async (
 													bold: true,
 												}),
 												new docx.TextRun({
-													text: "Situation pertinente",
+													text: "S (Situation) : le candidat décrit-il une situation professionnelle pertinente ?",
 												}),
 											],
 										}),
@@ -217,7 +217,7 @@ export const printGridDocx = async (
 													bold: true,
 												}),
 												new docx.TextRun({
-													text: "Tâche clairement définie",
+													text: "T (Tâche) : le candidat décrit-il son rôle et ses responsabilités dans la situation en question ?",
 												}),
 											],
 										}),
@@ -228,7 +228,7 @@ export const printGridDocx = async (
 													bold: true,
 												}),
 												new docx.TextRun({
-													text: "Actions efficaces",
+													text: "A (Action) : le candidat décrit-il les actions qu’il a entreprises pour atteindre un objectif ou pour résoudre un problème ?",
 												}),
 											],
 										}),
@@ -239,7 +239,7 @@ export const printGridDocx = async (
 													bold: true,
 												}),
 												new docx.TextRun({
-													text: "Résultat positif",
+													text: "R (Résultat) : le candidat décrit-il les résultats ou l’impact obtenus, idéalement avec des données chiffrées",
 												}),
 											],
 										}),
