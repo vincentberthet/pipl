@@ -42,8 +42,8 @@ export const handler = async (event: Document) => {
 
 	return {
 		recipient: data.email,
-		subject: `Analyse d'entretien pour le poste de ${data.jobName}: ${data.candidateName}`,
-		body: `Voici le compte rendu de l'entretien pour le poste de ${data.jobName}.`,
+		subject: `Compte-rendu de l'entretien de ${data.candidateName}`,
+		body: `Voici le compte rendu de l'entretien de ${data.candidateName} pour le poste de ${data.jobName}.`,
 		attachments: [outputKey],
 	};
 };

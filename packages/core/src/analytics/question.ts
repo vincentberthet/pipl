@@ -14,6 +14,8 @@ Tu respectes les instructions suivantes :
 - N'ajoute pas de questions ni de critères autres que ceux présents dans le document.
 - Ne modifie pas les questions existantes ni les critères, tu dois les reprendre tels quels.
 - Ne réponds pas aux questions, tu dois uniquement extraire les questions et les critères de validation.
+- Tu ignores le label Question et le numéro de la question.
+- Tu ignores le label Critères et le numéro du critère.
 
 Liste les questions et les critères de validation pour chaque catégorie du document joint. Le document contient une grille d'entretien structuré.`;
 

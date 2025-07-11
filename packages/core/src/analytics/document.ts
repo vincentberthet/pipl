@@ -22,18 +22,18 @@ ${filledGrid
 	.map(({ category, questions }) => {
 		return `### ${category}
 		${questions
-			.map(({ question, criterias }, i) => {
+			.map(({ question, criterias, answer }, i) => {
 				return `#### Question ${i + 1} : ${question}
+${answer ? `\n**Réponse du candidat :**\n${answer}` : ""}
 ${criterias
 	.map(
-		({ criteria, passes, answer }, i) =>
-			`* ${passes ? "✅" : "❌"} **Critère ${i + 1} :** ${criteria}` +
-			(passes ? `**\nRéponse du candidat :** ${answer?.text}` : ""),
+		({ criteria, passes }, i) =>
+			`* ${passes ? "✅" : "❌"} **Critère ${i + 1} :** ${criteria}`,
 	)
 	.join("\n")}`;
 			})
 			.join("\n")}
-`;
+			`;
 	})
 	.join("\n\n")}`;
 
@@ -85,7 +85,7 @@ export async function writeDocxOutput(
 					new docx.Paragraph({
 						children: [
 							new docx.TextRun({
-								text: `Grille d'évaluation de l'entretien`,
+								text: `Évaluation de l'entretien suivant la grille`,
 								bold: true,
 							}),
 						],
@@ -106,13 +106,12 @@ export async function writeDocxOutput(
 							new docx.Paragraph({
 								children: [
 									new docx.TextRun({
-										text: `${category} (${passedCriteriaCount} / ${totalCriteriaCount})`,
+										text: `${category} (Score: ${passedCriteriaCount} / ${totalCriteriaCount})`,
 										bold: true,
 									}),
 								],
 								heading: docx.HeadingLevel.HEADING_3,
 							}),
-
 							...questions.flatMap((question, i) => {
 								return [
 									new docx.Paragraph({
@@ -124,6 +123,26 @@ export async function writeDocxOutput(
 										],
 										heading: docx.HeadingLevel.HEADING_4,
 									}),
+									...(question.answer
+										? [
+												new docx.Paragraph({
+													children: [
+														new docx.TextRun({
+															text: `Réponse du candidat : \n`,
+															bold: true,
+															break: 1,
+														}),
+														new docx.TextRun({
+															text: `${question.answer}`,
+														}),
+														new docx.TextRun({
+															text: "",
+															break: 1,
+														}),
+													],
+												}),
+											]
+										: []),
 									...question.criterias.flatMap((criteria, i) => {
 										return [
 											new docx.Paragraph({
@@ -143,18 +162,6 @@ export async function writeDocxOutput(
 													new docx.TextRun({
 														text: `${criteria.criteria}`,
 													}),
-													...(criteria.passes
-														? [
-																new docx.TextRun({
-																	text: `Réponse du candidat : \n`,
-																	bold: true,
-																	break: 1,
-																}),
-																new docx.TextRun({
-																	text: `${criteria.answer?.text || "Aucune réponse"}`,
-																}),
-															]
-														: []),
 												],
 											}),
 										];
