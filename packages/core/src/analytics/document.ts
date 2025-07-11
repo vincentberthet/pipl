@@ -76,7 +76,7 @@ export async function writeDocxOutput(
 					new docx.Paragraph({
 						children: [
 							new docx.TextRun({
-								text: `Analyse de l'entretien de ${candidateName}`,
+								text: `Compte-rendu de l'entretien de ${candidateName}`,
 								bold: true,
 							}),
 						],
