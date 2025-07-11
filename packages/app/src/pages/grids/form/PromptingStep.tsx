@@ -14,10 +14,10 @@ export const PromptingStep = () => {
 			</legend>
 			<div className="flex flex-col gap-4">
 				<div>
-					<h3 className="pt-2">Connaissances du poste</h3>
+					<h3 className="pt-2">Connaissances liées au poste</h3>
 					<Input
 						name="nb-questions-poste"
-						label="questions de connaissance relatives au poste"
+						label="questions de connaissances relatives au poste"
 					/>
 				</div>
 				<div>
@@ -28,19 +28,15 @@ export const PromptingStep = () => {
 					/>
 				</div>
 				<div className="px-12">
-					<h4>Questions pour chaque compétences comportementales évaluées</h4>
+					<h4>Questions pour chaque compétences techniques à évaluer</h4>
 					<div className="flex flex-col gap-2">
 						<Input
-							name="tech-nb-questions-competences"
-							label="questions de compétences"
+							name="tech-nb-questions-experience"
+							label="questions d'expérience"
 						/>
 						<Input
-							name="tech-nb-questions-comportementales"
-							label="questions comportementales"
-						/>
-						<Input
-							name="tech-nb-questions-situationnelles"
-							label="questions situationnelles"
+							name="tech-nb-questions-situation"
+							label="questions de mise en situation"
 						/>
 					</div>
 				</div>
@@ -53,18 +49,20 @@ export const PromptingStep = () => {
 				</div>
 				<div className="px-12">
 					<div className="flex flex-col gap-2">
-						<h4>Questions pour chaque compétences comportementales évaluées</h4>
+						<h4>
+							Questions pour chaque compétences comportementales à évaluer
+						</h4>
 						<Input
-							name="comportementale-nb-questions-comportementales"
-							label="questions comportementales"
+							name="comportementale-nb-questions-experience"
+							label="questions d'expérience"
 						/>
 						<Input
-							name="comportementale-nb-questions-situationnelles"
-							label="questions situationnelles"
+							name="comportementale-nb-questions-situation"
+							label="questions de mise en situation"
 						/>
 					</div>
 				</div>
-				Total: {totalQuestions} questions
+				Total: {totalQuestions} / 40 questions
 			</div>
 		</>
 	);

@@ -1,5 +1,5 @@
 import { X } from "lucide-react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Link } from "react-router";
 import { Form } from "../../components/Form.js";
 import { FinalizeStep } from "./form/FinalizeStep.js";
@@ -11,20 +11,13 @@ import { PromptingStep } from "./form/PromptingStep.js";
 export function GridsPage() {
 	const [step, setStep] = useState<"form" | "loading" | "finished">("form");
 
-	// TODO: remove this effect when the form is connected to the backend
-	useEffect(() => {
-		if (step !== "loading") {
-			return;
-		}
-		// Simulate a loading state for demonstration purposes
-		const timer = setTimeout(() => {
-			setStep("finished");
-		}, 2000); // Change to 2000ms for a realistic loading time
-
-		return () => clearTimeout(timer);
-	}, [step]);
-
-	const handleSubmit = useCallback(async () => {}, []);
+	const handleSubmit = useCallback(async () => {
+		// TODO: change the content of this function once the backend is connected to the frontend
+		setStep("loading");
+		await new Promise((resolve) => setTimeout(resolve, 2000));
+		setStep("finished");
+		await new Promise((resolve) => setTimeout(resolve, 2000));
+	}, []);
 
 	const steps = useMemo(
 		() => [
@@ -39,14 +32,14 @@ export function GridsPage() {
 		<Form
 			onSubmit={handleSubmit}
 			steps={steps}
-			pageTitle="Générer une grille d'évaluation"
-			submitLabel="Générer la grille &#x3E;"
+			pageTitle="Générer une grille d'entretien"
+			submitLabel="Générer la grille"
 		/>
 	) : (
 		<form>
 			<h1 className="flex flex-row justify-between items-center">
 				<div />
-				Générer une grille d'évaluation
+				Générer une grille d'entretien
 				<Link to="/">
 					<X />
 				</Link>

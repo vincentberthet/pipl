@@ -6,7 +6,7 @@ export function ImportFilesStep() {
 			</legend>
 
 			<label htmlFor="analytics-audio">
-				Sélectionner l'audio de l'entretien
+				Sélectionner l'enregistrement de l'entretien
 			</label>
 			<input
 				type="file"
@@ -16,9 +16,7 @@ export function ImportFilesStep() {
 				accept=".mp3"
 			/>
 
-			<label htmlFor="analytics-grid">
-				Sélectionner la grille d'évaluation à compléter
-			</label>
+			<label htmlFor="analytics-grid">Sélectionner la grille d'entretien</label>
 			<input
 				type="file"
 				className="file-input"
