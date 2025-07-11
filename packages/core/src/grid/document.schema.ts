@@ -1,22 +1,23 @@
 import * as z from "zod/v4";
-import { groupedDataSchema } from "./utils.js";
+import { groupedByCompetenceSchema } from "./utils.js";
 
-export const documentSchema = z.object({
+// grid-generate-docx
+export const generateGridPropsSchema = z.object({
 	email: z.email(),
 	jobName: z.string().min(1).max(100),
-	grid: groupedDataSchema,
+	grid: groupedByCompetenceSchema,
 });
+export type GenerateGridProps = z.infer<typeof generateGridPropsSchema>;
 
-export type Document = z.infer<typeof documentSchema>;
-
+// grid-agent
 export const agentPropsSchema = z.object({
 	pathToFiles: z.array(z.string()),
 	jobName: z.string(),
 	email: z.email(),
 });
-
 export type AgentProps = z.infer<typeof agentPropsSchema>;
 
+// grid-endpoint
 export const gridEndpointSchema = agentPropsSchema.extend({
 	accessToken: z.string(),
 });

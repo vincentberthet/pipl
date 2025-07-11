@@ -1,7 +1,8 @@
 import * as fs from "node:fs/promises";
 import { createPartFromBase64, createUserContent } from "@google/genai";
 import { generateGrid, parseResponse } from "./agent.js";
-import { printGridDocx, prompt } from "./utils.js";
+import { printGridDocx } from "./prindGridDocx.js";
+import { prompt } from "./utils.js";
 
 export const generateGridAgent = async (
 	pathToFiles: string[],

@@ -3,15 +3,15 @@ import fs from "node:fs/promises";
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { getMimeTypeFromFileName } from "@pipl-analytics/core/commons/file";
 import {
-	documentSchema,
-	type GridEndpoint,
+	type GenerateGridProps,
+	generateGridPropsSchema,
 } from "@pipl-analytics/core/grid/document.schema";
-import { printGridDocx } from "@pipl-analytics/core/grid/utils";
+import { printGridDocx } from "@pipl-analytics/core/grid/prindGridDocx";
 
 const s3 = new S3Client({ region: process.env.AWS_REGION });
 
-export const handler = async (event: GridEndpoint) => {
-	const { success, data, error } = documentSchema.safeParse(event);
+export const handler = async (event: GenerateGridProps) => {
+	const { success, data, error } = generateGridPropsSchema.safeParse(event);
 	if (!success) {
 		throw new Error(`Invalid input data, error: ${JSON.stringify(error)}`);
 	}
