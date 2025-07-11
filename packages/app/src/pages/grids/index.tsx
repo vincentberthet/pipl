@@ -1,8 +1,7 @@
 import { useCallback, useMemo } from "react";
 import * as z from "zod/v4";
-import { toBase64 } from "../../commons/file.js";
 import { fireAndForget } from "../../commons/http.js";
-
+import { uploadFiles } from "../../commons/s3.js";
 import { Form } from "../../components/Form.js";
 import { FinalizeStep } from "./form/FinalizeStep.js";
 import { gridFormSchema } from "./form/gridsFormSchema.js";
@@ -29,17 +28,10 @@ export function GridsPage() {
 		}
 
 		const { files, ...rest } = data;
-
-		const encodedFiles = await Promise.all(
-			files.map(async (file) => ({
-				type: file.name.split(".").pop(),
-				data: await toBase64(file),
-			})),
-		);
-
+		const pathToFiles = await uploadFiles(files);
 		return fireAndForget(`${import.meta.env.VITE_API_ENDPOINT}/grids`, {
 			...rest,
-			files: encodedFiles,
+			pathToFiles,
 		});
 	}, []);
 
