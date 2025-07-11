@@ -1,15 +1,17 @@
-// import { randomUUID } from "node:crypto";
 import * as fs from "node:fs/promises";
 import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { createPartFromBase64, createUserContent } from "@google/genai";
 import { generateGrid, parseResponse } from "@pipl-analytics/core/grid/agent";
-import { agentPropsSchema } from "@pipl-analytics/core/grid/document.schema";
+import {
+	type AgentProps,
+	agentPropsSchema,
+} from "@pipl-analytics/core/grid/document.schema";
 import { prompt } from "@pipl-analytics/core/grid/utils";
 
 const s3 = new S3Client({ region: process.env.AWS_REGION });
 
-export const handler = async ({ body }: { body: string }) => {
-	const { success, data, error } = agentPropsSchema.safeParse(body);
+export const handler = async (event: AgentProps) => {
+	const { success, data, error } = agentPropsSchema.safeParse(event);
 	if (!success) {
 		throw new Error(`Invalid input: ${JSON.stringify(error)}`);
 	}
@@ -33,17 +35,9 @@ export const handler = async ({ body }: { body: string }) => {
 		}),
 	);
 
-	// TODO: remove those logs
-	console.log("readedFiles");
-	console.log(readedFiles);
-
 	const encodedFiles = readedFiles.map((file) =>
 		createPartFromBase64(file, "application/pdf"),
 	);
-
-	// TODO: remove those logs
-	console.log("encodedFiles");
-	console.log(encodedFiles);
 
 	const contents = createUserContent([
 		...encodedFiles,
