@@ -1,5 +1,3 @@
-import * as fs from "node:fs/promises";
-import * as docx from "docx";
 import { z } from "zod/v4";
 export const prompt = ({
 	nbDocuments,
@@ -41,32 +39,29 @@ Fais des questions concises.
 Fais des questions de moins de 20 mots.
 `;
 
-const question = z
-	.string()
-	.meta({ description: "La question de la grille d'évaluation" });
-
-const category = z
-	.string()
-	.meta({ description: "La catégorie de la question" });
-
-const questionType = z.enum(["comportementale", "situationnelle"]).meta({
-	description: "Le type de la question (comportementale ou situationnelle)",
-});
-
-const binaryCriteriaSchema = z.object({
-	question,
-	questionType,
-	category,
-	criterias: z.array(
-		z.string().meta({
-			description: "Un critère binaire pour évaluer une réponse",
+const questionSchema = z
+	.object({
+		question: z
+			.string()
+			.meta({ description: "La question de la grille d'évaluation" }),
+		questionType: z.enum(["comportementale", "situationnelle"]).meta({
+			description: "Le type de la question (comportementale ou situationnelle)",
 		}),
-	),
-});
-
-const STARCriteriaSchema = z.object({ question, questionType, category });
-
-const questionSchema = z.union([binaryCriteriaSchema, STARCriteriaSchema]);
+		category: z.string().meta({ description: "La catégorie de la question" }),
+		criterias: z.optional(
+			z.array(
+				z.string().meta({
+					description: "Un critère binaire pour évaluer une réponse",
+				}),
+			),
+		),
+		competence: z.optional(
+			z.string().meta({ description: "La compétence associée à la question" }),
+		),
+	})
+	.meta({
+		description: "Une question de la grille d'entretien structurée",
+	});
 export type QuestionSchema = z.infer<typeof questionSchema>;
 
 export const gridSchema = z
@@ -84,175 +79,3 @@ export const groupedDataSchema = z.array(
 );
 
 export type GroupedData = z.infer<typeof groupedDataSchema>;
-
-export const printGrid = (grid: GridSchema, jobName: string) => {
-	if (grid.length === 0) {
-		return "Aucune question trouvée dans la grille.";
-	}
-
-	let output = `# Grille d’entretien – ${jobName}\n`;
-
-	grid.forEach((element, index) => {
-		output += `\n## Question ${index + 1}. ${element.question}\n\n`;
-
-		if ("criterias" in element && element.criterias) {
-			element.criterias.forEach((criteria, criteriaIndex) => {
-				output += `- Critère ${criteriaIndex + 1} (Oui/Non): ${criteria}\n`;
-			});
-		} else {
-			output +=
-				"Critères de la méthode STAR :\n\n- Critère 1 : Situation\n- Critère 2 : Tâche\n- Critère 3 : Actions\n- Critère 4 : Résultats\n";
-		}
-	});
-
-	return output;
-};
-
-export const printGridDocx = async (
-	filePath: string,
-	grid: GroupedData,
-	jobName: string,
-) => {
-	const document = new docx.Document({
-		sections: [
-			{
-				children: [
-					new docx.Paragraph({
-						children: [
-							new docx.TextRun({
-								text: `Grille d’entretien – ${jobName}`,
-								bold: true,
-							}),
-						],
-						heading: docx.HeadingLevel.HEADING_1,
-					}),
-					...grid.flatMap((element) => {
-						if (element.questions.length === 0) {
-							return [
-								new docx.Paragraph({
-									children: [
-										new docx.TextRun({
-											text: `Aucune question trouvée pour la catégorie ${element.category}.`,
-											bold: true,
-										}),
-									],
-									heading: docx.HeadingLevel.HEADING_3,
-								}),
-							];
-						}
-						const categoryText = `Catégorie : ${element.category}`;
-						return [
-							new docx.Paragraph({
-								children: [
-									new docx.TextRun({
-										text: categoryText,
-										bold: true,
-									}),
-								],
-								heading: docx.HeadingLevel.HEADING_2,
-							}),
-							...element.questions.flatMap((element, index) => {
-								const questionTypeText =
-									element.category === "Connaissances liées au poste"
-										? ""
-										: `(question ${element.questionType}) `;
-								const questionText = `Question ${index + 1} ${questionTypeText}: ${element.question}`;
-								if ("criterias" in element && element.criterias) {
-									return [
-										new docx.Paragraph({
-											children: [
-												new docx.TextRun({
-													text: questionText,
-												}),
-											],
-											heading: docx.HeadingLevel.HEADING_3,
-										}),
-										...element.criterias.flatMap((criteria, criteriaIndex) => {
-											return new docx.Paragraph({
-												children: [
-													new docx.TextRun({
-														text: `Critère ${criteriaIndex + 1} (Oui/Non): `,
-														bold: true,
-													}),
-													new docx.TextRun({
-														text: criteria,
-													}),
-												],
-											});
-										}),
-									];
-								} else {
-									return [
-										new docx.Paragraph({
-											children: [
-												new docx.TextRun({
-													text: questionText,
-												}),
-											],
-											heading: docx.HeadingLevel.HEADING_3,
-										}),
-										new docx.Paragraph({
-											children: [
-												new docx.TextRun({
-													text: "Critères de la méthode STAR :",
-													bold: true,
-												}),
-											],
-										}),
-										new docx.Paragraph({
-											children: [
-												new docx.TextRun({
-													text: "Critère 1 : ",
-													bold: true,
-												}),
-												new docx.TextRun({
-													text: "S (Situation) : le candidat décrit-il une situation professionnelle pertinente ?",
-												}),
-											],
-										}),
-										new docx.Paragraph({
-											children: [
-												new docx.TextRun({
-													text: "Critère 2 : ",
-													bold: true,
-												}),
-												new docx.TextRun({
-													text: "T (Tâche) : le candidat décrit-il son rôle et ses responsabilités dans la situation en question ?",
-												}),
-											],
-										}),
-										new docx.Paragraph({
-											children: [
-												new docx.TextRun({
-													text: "Critère 3 : ",
-													bold: true,
-												}),
-												new docx.TextRun({
-													text: "A (Action) : le candidat décrit-il les actions qu’il a entreprises pour atteindre un objectif ou pour résoudre un problème ?",
-												}),
-											],
-										}),
-										new docx.Paragraph({
-											children: [
-												new docx.TextRun({
-													text: "Critère 4 : ",
-													bold: true,
-												}),
-												new docx.TextRun({
-													text: "R (Résultat) : le candidat décrit-il les résultats ou l’impact obtenus, idéalement avec des données chiffrées",
-												}),
-											],
-										}),
-									];
-								}
-							}),
-						];
-					}),
-				],
-			},
-		],
-	});
-
-	const buffer = await docx.Packer.toBuffer(document);
-	await fs.writeFile(filePath, buffer);
-};

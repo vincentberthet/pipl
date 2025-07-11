@@ -6,7 +6,7 @@ import {
 	documentSchema,
 	type GridEndpoint,
 } from "@pipl-analytics/core/grid/document.schema";
-import { printGridDocx } from "@pipl-analytics/core/grid/utils";
+import { printGridDocx } from "@pipl-analytics/core/grid/prindGridDocx";
 
 const s3 = new S3Client({ region: process.env.AWS_REGION });
 
