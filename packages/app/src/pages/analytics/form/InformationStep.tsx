@@ -22,7 +22,9 @@ export function InformationStep() {
 				placeholder="Ex. Jean Dupont"
 			/>
 
-			<label htmlFor="analytics-email">Email (pour recevoir la grille)</label>
+			<label htmlFor="analytics-email">
+				Email (pour recevoir les résultats)
+			</label>
 			<input
 				type="email"
 				className="input"

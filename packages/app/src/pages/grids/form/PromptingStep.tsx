@@ -11,13 +11,40 @@ export const PromptingStep = () => {
 		<>
 			<legend className="fieldset-legend">
 				<h2>Étape 2/3 : Personnalisez la grille d'entretien</h2>
+				<div className="tooltip tooltip-bottom">
+					<div className="border rounded-full w-5 h-5 flex justify-center text-sm font-light cursor-default">
+						?
+					</div>
+					<div className="tooltip-content text-start flex flex-col gap-1.5">
+						<p>
+							Questions d'expérience : elles consistent à interroger le candidat
+							sur des situations réelles qu’il a vécues. Exemple : « Parlez-moi
+							d’un cas où… »
+						</p>
+						<br />
+						<p>
+							Questions de mise en situation : elles placent le candidat dans un
+							contexte hypothétique. Exemple : « Imaginez que… »
+						</p>
+						<br />
+						<p>
+							Les questions d’expérience sont à privilégier car elles reflètent
+							les comportements réels du candidat. Les mises en situation sont
+							plus adaptées aux profils avec moins d’expérience.
+						</p>
+						<br />
+						<p>Il est recommandé : </p>
+						<p>- d'évaluer 6 à 8 compétences</p>
+						<p>- de poser 2 à 3 questions par compétences </p>
+					</div>
+				</div>
 			</legend>
 			<div className="flex flex-col gap-4">
 				<div>
-					<h3 className="pt-2">Connaissances du poste</h3>
+					<h3 className="pt-2">Connaissances liées au poste</h3>
 					<Input
 						name="nb-questions-poste"
-						label="questions de connaissance relatives au poste"
+						label="questions de connaissances liées au poste"
 					/>
 				</div>
 				<div>
@@ -28,19 +55,15 @@ export const PromptingStep = () => {
 					/>
 				</div>
 				<div className="px-12">
-					<h4>Questions pour chaque compétences comportementales évaluées</h4>
+					<h4>Questions pour chaque compétences techniques évaluées</h4>
 					<div className="flex flex-col gap-2">
 						<Input
-							name="tech-nb-questions-competences"
-							label="questions de compétences"
+							name="tech-nb-questions-experience"
+							label="questions d'expérience"
 						/>
 						<Input
-							name="tech-nb-questions-comportementales"
-							label="questions comportementales"
-						/>
-						<Input
-							name="tech-nb-questions-situationnelles"
-							label="questions situationnelles"
+							name="tech-nb-questions-situation"
+							label="questions de mise en situation"
 						/>
 					</div>
 				</div>
@@ -55,16 +78,16 @@ export const PromptingStep = () => {
 					<div className="flex flex-col gap-2">
 						<h4>Questions pour chaque compétences comportementales évaluées</h4>
 						<Input
-							name="comportementale-nb-questions-comportementales"
-							label="questions comportementales"
+							name="comportementale-nb-questions-experience"
+							label="questions d'expérience"
 						/>
 						<Input
-							name="comportementale-nb-questions-situationnelles"
-							label="questions situationnelles"
+							name="comportementale-nb-questions-situation"
+							label="questions de mise en situation"
 						/>
 					</div>
 				</div>
-				Total: {totalQuestions} questions
+				<div className="mt-4">Total: {totalQuestions} / 40 questions</div>
 			</div>
 		</>
 	);

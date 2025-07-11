@@ -97,7 +97,7 @@ function FormStepperFieldset({
 						{isSubmitting && (
 							<span className="loading loading-spinner loading-xs text-white"></span>
 						)}
-						{submitLabel}
+						{submitLabel} &#x3E;
 					</button>
 				) : (
 					<button

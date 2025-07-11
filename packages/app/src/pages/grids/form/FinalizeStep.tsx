@@ -8,13 +8,13 @@ export const FinalizeStep = () => (
 			type="text"
 			className="input mt-4"
 			name="job-name"
-			placeholder="Nom du poste"
+			placeholder="Nom du poste *"
 		/>
 		<input
 			type="email"
 			className="input mt-4"
 			name="email"
-			placeholder="Email (pour recevoir la grille)"
+			placeholder="Email (pour recevoir la grille) *"
 		/>
 	</>
 );
