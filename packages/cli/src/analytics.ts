@@ -3,6 +3,7 @@ import { parseArgs } from "node:util";
 
 import {
 	runAnalyticsAgent,
+	writeDocxOutput,
 	writeMarkdownOutput,
 } from "@pipl-analytics/core/analytics";
 
@@ -78,32 +79,19 @@ export async function runAnalytics(args: string[]) {
 				)
 		: await runAnalyticsAgent(values.audio, values.grid);
 
-	const [response] = await Promise.all([
-		fetch(process.env.ANALYTICS_ENDPOINT ?? "", {
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({
-				accessToken: process.env.LAMBDA_ACCESS_TOKEN,
-				candidateName,
-				jobName: values.job,
-				email: values.email,
-				transcript,
-				filledGrid,
-			}),
-		}),
+	await Promise.all([
 		fs.writeFile(
 			jsonOutFile,
 			JSON.stringify({ questions, transcript, filledGrid }, null, 2),
 		),
+		writeDocxOutput(
+			`out/${outputBaseName}.docx`,
+			candidateName,
+			transcript,
+			filledGrid,
+		),
 		writeMarkdownOutput(`out/${outputBaseName}.md`, transcript, filledGrid),
 	]);
-
-	if (!response.ok) {
-		console.error(
-			`Error: ${response.status} ${response.statusText} - ${await response.text()}`,
-		);
-		process.exit(1);
-	}
 
 	process.exit(0);
 }

@@ -22,11 +22,13 @@ La transcription de l'entretien est faite pour les deux personnes suivantes:
 Tu respectes les instructions suivantes :
 - Tu dois analyser les réponses du candidat présentes dans la transcription
 - Tu dois te baser sur la grille d'entretien au format JSON fournie pour vérifier que le candidat répond aux critères de la grille
-- Tu dois analyser uniquement les réponses du candidat, pas les questions du recruteur
-- Tu ne dois pas prendre en compte le recruteur dans l'analyse des critères
-- Tu dois inclure toutes les questions et tous les critères dans ton analyse
-- Tu dois être concis lorsque tu reprends la réponse du candidat permettant de valider un critère
-- Tu analyse une seule fois chaque question et chaque critère
+- Tu dois analyser uniquement les réponses du candidat, pas les questions du recruteur.
+- Tu ne dois pas prendre en compte le recruteur dans l'analyse des critères.
+- Tu dois inclure toutes les questions et tous les critères dans ton analyse.
+- Tu analyse une seule fois chaque catégorie, chaque question et chaque critère.
+- Tu ne dois pas répéter les catégories.
+- Lorsque tu reprends la réponse du candidat, tu dois la reprendre intégralement, sans la modifier.
+- Si le candidat a dit plusieurs phrases dans la même réponse, tu dois les reprendre toutes.
 
 Voici la grille d'entretien au format JSON à utiliser pour l'analyse : {{grid}}
 

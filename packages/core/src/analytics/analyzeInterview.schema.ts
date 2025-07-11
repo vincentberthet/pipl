@@ -21,24 +21,13 @@ export const filledGridSchema = z.array(
 							passes: z.boolean().meta({
 								description: "Si le candidat valide le critère",
 							}),
-							answer: z
-								.object({
-									text: z.string().meta({
-										description:
-											"La transcription de la réponse du candidat permettant de valider le critère",
-									}),
-									answerTimeCode: z.string().meta({
-										description:
-											"Le timecode de la réponse du candidat, sous la forme hh:mm:ss",
-									}),
-								})
-								.nullable()
-								.meta({
-									description:
-										"Si le candidat valide le critère, la réponse du candidat, sinon null",
-								}),
 						}),
 					),
+
+					answer: z.string().nullable().meta({
+						description:
+							"Si le candidat valide le critère, la réponse du candidat à la question, sinon `null`",
+					}),
 					questionTimeCode: z.string().nullable().meta({
 						description:
 							"Si la question a été posée par le recruteur, le timecode de la question du recruteur, sous la forme hh:mm:ss, sinon null",
