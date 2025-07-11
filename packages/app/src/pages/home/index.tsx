@@ -6,10 +6,10 @@ export function HomePage() {
 			<div className="grid grid-cols-1 md:grid-cols-2 auto-rows-auto gap-4">
 				<div className="card card-border">
 					<div className="card-body">
-						<h2 className="card-title">Génération de grille</h2>
+						<h2 className="card-title">Générer une grille d’entretien</h2>
 						<p>
-							Importez les documents du poste (fiche de posten de compétence,
-							offre d'emploi...) pour générer une grille d'entretien structuré.
+							Importez les documents liés au poste (fiche de poste, offre
+							d'emploi, etc.) pour générer une grille d'entretien structuré.
 						</p>
 						<div className="card-actions stretch">
 							<Link to="/grids" className="btn btn-primary w-full">
@@ -20,10 +20,10 @@ export function HomePage() {
 				</div>
 				<div className="card card-border">
 					<div className="card-body">
-						<h2 className="card-title">Analyse d'entretien</h2>
+						<h2 className="card-title">Analyser un entretien</h2>
 						<p>
-							Importez la grille d'valuation et l'enregistrement de l'entretien
-							pour la faire compléter par les réponses du candidat.
+							Importez la grille d'entretien et l'enregistrement de l'entretien
+							pour évaluer les réponses du candidat.
 						</p>
 						<div className="card-actions stretch">
 							<Link to="/analytics" className="btn btn-primary w-full">
