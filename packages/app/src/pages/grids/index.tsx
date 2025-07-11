@@ -1,50 +1,54 @@
-import { X } from "lucide-react";
-import { useCallback, useMemo, useState } from "react";
-import { Link } from "react-router";
+import { useCallback, useMemo } from "react";
+import * as z from "zod/v4";
+import { toBase64 } from "../../commons/file.js";
+import { fireAndForget } from "../../commons/http.js";
+
 import { Form } from "../../components/Form.js";
 import { FinalizeStep } from "./form/FinalizeStep.js";
-import { FinishedStep } from "./form/FinishedStep.js";
+import { gridFormSchema } from "./form/gridsFormSchema.js";
 import { ImportStep } from "./form/ImportStep.js";
-import { Loading } from "./form/Loading.js";
-import { PromptingStep } from "./form/PromptingStep.js";
 
 export function GridsPage() {
-	const [step, setStep] = useState<"form" | "loading" | "finished">("form");
-
-	const handleSubmit = useCallback(async () => {
-		// TODO: change the content of this function once the backend is connected to the frontend
-		setStep("loading");
-		await new Promise((resolve) => setTimeout(resolve, 2000));
-		setStep("finished");
-		await new Promise((resolve) => setTimeout(resolve, 2000));
-	}, []);
-
 	const steps = useMemo(
-		() => [
-			<ImportStep key="import" />,
-			<PromptingStep key="prompting" />,
-			<FinalizeStep key="finalize" />,
-		],
+		() => [<ImportStep key="import" />, <FinalizeStep key="finalize" />],
 		[],
 	);
 
-	return step === "form" ? (
+	const handleSubmit = useCallback(async (formData: FormData) => {
+		const { success, data, error } = gridFormSchema.safeParse({
+			...Object.fromEntries([...formData.entries()]),
+			files: formData.getAll("files"),
+		});
+
+		if (!success) {
+			console.error(
+				"Form validation failed:",
+				JSON.stringify(z.treeifyError(error)),
+			);
+			throw new Error("form_validation_error");
+		}
+
+		const { files, ...rest } = data;
+
+		const encodedFiles = await Promise.all(
+			files.map(async (file) => ({
+				type: file.name.split(".").pop(),
+				data: await toBase64(file),
+			})),
+		);
+
+		return fireAndForget(`${import.meta.env.VITE_API_ENDPOINT}/grids`, {
+			...rest,
+			files: encodedFiles,
+		});
+	}, []);
+
+	return (
 		<Form
 			onSubmit={handleSubmit}
 			steps={steps}
 			pageTitle="Générer une grille d'entretien"
 			submitLabel="Générer la grille"
 		/>
-	) : (
-		<form>
-			<h1 className="flex flex-row justify-between items-center">
-				<div />
-				Générer une grille d'entretien
-				<Link to="/">
-					<X />
-				</Link>
-			</h1>
-			{step === "loading" ? <Loading /> : <FinishedStep />}
-		</form>
 	);
 }

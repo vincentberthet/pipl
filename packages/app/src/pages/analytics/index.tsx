@@ -1,4 +1,5 @@
 import { useCallback, useMemo } from "react";
+import * as z from "zod/v4";
 import { toBase64 } from "../../commons/file.js";
 import { fireAndForget } from "../../commons/http.js";
 import { Form } from "../../components/Form.js";
@@ -13,7 +14,10 @@ export function AnalyticsForm() {
 		);
 
 		if (!success) {
-			console.error("Form validation failed:", error);
+			console.error(
+				"Form validation failed:",
+				JSON.stringify(z.treeifyError(error)),
+			);
 			throw new Error("form_validation_error");
 		}
 

@@ -7,7 +7,7 @@ export const FinalizeStep = () => (
 		<input
 			type="text"
 			className="input mt-4"
-			name="job-name"
+			name="jobName"
 			placeholder="Nom du poste *"
 		/>
 		<input
