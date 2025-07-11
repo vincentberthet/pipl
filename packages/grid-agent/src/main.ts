@@ -1,0 +1,55 @@
+import * as fs from "node:fs/promises";
+import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { createPartFromBase64, createUserContent } from "@google/genai";
+import { generateGrid, parseResponse } from "@pipl-analytics/core/grid/agent";
+import {
+	type AgentProps,
+	agentPropsSchema,
+} from "@pipl-analytics/core/grid/document.schema";
+import { prompt } from "@pipl-analytics/core/grid/utils";
+
+const s3 = new S3Client({ region: process.env.AWS_REGION });
+
+export const handler = async (event: AgentProps) => {
+	const { success, data, error } = agentPropsSchema.safeParse(event);
+	if (!success) {
+		throw new Error(`Invalid input: ${JSON.stringify(error)}`);
+	}
+
+	const { pathToFiles, jobName, email } = data;
+
+	const readedFiles = await Promise.all(
+		pathToFiles.map(async (pathToFile) => {
+			const [{ Body }] = await Promise.all([
+				s3.send(
+					new GetObjectCommand({
+						Bucket: process.env.S3_BUCKET,
+						Key: pathToFile,
+					}),
+				),
+				fs.mkdir("/tmp", { recursive: true }),
+			]);
+
+			if (!Body) throw new Error(`File not found: ${pathToFile}`);
+			return Body.transformToString("base64");
+		}),
+	);
+
+	const encodedFiles = readedFiles.map((file) =>
+		createPartFromBase64(file, "application/pdf"),
+	);
+
+	const contents = createUserContent([
+		...encodedFiles,
+		prompt({ nbDocuments: readedFiles.length, jobName }),
+	]);
+
+	const response = await generateGrid(contents);
+	const grid = await parseResponse(response);
+
+	return {
+		email,
+		jobName,
+		grid,
+	};
+};

@@ -1,0 +1,17 @@
+{
+	"name": "@pipl-analytics/grid-agent",
+	"type": "module",
+	"version": "0.1.0",
+	"description": "The question extractor for Pipl Analytics",
+	"license": "UNLICENSED",
+	"private": true,
+	"scripts": {
+		"build": "vite build",
+		"dev": "vite build --watch",
+		"typecheck": "tsc --noEmit"
+	},
+	"dependencies": {},
+	"devDependencies": {
+		"@pipl-analytics/core": "*"
+	}
+}
