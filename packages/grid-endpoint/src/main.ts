@@ -38,7 +38,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
 
 	const { executionArn } = await sfn.send(
 		new StartExecutionCommand({
-			stateMachineArn: process.env.STATE_MACHINE_ARM,
+			stateMachineArn: process.env.STATE_MACHINE_ARN,
 			input: JSON.stringify(rest),
 		}),
 	);

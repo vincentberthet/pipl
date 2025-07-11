@@ -18,7 +18,7 @@ export default defineConfig({
 			formats: ["es"],
 		},
 		rollupOptions: {
-			external: ["aws-lambda", "@aws-sdk/*"],
+			external: ["aws-lambda", "@aws-sdk/client-sfn"],
 		},
 	},
 });

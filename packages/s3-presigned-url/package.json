@@ -1,5 +1,5 @@
 {
-	"name": "@pipl-analytics/analytics-endpoint",
+	"name": "@pipl-analytics/s3-presigned-url",
 	"type": "module",
 	"version": "0.1.0",
 	"description": "The analytics endpoint for Pipl Analytics",
@@ -11,7 +11,8 @@
 		"typecheck": "tsc --noEmit"
 	},
 	"dependencies": {
-		"@aws-sdk/client-sfn": "^3.840.0"
+		"@aws-sdk/client-s3": "^3.842.0",
+		"@aws-sdk/s3-request-presigner": "^3.844.0"
 	},
 	"devDependencies": {
 		"@pipl-analytics/core": "*"

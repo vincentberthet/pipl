@@ -51,8 +51,9 @@ export const ImportStep = () => (
 			className="file-input h-50 rounded-md"
 			id="grid-files"
 			name="files"
-			accept="application/pdf"
 			placeholder="Fichiers PDF"
+			accept=".pdf,.docx"
+			multiple
 		/>
 	</>
 );

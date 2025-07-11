@@ -1,6 +1,7 @@
 import { useCallback, useMemo } from "react";
-import { toBase64 } from "../../commons/file.js";
+import * as z from "zod/v4";
 import { fireAndForget } from "../../commons/http.js";
+import { uploadFiles } from "../../commons/s3.js";
 import { Form } from "../../components/Form.js";
 import { analyticsFormSchema } from "./form/analyticsFormSchema.js";
 import { ImportFilesStep } from "./form/ImportFilesStep.js";
@@ -13,30 +14,21 @@ export function AnalyticsForm() {
 		);
 
 		if (!success) {
-			console.error("Form validation failed:", error);
+			console.error(
+				"Form validation failed:",
+				JSON.stringify(z.treeifyError(error)),
+			);
 			throw new Error("form_validation_error");
 		}
 
 		const { audio, grid, ...rest } = data;
 
-		const audioType = audio.name.split(".").pop();
-		const gridType = grid.name.split(".").pop();
-
-		const [audioFileContent, gridFileContent] = await Promise.all([
-			toBase64(audio),
-			toBase64(grid),
-		]);
+		const [audioObjectKey, gridObjectKey] = await uploadFiles([audio, grid]);
 
 		return fireAndForget(`${import.meta.env.VITE_API_ENDPOINT}/analytics`, {
 			...rest,
-			audio: {
-				type: audioType,
-				data: audioFileContent,
-			},
-			grid: {
-				type: gridType,
-				data: gridFileContent,
-			},
+			audioPath: audioObjectKey,
+			gridPath: gridObjectKey,
 		});
 	}, []);
 

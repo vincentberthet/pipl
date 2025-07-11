@@ -4,7 +4,7 @@ import tsConfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
 	root: __dirname,
-	cacheDir: `${__dirname}/../../node_modules/.vite/packages/grid-endpoint`,
+	cacheDir: `${__dirname}/../../node_modules/.vite/packages/mailer-lambda`,
 	plugins: [tsConfigPaths()],
 	esbuild: {
 		minifyWhitespace: true,
@@ -13,7 +13,7 @@ export default defineConfig({
 		minify: true,
 		lib: {
 			entry: path.resolve(__dirname, "src/main.js"),
-			name: "grid-endpoint",
+			name: "mailer-lambda",
 			fileName: "main",
 			formats: ["es"],
 		},
