@@ -13,7 +13,7 @@ export function ImportFilesStep() {
 				className="file-input"
 				id="analytics-audio"
 				name="audio"
-				accept=".mp3"
+				accept=".mp3,.mp4"
 			/>
 
 			<label htmlFor="analytics-grid">Sélectionner la grille d'entretien</label>
@@ -22,7 +22,7 @@ export function ImportFilesStep() {
 				className="file-input"
 				id="analytics-grid"
 				name="grid"
-				accept=".pdf,.doc,.docx"
+				accept=".pdf"
 			/>
 		</>
 	);
