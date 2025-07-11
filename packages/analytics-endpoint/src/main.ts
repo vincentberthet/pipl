@@ -11,8 +11,8 @@ const analyticsEndpointInputSchema = documentSchema
 	.omit({ filledGrid: true, transcript: true })
 	.extend({
 		accessToken: z.string(),
-		audio: z.string().min(1).max(1000),
-		grid: z.string().min(1).max(1000),
+		audioPath: z.string().min(1).max(1000),
+		gridPath: z.string().min(1).max(1000),
 	});
 
 export type Payload = z.infer<typeof analyticsEndpointInputSchema>;
@@ -38,7 +38,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
 		};
 	}
 
-	const { accessToken, ...rest } = data;
+	const { accessToken, audioPath, gridPath, ...rest } = data;
 	const authToken = process.env.LAMBDA_ACCESS_TOKEN;
 	if (accessToken !== authToken) {
 		return { statusCode: 401, body: JSON.stringify({ error: "unauthorized" }) };
@@ -49,8 +49,8 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
 			stateMachineArn: process.env.STATE_MACHINE_ARN,
 			input: JSON.stringify({
 				...rest,
-				audioObjectKey: data.audio,
-				gridObjectKey: data.grid,
+				audioObjectKey: audioPath,
+				gridObjectKey: gridPath,
 			}),
 		}),
 	);

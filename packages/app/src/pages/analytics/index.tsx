@@ -27,8 +27,8 @@ export function AnalyticsForm() {
 
 		return fireAndForget(`${import.meta.env.VITE_API_ENDPOINT}/analytics`, {
 			...rest,
-			audio: audioObjectKey,
-			grid: gridObjectKey,
+			audioPath: audioObjectKey,
+			gridPath: gridObjectKey,
 		});
 	}, []);
 
