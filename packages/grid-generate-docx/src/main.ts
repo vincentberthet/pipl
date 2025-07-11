@@ -38,7 +38,7 @@ export const handler = async (event: GridEndpoint) => {
 	return {
 		recipient: data.email,
 		subject: `Grille d'entretien structurée pour l'entretient au poste ${data.jobName}`,
-		body: `Voici ci-joint la grill d'entretient structurée générée pour l'entretient au poste de ${data.jobName}.\nCette grille étant générée automatiquement, elle est à considérer comme un préliminaire à l'entretien. N'hésitez pas à la modifier pour l'adapter à vos besoins.`,
+		body: `Voici ci-joint la grille d'entretien générée pour le poste de ${data.jobName}.\nCette grille d’entretien est un draft et non un document définitif. N'hésitez pas à éditer ce document (par exemple, modifier des questions) pour l'adapter à vos besoins.`,
 		attachments: [outputKey],
 	};
 };
