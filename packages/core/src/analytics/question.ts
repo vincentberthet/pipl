@@ -53,10 +53,10 @@ export async function extractQuestionsFromGrid(gridPath: string) {
 						const trimmedCriteria = criteria.trim();
 						if (trimmedCriteria.toLocaleUpperCase().includes("STAR")) {
 							return [
-								"Situation: Le candidat doit décrire une situation ou un contexte spécifique.",
-								"Tâche: Le candidat doit expliquer la tâche ou le défi qu'il a rencontré dans cette situation.",
-								"Action: Le candidat doit décrire l'action qu'il a entreprise pour résoudre le problème.",
-								"Résultat: Le candidat doit expliquer le résultat de ses actions.",
+								"S (Situation) : le candidat décrit-il une situation professionnelle pertinente ? ",
+								"T (Tâche) : le candidat décrit-il son rôle et ses responsabilités dans la situation en question ?",
+								"A (Action) : le candidat décrit-il les actions qu’il a entreprises pour atteindre un objectif ou pour résoudre un problème ?",
+								"R (Résultat) : le candidat décrit-il les résultats ou l’impact obtenus, idéalement avec des données chiffrées ?",
 							];
 						}
 

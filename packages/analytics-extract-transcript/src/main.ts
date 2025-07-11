@@ -9,7 +9,7 @@ const s3 = new S3Client({ region: process.env.AWS_REGION });
 const extractTranscriptInputSchema = fillGridInputSchema
 	.omit({ questions: true, transcript: true })
 	.extend({
-		transcriptObjectKey: z.string(),
+		audioObjectKey: z.string(),
 	});
 
 export type ExtractTranscriptInput = z.infer<
@@ -23,13 +23,13 @@ export const handler = async (event: ExtractTranscriptInput) => {
 		throw new Error(`Invalid input: ${JSON.stringify(error)}`);
 	}
 
-	const { transcriptObjectKey, ...rest } = data;
+	const { audioObjectKey: transcriptObjectKey, ...rest } = data;
 
 	const [{ Body }] = await Promise.all([
 		s3.send(
 			new GetObjectCommand({
 				Bucket: process.env.S3_BUCKET,
-				Key: data.transcriptObjectKey,
+				Key: data.audioObjectKey,
 			}),
 		),
 		fs.mkdir("/tmp", { recursive: true }),

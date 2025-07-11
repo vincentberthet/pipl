@@ -1,5 +1,5 @@
 import { X } from "lucide-react";
-import { type FormEvent, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router";
 import { Form } from "../../components/Form.js";
 import { FinalizeStep } from "./form/FinalizeStep.js";
@@ -24,11 +24,7 @@ export function GridsPage() {
 		return () => clearTimeout(timer);
 	}, [step]);
 
-	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-		e.preventDefault();
-		console.log("submit", e.currentTarget);
-		// setStep("loading"); // FIXME: fix the bad handleSubmit call on "suivant" click
-	};
+	const handleSubmit = useCallback(async () => {}, []);
 
 	const steps = useMemo(
 		() => [
@@ -41,7 +37,7 @@ export function GridsPage() {
 
 	return step === "form" ? (
 		<Form
-			handleSubmit={handleSubmit}
+			onSubmit={handleSubmit}
 			steps={steps}
 			pageTitle="Générer une grille d'évaluation"
 			submitLabel="Générer la grille &#x3E;"

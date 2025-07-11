@@ -7,11 +7,19 @@ import {
 export type FormStepperProps = {
 	steps: ReactNode[];
 	submitLabel: string;
+	isSubmitting: boolean;
 };
 
-export function FormStepper({ steps, submitLabel }: FormStepperProps) {
+export function FormStepper({
+	steps,
+	submitLabel,
+	isSubmitting,
+}: FormStepperProps) {
 	return (
-		<FormStepperContextProvider totalSteps={steps.length}>
+		<FormStepperContextProvider
+			totalSteps={steps.length}
+			isSubmitting={isSubmitting}
+		>
 			<div className="form-stepper">
 				{steps.map((step, i) => (
 					// biome-ignore lint/suspicious/noArrayIndexKey: This is fine here
@@ -33,8 +41,14 @@ function FormStepperFieldset({
 	children,
 	submitLabel,
 }: FormStepperFieldsetProps) {
-	const { currentStep, isFirstStep, isLastStep, onPrevious, onNext } =
-		useFormStepperContext();
+	const {
+		isSubmitting,
+		currentStep,
+		isFirstStep,
+		isLastStep,
+		onPrevious,
+		onNext,
+	} = useFormStepperContext();
 
 	const style = {
 		transform: `translateX(-${currentStep * 100}%)`,
@@ -78,8 +92,11 @@ function FormStepperFieldset({
 					<button
 						type="submit"
 						className="btn btn-primary"
-						disabled={disableSubmit}
+						disabled={disableSubmit || isSubmitting}
 					>
+						{isSubmitting && (
+							<span className="loading loading-spinner loading-xs text-white"></span>
+						)}
 						{submitLabel}
 					</button>
 				) : (

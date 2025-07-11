@@ -65,6 +65,7 @@ h4 {
 }
 
 .fieldset {
+	@apply p-2;
 	font-size: 1rem;
 }
 

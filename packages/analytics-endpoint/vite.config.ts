@@ -18,7 +18,13 @@ export default defineConfig({
 			formats: ["es"],
 		},
 		rollupOptions: {
-			external: ["aws-lambda", "@aws-sdk/client-s3", "@aws-sdk/client-sfn"],
+			external: [
+				"aws-lambda",
+				"@aws-sdk/client-s3",
+				"@aws-sdk/client-sfn",
+				"node:crypto",
+				"node:fs/promises",
+			],
 		},
 	},
 });
