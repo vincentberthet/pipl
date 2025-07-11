@@ -7,6 +7,7 @@ import {
 } from "react";
 
 type FormStepperContextValue = {
+	isSubmitting: boolean;
 	currentStep: number;
 	totalSteps: number;
 	isFirstStep: boolean;
@@ -18,11 +19,13 @@ type FormStepperContextValue = {
 const formStepperContext = createContext<FormStepperContextValue | null>(null);
 
 type FormStepperContextProviderProps = {
+	isSubmitting: boolean;
 	totalSteps: number;
 	children: React.ReactNode;
 };
 
 export function FormStepperContextProvider({
+	isSubmitting,
 	totalSteps,
 	children,
 }: FormStepperContextProviderProps) {
@@ -47,6 +50,7 @@ export function FormStepperContextProvider({
 	return (
 		<formStepperContext.Provider
 			value={{
+				isSubmitting,
 				currentStep,
 				totalSteps,
 				isFirstStep,

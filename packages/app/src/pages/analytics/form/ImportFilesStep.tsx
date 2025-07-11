@@ -13,7 +13,7 @@ export function ImportFilesStep() {
 				className="file-input"
 				id="analytics-audio"
 				name="audio"
-				accept="audio/*"
+				accept=".mp3"
 			/>
 
 			<label htmlFor="analytics-grid">

@@ -1,4 +1,4 @@
-function getMimeTypeFromExtension(extension: string): string {
+export function getMimeTypeFromExtension(extension: string): string {
 	switch (extension.toLowerCase()) {
 		case ".pdf":
 			return "application/pdf";

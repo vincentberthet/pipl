@@ -9,7 +9,7 @@ export function InformationStep() {
 			<input
 				type="text"
 				className="input"
-				name="job-name"
+				name="jobName"
 				id="analytics-job-name"
 				placeholder="Ex. Maçon"
 			/>
@@ -17,7 +17,7 @@ export function InformationStep() {
 			<input
 				type="text"
 				className="input"
-				name="candidate-name"
+				name="candidateName"
 				id="analytics-candidate-name"
 				placeholder="Ex. Jean Dupont"
 			/>
@@ -26,7 +26,7 @@ export function InformationStep() {
 			<input
 				type="email"
 				className="input"
-				name="candidate-email"
+				name="email"
 				id="analytics-email"
 				placeholder="Ex. jeanne.martin@example.com"
 			/>
