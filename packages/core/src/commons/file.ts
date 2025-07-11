@@ -8,6 +8,8 @@ export function getMimeTypeFromExtension(extension: string): string {
 			return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
 		case ".mp3":
 			return "audio/mpeg";
+		case ".mp4":
+			return "video/mp4";
 		default:
 			throw new Error(`Unsupported file extension: ${extension}`);
 	}
