@@ -32,7 +32,7 @@ IMPORTANT: Les questions doivent faire maximum 20 mots.
 
 Voici ${nbDocuments} documents relatifs au métier de ${jobName}. A partir de ces documents, je voudrais que tu génères une grille d’entretien pour évaluer des candidats à ce poste :
 3 questions de connaissances liées à ce poste ("Connaissances liées au poste")
-3 compétences techniques ("Hard skills") et 3 compétences comportementales ("Soft skills"). Pour chaque compétence, génère 2 questions comportementales et 2 questions situationnelles 
+3 compétences techniques ("Compétences techniques") et 3 compétences comportementales ("Compétences comportementales"). Pour chaque compétence, génère 2 questions comportementales et 2 questions situationnelles 
 les critères de notation pour évaluer les réponses à chaque question : utilise 3 critères binaires pour les questions de connaissances et les questions situationnelles
 
 Fais des questions concises.
@@ -77,5 +77,23 @@ export const groupedDataSchema = z.array(
 		}),
 	}),
 );
-
 export type GroupedData = z.infer<typeof groupedDataSchema>;
+
+export const groupedByCompetenceSchema = z.array(
+	z.object({
+		category: z.string().meta({ description: "La catégorie de la question" }),
+		questionsGroups: z.array(
+			z.object({
+				competence: z.optional(
+					z
+						.string()
+						.meta({ description: "La compétence associée à la question" }),
+				),
+				questions: z.array(questionSchema).meta({
+					description: "Les questions de la catégorie",
+				}),
+			}),
+		),
+	}),
+);
+export type GroupedByCompetence = z.infer<typeof groupedByCompetenceSchema>;
