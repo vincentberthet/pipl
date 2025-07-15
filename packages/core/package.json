@@ -33,6 +33,7 @@
 	},
 	"dependencies": {
 		"@google/genai": "^1.8.0",
-		"docx": "^9.5.1"
+		"docx": "^9.5.1",
+		"js-levenshtein-esm": "^2.0.0"
 	}
 }
