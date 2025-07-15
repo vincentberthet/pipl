@@ -15,9 +15,19 @@ export const generateGridAgent = async (
 		createPartFromBase64(file.toString("base64"), "application/pdf"),
 	);
 
+	const nbQuestions = {
+		"nb-questions-poste": 3,
+		"nb-competences-tech": 3,
+		"tech-nb-questions-experience": 2,
+		"tech-nb-questions-situation": 1,
+		"nb-competences-comportementales": 3,
+		"comportementale-nb-questions-experience": 2,
+		"comportementale-nb-questions-situation": 1,
+	};
+
 	const contents = createUserContent([
 		...encodedFiles,
-		prompt({ nbDocuments: readedFiles.length, jobName }),
+		prompt({ nbDocuments: readedFiles.length, jobName, ...nbQuestions }),
 	]);
 
 	console.debug("Generating grid...");
