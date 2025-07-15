@@ -1,11 +1,79 @@
 import { z } from "zod/v4";
+
 export const prompt = ({
 	nbDocuments,
 	jobName,
+	nbJobQuestions,
+	nbTechSkills,
+	techNbExperienceQuestions,
+	techNbSituationQuestions,
+	nbBehavioralSkills,
+	behavioralNbExperienceQuestions,
+	behavioralNbSituationQuestions,
 }: {
+	nbJobQuestions: number;
+	nbTechSkills: number;
+	techNbExperienceQuestions: number;
+	techNbSituationQuestions: number;
+	nbBehavioralSkills: number;
+	behavioralNbExperienceQuestions: number;
+	behavioralNbSituationQuestions: number;
 	nbDocuments: number;
 	jobName: string;
-}) => `Dans le recrutement, l’entretien structuré consiste à s’entretenir avec les candidats en utilisant une même grille d’entretien. Celle-ci comporte :
+}) => {
+	const jobQuestions = () => {
+		if (nbJobQuestions === 0) return "";
+		const plural = nbJobQuestions > 1 ? "s" : "";
+		return `
+- ${nbJobQuestions} question${plural} de connaissance${plural} liée${plural} au poste ("Connaissance${plural} liée${plural} au poste")`;
+	};
+
+	const techSkillQuestions = () => {
+		if (
+			nbTechSkills === 0 ||
+			(techNbExperienceQuestions === 0 && techNbSituationQuestions === 0)
+		)
+			return "";
+
+		const experienceQuestions =
+			techNbExperienceQuestions > 0
+				? `${techNbExperienceQuestions} question${techNbExperienceQuestions === 1 ? "" : "s"} d'expérience`
+				: "";
+		const situationQuestions =
+			techNbSituationQuestions > 0
+				? `${techNbSituationQuestions} question${techNbSituationQuestions === 1 ? "" : "s"} de mise en situation`
+				: "";
+		const and = experienceQuestions && situationQuestions ? " et " : "";
+
+		const plural = nbTechSkills > 1 ? "s" : "";
+		return `
+- ${nbTechSkills} compétence${plural} technique${plural} ("Compétence${plural} technique${plural}"). Pour chaque compétence, génère ${experienceQuestions}${and}${situationQuestions}`;
+	};
+
+	const comportementaleSkillQuestions = () => {
+		if (
+			nbBehavioralSkills === 0 ||
+			(behavioralNbExperienceQuestions === 0 &&
+				behavioralNbSituationQuestions === 0)
+		)
+			return "";
+
+		const experienceQuestions =
+			behavioralNbExperienceQuestions > 0
+				? `${behavioralNbExperienceQuestions} question${behavioralNbExperienceQuestions === 1 ? "" : "s"} d'expérience`
+				: "";
+		const situationQuestions =
+			behavioralNbSituationQuestions > 0
+				? `${behavioralNbSituationQuestions} question${behavioralNbSituationQuestions === 1 ? "" : "s"} de mise en situation`
+				: "";
+		const and = experienceQuestions && situationQuestions ? " et " : "";
+
+		const plural = nbBehavioralSkills > 1 ? "s" : "";
+		return `
+- ${nbBehavioralSkills} compétence${plural} comportementale${plural} ("Compétence${plural} comportementale${plural}"). Pour chaque compétence, génère ${experienceQuestions}${and}${situationQuestions}`;
+	};
+
+	return `Dans le recrutement, l’entretien structuré consiste à s’entretenir avec les candidats en utilisant une même grille d’entretien. Celle-ci comporte :
 les connaissances (savoirs), les compétences techniques (savoir-faire), et les compétences comportementales (savoir-être) à évaluer
 les questions à poser pour chacune
 les critères de notation pour évaluer les réponses à chaque question
@@ -30,14 +98,14 @@ IMPORTANT: Les questions ne doivent pas dépasser 1 phrase.
 IMPORTANT: Les questions doivent être courtes et concises.
 IMPORTANT: Les questions doivent faire maximum 20 mots.
 
-Voici ${nbDocuments} documents relatifs au métier de ${jobName}. A partir de ces documents, je voudrais que tu génères une grille d’entretien pour évaluer des candidats à ce poste :
-3 questions de connaissances liées à ce poste ("Connaissances liées au poste")
-3 compétences techniques ("Compétences techniques") et 3 compétences comportementales ("Compétences comportementales"). Pour chaque compétence, génère 2 questions comportementales et 2 questions situationnelles 
-les critères de notation pour évaluer les réponses à chaque question : utilise 3 critères binaires pour les questions de connaissances et les questions situationnelles
+Voici ${nbDocuments} documents relatifs au métier de ${jobName}. A partir de ces documents, je voudrais que tu génères une grille d’entretien pour évaluer des candidats à ce poste :${jobQuestions()}${techSkillQuestions()}${comportementaleSkillQuestions()}
+
+Les critères de notation pour évaluer les réponses à chaque question : utilise 3 critères binaires pour les questions de connaissances et les questions situationnelles
 
 Fais des questions concises.
 Fais des questions de moins de 20 mots.
 `;
+};
 
 const questionSchema = z
 	.object({

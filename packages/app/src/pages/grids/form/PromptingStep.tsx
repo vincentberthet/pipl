@@ -1,12 +1,49 @@
-const Input = ({ name, label }: { name: string; label: string }) => (
-	<div className="flex items-center gap-2">
-		<input type="number" className="input !w-10" name={name} />
-		{label}
-	</div>
-);
+import React, { useMemo } from "react";
 
 export const PromptingStep = () => {
-	const totalQuestions = 21; // TODO: calculate this based on the inputs
+	const [values, setValues] = React.useState({
+		nbJobQuestions: 3,
+		nbTechSkills: 3,
+		techNbExperienceQuestions: 2,
+		techNbSituationQuestions: 1,
+		nbBehavioralSkills: 3,
+		behavioralNbExperienceQuestions: 2,
+		behavioralNbSituationQuestions: 1,
+	});
+
+	const totalQuestions = useMemo(
+		() =>
+			values.nbJobQuestions +
+			values.nbTechSkills *
+				(values.techNbExperienceQuestions + values.techNbSituationQuestions) +
+			values.nbBehavioralSkills *
+				(values.behavioralNbExperienceQuestions +
+					values.behavioralNbSituationQuestions),
+		[values],
+	);
+
+	const Input = ({
+		label,
+		name,
+	}: {
+		label: string;
+		name: keyof typeof values;
+	}) => (
+		<div className="flex items-center gap-2">
+			<input
+				type="number"
+				className="input !w-10"
+				name={name}
+				defaultValue={values[name]}
+				min={0}
+				onChange={(e) => {
+					setValues((prev) => ({ ...prev, [name]: parseInt(e.target.value) }));
+				}}
+			/>
+			{label}
+		</div>
+	);
+
 	return (
 		<>
 			<legend className="fieldset-legend">
@@ -43,14 +80,14 @@ export const PromptingStep = () => {
 				<div>
 					<h3 className="pt-2">Connaissances liées au poste</h3>
 					<Input
-						name="nb-questions-poste"
+						name="nbJobQuestions"
 						label="questions de connaissances liées au poste"
 					/>
 				</div>
 				<div>
 					<h3 className="pt-2">Compétences techniques</h3>
 					<Input
-						name="nb-competences-tech"
+						name="nbTechSkills"
 						label="comptétences techniques à évaluer"
 					/>
 				</div>
@@ -58,11 +95,11 @@ export const PromptingStep = () => {
 					<h4>Questions pour chaque compétences techniques évaluées</h4>
 					<div className="flex flex-col gap-2">
 						<Input
-							name="tech-nb-questions-experience"
+							name="techNbExperienceQuestions"
 							label="questions d'expérience"
 						/>
 						<Input
-							name="tech-nb-questions-situation"
+							name="techNbSituationQuestions"
 							label="questions de mise en situation"
 						/>
 					</div>
@@ -70,7 +107,7 @@ export const PromptingStep = () => {
 				<div>
 					<h3 className="pt-2">Compétences comportementales</h3>
 					<Input
-						name="nb-competences-comportementales"
+						name="nbBehavioralSkills"
 						label="comptétences comportementales à évaluer"
 					/>
 				</div>
@@ -78,16 +115,20 @@ export const PromptingStep = () => {
 					<div className="flex flex-col gap-2">
 						<h4>Questions pour chaque compétences comportementales évaluées</h4>
 						<Input
-							name="comportementale-nb-questions-experience"
+							name="behavioralNbExperienceQuestions"
 							label="questions d'expérience"
 						/>
 						<Input
-							name="comportementale-nb-questions-situation"
+							name="behavioralNbSituationQuestions"
 							label="questions de mise en situation"
 						/>
 					</div>
 				</div>
-				<div className="mt-4">Total: {totalQuestions} / 40 questions</div>
+				<div
+					className={`mt-4${totalQuestions > 40 ? " text-error font-semibold" : ""}`}
+				>
+					Total: {totalQuestions} / 40 questions
+				</div>
 			</div>
 		</>
 	);

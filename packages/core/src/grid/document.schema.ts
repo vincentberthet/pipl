@@ -14,6 +14,13 @@ export const agentPropsSchema = z.object({
 	pathToFiles: z.array(z.string()),
 	jobName: z.string(),
 	email: z.email(),
+	nbJobQuestions: z.number().min(0),
+	nbTechSkills: z.number().min(0),
+	techNbExperienceQuestions: z.number().min(0),
+	techNbSituationQuestions: z.number().min(0),
+	nbBehavioralSkills: z.number().min(0),
+	behavioralNbExperienceQuestions: z.number().min(0),
+	behavioralNbSituationQuestions: z.number().min(0),
 });
 export type AgentProps = z.infer<typeof agentPropsSchema>;
 

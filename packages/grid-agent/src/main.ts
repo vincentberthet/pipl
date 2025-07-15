@@ -19,7 +19,7 @@ export const handler = async (
 		throw new Error(`Invalid input: ${JSON.stringify(error)}`);
 	}
 
-	const { pathToFiles, jobName, email } = data;
+	const { pathToFiles, jobName, email, ...nbQuestions } = data;
 
 	const readedFiles = await Promise.all(
 		pathToFiles.map(async (pathToFile) => {
@@ -44,7 +44,7 @@ export const handler = async (
 
 	const contents = createUserContent([
 		...encodedFiles,
-		prompt({ nbDocuments: readedFiles.length, jobName }),
+		prompt({ nbDocuments: readedFiles.length, jobName, ...nbQuestions }),
 	]);
 
 	const response = await generateGrid(contents);
