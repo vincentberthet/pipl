@@ -61,44 +61,44 @@ const printQuestion = (
 			new docx.Paragraph({
 				children: [
 					new docx.TextRun({
-						text: "Critère 1 : ",
+						text: "Critère 1 (Oui/Non): Situation",
 						bold: true,
 					}),
 					new docx.TextRun({
-						text: "S (Situation) : le candidat décrit-il une situation professionnelle pertinente ?",
+						text: "La situation décrite renvoie-t-elle bien à la question ?",
 					}),
 				],
 			}),
 			new docx.Paragraph({
 				children: [
 					new docx.TextRun({
-						text: "Critère 2 : ",
+						text: "Critère 2 (Oui/Non): Tâche",
 						bold: true,
 					}),
 					new docx.TextRun({
-						text: "T (Tâche) : le candidat décrit-il son rôle et ses responsabilités dans la situation en question ?",
+						text: "La tâche à réaliser renvoie-t-elle bien à la question ?",
 					}),
 				],
 			}),
 			new docx.Paragraph({
 				children: [
 					new docx.TextRun({
-						text: "Critère 3 : ",
+						text: "Critère 3 (Oui/Non): Action",
 						bold: true,
 					}),
 					new docx.TextRun({
-						text: "A (Action) : le candidat décrit-il les actions qu’il a entreprises pour atteindre un objectif ou pour résoudre un problème ?",
+						text: "Les actions réalisées par le candidat sont-elles pertinentes ?",
 					}),
 				],
 			}),
 			new docx.Paragraph({
 				children: [
 					new docx.TextRun({
-						text: "Critère 4 : ",
+						text: "Critère 4 (Oui/Non): Résultat",
 						bold: true,
 					}),
 					new docx.TextRun({
-						text: "R (Résultat) : le candidat décrit-il les résultats ou l’impact obtenus, idéalement avec des données chiffrées",
+						text: "Les résultats obtenus par les actions réalisées sont-ils satisfaisants ?",
 					}),
 				],
 			}),
