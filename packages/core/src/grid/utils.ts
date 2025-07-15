@@ -79,7 +79,7 @@ export const groupedDataSchema = z.array(
 );
 export type GroupedData = z.infer<typeof groupedDataSchema>;
 
-export const groupedByCompetenceSchema = z.array(
+export const groupedBySkillSchema = z.array(
 	z.object({
 		category: z.string().meta({ description: "La catégorie de la question" }),
 		questionsGroups: z.array(
@@ -96,4 +96,4 @@ export const groupedByCompetenceSchema = z.array(
 		),
 	}),
 );
-export type GroupedByCompetence = z.infer<typeof groupedByCompetenceSchema>;
+export type GroupedBySkill = z.infer<typeof groupedBySkillSchema>;

@@ -3,7 +3,7 @@ import { z } from "zod/v4";
 import { gemini } from "../commons/gemini.js";
 import {
 	type GridSchema,
-	type GroupedByCompetence,
+	type GroupedBySkill,
 	type GroupedData,
 	gridSchema,
 	type QuestionSchema,
@@ -21,7 +21,7 @@ export const generateGrid = async (contents: Content) =>
 
 export const parseResponse = async (
 	response: AsyncIterable<{ text?: string }>,
-): Promise<GroupedByCompetence> => {
+): Promise<GroupedBySkill> => {
 	const chunks = [];
 	for await (const chunk of response) {
 		chunks.push(chunk.text ?? "");
@@ -57,32 +57,30 @@ const groupByCategory = (grid: GridSchema): GroupedData => {
 
 const groupQuestionsByCompetence = (
 	groupedData: GroupedData,
-): GroupedByCompetence => {
-	const groupedByCompetence: GroupedByCompetence = groupedData.map(
-		(categoryGroup) => {
-			const questionsGroups = categoryGroup.questions.reduce(
-				(acc, question) => {
-					const competence = question.competence || "Sans compétence";
-					if (!acc[competence]) {
-						acc[competence] = [];
-					}
-					acc[competence].push(question);
-					return acc;
-				},
-				{} as Record<string, QuestionSchema[]>,
-			);
+): GroupedBySkill => {
+	const groupedBySkill: GroupedBySkill = groupedData.map((categoryGroup) => {
+		const questionsGroups = categoryGroup.questions.reduce(
+			(acc, question) => {
+				const competence = question.competence || "Sans compétence";
+				if (!acc[competence]) {
+					acc[competence] = [];
+				}
+				acc[competence].push(question);
+				return acc;
+			},
+			{} as Record<string, QuestionSchema[]>,
+		);
 
-			return {
-				category: categoryGroup.category,
-				questionsGroups: Object.entries(questionsGroups).map(
-					([competence, questions]) => ({
-						competence,
-						questions,
-					}),
-				),
-			};
-		},
-	);
+		return {
+			category: categoryGroup.category,
+			questionsGroups: Object.entries(questionsGroups).map(
+				([competence, questions]) => ({
+					competence,
+					questions,
+				}),
+			),
+		};
+	});
 
-	return groupedByCompetence;
+	return groupedBySkill;
 };

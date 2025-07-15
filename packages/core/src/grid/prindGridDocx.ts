@@ -1,9 +1,9 @@
 import * as fs from "node:fs/promises";
 import * as docx from "docx";
-import type { GroupedByCompetence } from "./utils.js";
+import type { GroupedBySkill } from "./utils.js";
 
 const printQuestion = (
-	question: GroupedByCompetence[0]["questionsGroups"][0]["questions"][0],
+	question: GroupedBySkill[0]["questionsGroups"][0]["questions"][0],
 	index: number,
 ) => {
 	const questionTypeText =
@@ -102,7 +102,7 @@ const printQuestion = (
 };
 
 const printQuestionsGroups = (
-	questionsGroups: GroupedByCompetence[0]["questionsGroups"][0],
+	questionsGroups: GroupedBySkill[0]["questionsGroups"][0],
 ) => {
 	const questions = questionsGroups.questions.flatMap(printQuestion);
 
@@ -125,7 +125,7 @@ const printQuestionsGroups = (
 	return [...questions];
 };
 
-const printCategory = (category: GroupedByCompetence[0]) => {
+const printCategory = (category: GroupedBySkill[0]) => {
 	if (category.questionsGroups.length === 0) {
 		return [
 			new docx.Paragraph({
@@ -155,7 +155,7 @@ const printCategory = (category: GroupedByCompetence[0]) => {
 
 export const printGridDocx = async (
 	filePath: string,
-	grid: GroupedByCompetence,
+	grid: GroupedBySkill,
 	jobName: string,
 ) => {
 	const document = new docx.Document({
