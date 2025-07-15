@@ -1,3 +1,11 @@
+export function getExtensionFromFileName(fileName: string): string {
+	const extension = fileName.slice(fileName.lastIndexOf("."));
+	if (!extension) {
+		throw new Error(`File name does not have an extension: ${fileName}`);
+	}
+	return extension;
+}
+
 export function getMimeTypeFromExtension(extension: string): string {
 	switch (extension.toLowerCase()) {
 		case ".pdf":
@@ -16,6 +24,6 @@ export function getMimeTypeFromExtension(extension: string): string {
 }
 
 export function getMimeTypeFromFileName(fileName: string): string {
-	const extension = fileName.slice(fileName.lastIndexOf("."));
+	const extension = getExtensionFromFileName(fileName);
 	return getMimeTypeFromExtension(extension);
 }

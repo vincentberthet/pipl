@@ -1,4 +1,5 @@
-import { useOutlet } from "react-router";
+import { Link, useOutlet } from "react-router";
+import { ToastContainer } from "react-toastify";
 
 export function Layout() {
 	const children = useOutlet();
@@ -6,14 +7,18 @@ export function Layout() {
 		<>
 			<header>
 				<div className="container items-start">
-					<img
-						src="./assets/logo_white.svg"
-						alt="Pipl Analytics Logo"
-						className="logo h-8"
-					/>
+					<Link to="/">
+						<img
+							src="./assets/logo_white.svg"
+							alt="Pipl Analytics Logo"
+							className="logo h-8"
+						/>
+					</Link>
 				</div>
 			</header>
 			<main className="container">{children}</main>
+
+			<ToastContainer position="bottom-left" />
 		</>
 	);
 }

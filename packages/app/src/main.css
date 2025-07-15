@@ -7,6 +7,8 @@
 :root {
 	--color-primary: #240cf2;
 	--color-secondary: #0064ff;
+
+	--toastify-color-error: var(--color-red-700);
 }
 
 * {
@@ -28,6 +30,10 @@ html {
 body {
 	@apply flex flex-col items-stretch min-h-full gap-4;
 	width: 100%;
+}
+
+main {
+	@apply flex-1 p-4;
 }
 
 header {

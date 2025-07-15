@@ -1,28 +1,36 @@
 import { useMutation } from "@tanstack/react-query";
 import { X } from "lucide-react";
 import { Link, useNavigate } from "react-router";
+import { toast } from "react-toastify";
 import { FormStepper, type FormStepperProps } from "./FormStepper.js";
 
-export type FormProps = {
-	onSubmit(data: FormData): Promise<void>;
+export type FormProps<T> = {
+	onSubmit(data: FormData): Promise<T>;
+	onSuccess?(data: T): void;
 	pageTitle: string;
 } & Omit<FormStepperProps, "isSubmitting">;
 
-export const Form = ({
+export function Form<T>({
 	onSubmit,
+	onSuccess,
 	steps,
 	pageTitle,
 	submitLabel,
-}: FormProps) => {
+}: FormProps<T>) {
 	const navigate = useNavigate();
 
-	const { isPending, mutate } = useMutation<void, Error, FormData>({
+	const { isPending, mutate } = useMutation<T, Error, FormData>({
 		mutationFn: onSubmit,
-		onSuccess: () => {
-			navigate("/");
-		},
+		onSuccess:
+			onSuccess ??
+			(() => {
+				navigate("/");
+			}),
 		onError: (error) => {
 			console.error("Form submission failed:", error);
+			toast.error(
+				"Une erreur est survenue lors de l'envoi du formulaire. Veuillez réessayer plus tard.",
+			);
 		},
 	});
 
@@ -49,4 +57,4 @@ export const Form = ({
 			/>
 		</form>
 	);
-};
+}

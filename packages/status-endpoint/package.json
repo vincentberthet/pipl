@@ -1,0 +1,19 @@
+{
+	"name": "@pipl-analytics/status-endpoint",
+	"type": "module",
+	"version": "0.1.0",
+	"description": "The analytics endpoint for Pipl Analytics",
+	"license": "UNLICENSED",
+	"private": true,
+	"scripts": {
+		"build": "vite build",
+		"dev": "vite build --watch",
+		"typecheck": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@aws-sdk/client-sfn": "^3.840.0"
+	},
+	"devDependencies": {
+		"@pipl-analytics/core": "*"
+	}
+}

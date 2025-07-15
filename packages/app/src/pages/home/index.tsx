@@ -2,7 +2,7 @@ import { Link } from "react-router";
 
 export function HomePage() {
 	return (
-		<div className="flex flex-col items-center justify-center grow">
+		<div className="flex flex-col items-center grow">
 			<div className="grid grid-cols-1 md:grid-cols-2 auto-rows-auto gap-4">
 				<div className="card card-border">
 					<div className="card-body">
