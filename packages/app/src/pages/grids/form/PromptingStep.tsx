@@ -2,24 +2,23 @@ import React, { useMemo } from "react";
 
 export const PromptingStep = () => {
 	const [values, setValues] = React.useState({
-		"nb-questions-poste": 3,
-		"nb-competences-tech": 3,
-		"tech-nb-questions-experience": 2,
-		"tech-nb-questions-situation": 1,
-		"nb-competences-comportementales": 3,
-		"comportementale-nb-questions-experience": 2,
-		"comportementale-nb-questions-situation": 1,
+		nbJobQuestions: 3,
+		nbTechSkills: 3,
+		techNbExperienceQuestions: 2,
+		techNbSituationQuestions: 1,
+		nbBehavioralSkills: 3,
+		behavioralNbExperienceQuestions: 2,
+		behavioralNbSituationQuestions: 1,
 	});
 
 	const totalQuestions = useMemo(
 		() =>
-			values["nb-questions-poste"] +
-			values["nb-competences-tech"] *
-				(values["tech-nb-questions-experience"] +
-					values["tech-nb-questions-situation"]) +
-			values["nb-competences-comportementales"] *
-				(values["comportementale-nb-questions-experience"] +
-					values["comportementale-nb-questions-situation"]),
+			values.nbJobQuestions +
+			values.nbTechSkills *
+				(values.techNbExperienceQuestions + values.techNbSituationQuestions) +
+			values.nbBehavioralSkills *
+				(values.behavioralNbExperienceQuestions +
+					values.behavioralNbSituationQuestions),
 		[values],
 	);
 
@@ -81,14 +80,14 @@ export const PromptingStep = () => {
 				<div>
 					<h3 className="pt-2">Connaissances liées au poste</h3>
 					<Input
-						name="nb-questions-poste"
+						name="nbJobQuestions"
 						label="questions de connaissances liées au poste"
 					/>
 				</div>
 				<div>
 					<h3 className="pt-2">Compétences techniques</h3>
 					<Input
-						name="nb-competences-tech"
+						name="nbTechSkills"
 						label="comptétences techniques à évaluer"
 					/>
 				</div>
@@ -96,11 +95,11 @@ export const PromptingStep = () => {
 					<h4>Questions pour chaque compétences techniques évaluées</h4>
 					<div className="flex flex-col gap-2">
 						<Input
-							name="tech-nb-questions-experience"
+							name="techNbExperienceQuestions"
 							label="questions d'expérience"
 						/>
 						<Input
-							name="tech-nb-questions-situation"
+							name="techNbSituationQuestions"
 							label="questions de mise en situation"
 						/>
 					</div>
@@ -108,7 +107,7 @@ export const PromptingStep = () => {
 				<div>
 					<h3 className="pt-2">Compétences comportementales</h3>
 					<Input
-						name="nb-competences-comportementales"
+						name="nbBehavioralSkills"
 						label="comptétences comportementales à évaluer"
 					/>
 				</div>
@@ -116,11 +115,11 @@ export const PromptingStep = () => {
 					<div className="flex flex-col gap-2">
 						<h4>Questions pour chaque compétences comportementales évaluées</h4>
 						<Input
-							name="comportementale-nb-questions-experience"
+							name="behavioralNbExperienceQuestions"
 							label="questions d'expérience"
 						/>
 						<Input
-							name="comportementale-nb-questions-situation"
+							name="behavioralNbSituationQuestions"
 							label="questions de mise en situation"
 						/>
 					</div>

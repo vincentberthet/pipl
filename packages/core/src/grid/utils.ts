@@ -3,75 +3,74 @@ import { z } from "zod/v4";
 export const prompt = ({
 	nbDocuments,
 	jobName,
-	"nb-questions-poste": nbQuestionsPoste,
-	"nb-competences-tech": nbCompetencesTech,
-	"tech-nb-questions-experience": techNbQuestionsExperience,
-	"tech-nb-questions-situation": techNbQuestionsSituation,
-	"nb-competences-comportementales": nbCompetencesComportementales,
-	"comportementale-nb-questions-experience":
-		comportementaleNbQuestionsExperience,
-	"comportementale-nb-questions-situation": comportementaleNbQuestionsSituation,
+	nbJobQuestions,
+	nbTechSkills,
+	techNbExperienceQuestions,
+	techNbSituationQuestions,
+	nbBehavioralSkills,
+	behavioralNbExperienceQuestions,
+	behavioralNbSituationQuestions,
 }: {
-	"nb-questions-poste": number;
-	"nb-competences-tech": number;
-	"tech-nb-questions-experience": number;
-	"tech-nb-questions-situation": number;
-	"nb-competences-comportementales": number;
-	"comportementale-nb-questions-experience": number;
-	"comportementale-nb-questions-situation": number;
+	nbJobQuestions: number;
+	nbTechSkills: number;
+	techNbExperienceQuestions: number;
+	techNbSituationQuestions: number;
+	nbBehavioralSkills: number;
+	behavioralNbExperienceQuestions: number;
+	behavioralNbSituationQuestions: number;
 	nbDocuments: number;
 	jobName: string;
 }) => {
 	const jobQuestions = () => {
-		if (nbQuestionsPoste === 0) return "";
-		const plural = nbQuestionsPoste > 1 ? "s" : "";
+		if (nbJobQuestions === 0) return "";
+		const plural = nbJobQuestions > 1 ? "s" : "";
 		return `
-- ${nbQuestionsPoste} question${plural} de connaissance${plural} liée${plural} au poste ("Connaissance${plural} liée${plural} au poste")`;
+- ${nbJobQuestions} question${plural} de connaissance${plural} liée${plural} au poste ("Connaissance${plural} liée${plural} au poste")`;
 	};
 
 	const techSkillQuestions = () => {
 		if (
-			nbCompetencesTech === 0 ||
-			(techNbQuestionsExperience === 0 && techNbQuestionsSituation === 0)
+			nbTechSkills === 0 ||
+			(techNbExperienceQuestions === 0 && techNbSituationQuestions === 0)
 		)
 			return "";
 
 		const experienceQuestions =
-			techNbQuestionsExperience > 0
-				? `${techNbQuestionsExperience} question${techNbQuestionsExperience === 1 ? "" : "s"} d'expérience`
+			techNbExperienceQuestions > 0
+				? `${techNbExperienceQuestions} question${techNbExperienceQuestions === 1 ? "" : "s"} d'expérience`
 				: "";
 		const situationQuestions =
-			techNbQuestionsSituation > 0
-				? `${techNbQuestionsSituation} question${techNbQuestionsSituation === 1 ? "" : "s"} de mise en situation`
+			techNbSituationQuestions > 0
+				? `${techNbSituationQuestions} question${techNbSituationQuestions === 1 ? "" : "s"} de mise en situation`
 				: "";
 		const and = experienceQuestions && situationQuestions ? " et " : "";
 
-		const plural = nbCompetencesTech > 1 ? "s" : "";
+		const plural = nbTechSkills > 1 ? "s" : "";
 		return `
-- ${nbCompetencesTech} compétence${plural} technique${plural} ("Compétence${plural} technique${plural}"). Pour chaque compétence, génère ${experienceQuestions}${and}${situationQuestions}`;
+- ${nbTechSkills} compétence${plural} technique${plural} ("Compétence${plural} technique${plural}"). Pour chaque compétence, génère ${experienceQuestions}${and}${situationQuestions}`;
 	};
 
 	const comportementaleSkillQuestions = () => {
 		if (
-			nbCompetencesComportementales === 0 ||
-			(comportementaleNbQuestionsExperience === 0 &&
-				comportementaleNbQuestionsSituation === 0)
+			nbBehavioralSkills === 0 ||
+			(behavioralNbExperienceQuestions === 0 &&
+				behavioralNbSituationQuestions === 0)
 		)
 			return "";
 
 		const experienceQuestions =
-			comportementaleNbQuestionsExperience > 0
-				? `${comportementaleNbQuestionsExperience} question${comportementaleNbQuestionsExperience === 1 ? "" : "s"} d'expérience`
+			behavioralNbExperienceQuestions > 0
+				? `${behavioralNbExperienceQuestions} question${behavioralNbExperienceQuestions === 1 ? "" : "s"} d'expérience`
 				: "";
 		const situationQuestions =
-			comportementaleNbQuestionsSituation > 0
-				? `${comportementaleNbQuestionsSituation} question${comportementaleNbQuestionsSituation === 1 ? "" : "s"} de mise en situation`
+			behavioralNbSituationQuestions > 0
+				? `${behavioralNbSituationQuestions} question${behavioralNbSituationQuestions === 1 ? "" : "s"} de mise en situation`
 				: "";
 		const and = experienceQuestions && situationQuestions ? " et " : "";
 
-		const plural = nbCompetencesComportementales > 1 ? "s" : "";
+		const plural = nbBehavioralSkills > 1 ? "s" : "";
 		return `
-- ${nbCompetencesComportementales} compétence${plural} comportementale${plural} ("Compétence${plural} comportementale${plural}"). Pour chaque compétence, génère ${experienceQuestions}${and}${situationQuestions}`;
+- ${nbBehavioralSkills} compétence${plural} comportementale${plural} ("Compétence${plural} comportementale${plural}"). Pour chaque compétence, génère ${experienceQuestions}${and}${situationQuestions}`;
 	};
 
 	return `Dans le recrutement, l’entretien structuré consiste à s’entretenir avec les candidats en utilisant une même grille d’entretien. Celle-ci comporte :

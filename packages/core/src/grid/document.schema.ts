@@ -14,13 +14,13 @@ export const agentPropsSchema = z.object({
 	pathToFiles: z.array(z.string()),
 	jobName: z.string(),
 	email: z.email(),
-	"nb-questions-poste": z.number().min(0),
-	"nb-competences-tech": z.number().min(0),
-	"tech-nb-questions-experience": z.number().min(0),
-	"tech-nb-questions-situation": z.number().min(0),
-	"nb-competences-comportementales": z.number().min(0),
-	"comportementale-nb-questions-experience": z.number().min(0),
-	"comportementale-nb-questions-situation": z.number().min(0),
+	nbJobQuestions: z.number().min(0),
+	nbTechSkills: z.number().min(0),
+	techNbExperienceQuestions: z.number().min(0),
+	techNbSituationQuestions: z.number().min(0),
+	nbBehavioralSkills: z.number().min(0),
+	behavioralNbExperienceQuestions: z.number().min(0),
+	behavioralNbSituationQuestions: z.number().min(0),
 });
 export type AgentProps = z.infer<typeof agentPropsSchema>;
 

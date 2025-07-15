@@ -16,13 +16,13 @@ export const generateGridAgent = async (
 	);
 
 	const nbQuestions = {
-		"nb-questions-poste": 3,
-		"nb-competences-tech": 3,
-		"tech-nb-questions-experience": 2,
-		"tech-nb-questions-situation": 1,
-		"nb-competences-comportementales": 3,
-		"comportementale-nb-questions-experience": 2,
-		"comportementale-nb-questions-situation": 1,
+		nbJobQuestions: 3,
+		nbTechSkills: 3,
+		techNbExperienceQuestions: 2,
+		techNbSituationQuestions: 1,
+		nbBehavioralSkills: 3,
+		behavioralNbExperienceQuestions: 2,
+		behavioralNbSituationQuestions: 1,
 	};
 
 	const contents = createUserContent([
