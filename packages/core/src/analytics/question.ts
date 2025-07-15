@@ -1,7 +1,11 @@
 import * as fs from "node:fs/promises";
 import { createPartFromBase64, createUserContent } from "@google/genai";
 import { z } from "zod/v4";
-import { getMimeTypeFromFileName } from "../commons/file.js";
+import { mapDocxToUserContent } from "../commons/docx.js";
+import {
+	getExtensionFromFileName,
+	getMimeTypeFromExtension,
+} from "../commons/file.js";
 import { gemini } from "../commons/gemini.js";
 import { questionsSchema } from "./question.schema.js";
 
@@ -19,16 +23,31 @@ Tu respectes les instructions suivantes :
 
 Liste les questions et les critères de validation pour chaque catégorie du document joint. Le document contient une grille d'entretien structuré.`;
 
+export async function mapGridToUserContent(documentPath: string) {
+	const gridExtension = getExtensionFromFileName(documentPath);
+	const gridFileMimeType = getMimeTypeFromExtension(gridExtension);
+	const gridFile = await fs.readFile(documentPath);
+
+	switch (gridExtension.toLowerCase()) {
+		case ".pdf": {
+			return createUserContent([
+				createPartFromBase64(gridFile.toString("base64"), gridFileMimeType),
+				QUESTIONS_PROMPT,
+			]);
+		}
+		case ".docx":
+			return mapDocxToUserContent(gridFile, QUESTIONS_PROMPT);
+		default:
+			throw new Error(`Unsupported file extension: ${gridExtension}`);
+	}
+}
+
 export async function extractQuestionsFromGrid(gridPath: string) {
-	const gridFileMimeType = getMimeTypeFromFileName(gridPath);
-	const gridFile = await fs.readFile(gridPath);
+	const contents = await mapGridToUserContent(gridPath);
 
 	const response = await gemini.models.generateContent({
 		model: "gemini-2.0-flash",
-		contents: createUserContent([
-			createPartFromBase64(gridFile.toString("base64"), gridFileMimeType),
-			QUESTIONS_PROMPT,
-		]),
+		contents,
 		config: {
 			responseMimeType: "application/json",
 			responseJsonSchema: z.toJSONSchema(questionsSchema),
