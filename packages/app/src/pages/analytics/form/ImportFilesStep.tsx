@@ -22,7 +22,7 @@ export function ImportFilesStep() {
 				className="file-input"
 				id="analytics-grid"
 				name="grid"
-				accept=".pdf"
+				accept=".pdf,.docx"
 			/>
 		</>
 	);
