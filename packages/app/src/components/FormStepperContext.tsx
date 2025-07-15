@@ -7,11 +7,10 @@ import {
 } from "react";
 
 type FormStepperContextValue = {
+	submitLabel: string;
 	isSubmitting: boolean;
 	currentStep: number;
 	totalSteps: number;
-	isFirstStep: boolean;
-	isLastStep: boolean;
 	onNext: () => void;
 	onPrevious: () => void;
 };
@@ -19,24 +18,19 @@ type FormStepperContextValue = {
 const formStepperContext = createContext<FormStepperContextValue | null>(null);
 
 type FormStepperContextProviderProps = {
+	submitLabel: string;
 	isSubmitting: boolean;
 	totalSteps: number;
 	children: React.ReactNode;
 };
 
 export function FormStepperContextProvider({
+	submitLabel,
 	isSubmitting,
 	totalSteps,
 	children,
 }: FormStepperContextProviderProps) {
 	const [currentStep, setCurrentStepStep] = useState(0);
-
-	const isFirstStep = useMemo(() => currentStep === 0, [currentStep]);
-
-	const isLastStep = useMemo(
-		() => currentStep === totalSteps - 1,
-		[currentStep, totalSteps],
-	);
 
 	const onPrevious = useCallback(
 		() => setCurrentStepStep((prev) => Math.max(prev - 1, 0)),
@@ -47,18 +41,19 @@ export function FormStepperContextProvider({
 		setCurrentStepStep((prev) => Math.min(prev + 1, totalSteps - 1));
 	}, [totalSteps]);
 
+	const value = useMemo<FormStepperContextValue>(() => {
+		return {
+			submitLabel,
+			isSubmitting,
+			currentStep,
+			totalSteps,
+			onNext,
+			onPrevious,
+		};
+	}, [submitLabel, isSubmitting, currentStep, totalSteps, onNext, onPrevious]);
+
 	return (
-		<formStepperContext.Provider
-			value={{
-				isSubmitting,
-				currentStep,
-				totalSteps,
-				isFirstStep,
-				isLastStep,
-				onNext,
-				onPrevious,
-			}}
-		>
+		<formStepperContext.Provider value={value}>
 			{children}
 		</formStepperContext.Provider>
 	);

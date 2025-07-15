@@ -37,11 +37,6 @@ export const handler = async (event: MailEvent) => {
 				}
 
 				const rawContent = Buffer.from(await Body.transformToByteArray());
-				console.log({
-					filename,
-					rawContentLength: rawContent.length,
-				});
-
 				return {
 					FileName: filename,
 					ContentDisposition: "ATTACHMENT",

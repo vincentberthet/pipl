@@ -1,43 +1,22 @@
-import { useMutation } from "@tanstack/react-query";
 import { X } from "lucide-react";
-import { Link, useNavigate } from "react-router";
-import { toast } from "react-toastify";
-import { FormStepper, type FormStepperProps } from "./FormStepper.js";
+import { useCallback } from "react";
+import { Link } from "react-router";
 
-export type FormProps<T> = {
-	onSubmit(data: FormData): Promise<T>;
-	onSuccess?(data: T): void;
+export type FormProps = {
 	pageTitle: string;
-} & Omit<FormStepperProps, "isSubmitting">;
+	onSubmit(): void;
+	children?: React.ReactNode;
+};
 
-export function Form<T>({
-	onSubmit,
-	onSuccess,
-	steps,
-	pageTitle,
-	submitLabel,
-}: FormProps<T>) {
-	const navigate = useNavigate();
-
-	const { isPending, mutate } = useMutation<T, Error, FormData>({
-		mutationFn: onSubmit,
-		onSuccess:
-			onSuccess ??
-			(() => {
-				navigate("/");
-			}),
-		onError: (error) => {
-			console.error("Form submission failed:", error);
-			toast.error(
-				"Une erreur est survenue lors de l'envoi du formulaire. Veuillez réessayer plus tard.",
-			);
+export function Form({ pageTitle, onSubmit, children }: FormProps) {
+	const handleSubmit = useCallback(
+		(e: React.FormEvent<HTMLFormElement>) => {
+			e.preventDefault();
+			e.stopPropagation();
+			onSubmit();
 		},
-	});
-
-	const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-		event.preventDefault();
-		mutate(new FormData(event.currentTarget));
-	};
+		[onSubmit],
+	);
 
 	return (
 		<form onSubmit={handleSubmit}>
@@ -48,13 +27,8 @@ export function Form<T>({
 						<X />
 					</Link>
 				</h1>
+				{children}
 			</div>
-
-			<FormStepper
-				isSubmitting={isPending}
-				steps={steps}
-				submitLabel={submitLabel}
-			/>
 		</form>
 	);
 }
