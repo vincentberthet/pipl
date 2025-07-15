@@ -1,6 +1,7 @@
 import { useCallback, useMemo } from "react";
+import { useNavigate } from "react-router";
 import * as z from "zod/v4";
-import { fireAndForget } from "../../commons/http.js";
+import { postJson } from "../../commons/http.js";
 import { uploadFiles } from "../../commons/s3.js";
 import { Form } from "../../components/Form.js";
 import { FinalizeStep } from "./form/FinalizeStep.js";
@@ -8,6 +9,8 @@ import { gridFormSchema } from "./form/gridsFormSchema.js";
 import { ImportStep } from "./form/ImportStep.js";
 
 export function GridsPage() {
+	const navigate = useNavigate();
+
 	const steps = useMemo(
 		() => [<ImportStep key="import" />, <FinalizeStep key="finalize" />],
 		[],
@@ -29,15 +32,23 @@ export function GridsPage() {
 
 		const { files, ...rest } = data;
 		const pathToFiles = await uploadFiles(files);
-		return fireAndForget(`${import.meta.env.VITE_API_ENDPOINT}/grids`, {
+		return postJson(`${import.meta.env.VITE_API_ENDPOINT}/grids`, {
 			...rest,
 			pathToFiles,
 		});
 	}, []);
 
+	const handleSuccess = useCallback(
+		({ executionArn }: { executionArn: string }) => {
+			navigate(`/grids/${executionArn}`);
+		},
+		[navigate],
+	);
+
 	return (
 		<Form
 			onSubmit={handleSubmit}
+			onSuccess={handleSuccess}
 			steps={steps}
 			pageTitle="Générer une grille d'entretien"
 			submitLabel="Générer la grille"
