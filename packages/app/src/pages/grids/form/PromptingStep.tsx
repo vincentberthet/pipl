@@ -1,12 +1,50 @@
-const Input = ({ name, label }: { name: string; label: string }) => (
-	<div className="flex items-center gap-2">
-		<input type="number" className="input !w-10" name={name} />
-		{label}
-	</div>
-);
+import React, { useMemo } from "react";
 
 export const PromptingStep = () => {
-	const totalQuestions = 21; // TODO: calculate this based on the inputs
+	const [values, setValues] = React.useState({
+		"nb-questions-poste": 3,
+		"nb-competences-tech": 3,
+		"tech-nb-questions-experience": 2,
+		"tech-nb-questions-situation": 1,
+		"nb-competences-comportementales": 3,
+		"comportementale-nb-questions-experience": 2,
+		"comportementale-nb-questions-situation": 1,
+	});
+
+	const totalQuestions = useMemo(
+		() =>
+			values["nb-questions-poste"] +
+			values["nb-competences-tech"] *
+				(values["tech-nb-questions-experience"] +
+					values["tech-nb-questions-situation"]) +
+			values["nb-competences-comportementales"] *
+				(values["comportementale-nb-questions-experience"] +
+					values["comportementale-nb-questions-situation"]),
+		[values],
+	);
+
+	const Input = ({
+		label,
+		name,
+	}: {
+		label: string;
+		name: keyof typeof values;
+	}) => (
+		<div className="flex items-center gap-2">
+			<input
+				type="number"
+				className="input !w-10"
+				name={name}
+				defaultValue={values[name]}
+				min={0}
+				onChange={(e) => {
+					setValues((prev) => ({ ...prev, [name]: parseInt(e.target.value) }));
+				}}
+			/>
+			{label}
+		</div>
+	);
+
 	return (
 		<>
 			<legend className="fieldset-legend">
@@ -87,7 +125,11 @@ export const PromptingStep = () => {
 						/>
 					</div>
 				</div>
-				<div className="mt-4">Total: {totalQuestions} / 40 questions</div>
+				<div
+					className={`mt-4${totalQuestions > 40 ? " text-error font-semibold" : ""}`}
+				>
+					Total: {totalQuestions} / 40 questions
+				</div>
 			</div>
 		</>
 	);

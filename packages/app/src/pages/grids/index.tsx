@@ -6,10 +6,15 @@ import { Form } from "../../components/Form.js";
 import { FinalizeStep } from "./form/FinalizeStep.js";
 import { gridFormSchema } from "./form/gridsFormSchema.js";
 import { ImportStep } from "./form/ImportStep.js";
+import { PromptingStep } from "./form/PromptingStep.js";
 
 export function GridsPage() {
 	const steps = useMemo(
-		() => [<ImportStep key="import" />, <FinalizeStep key="finalize" />],
+		() => [
+			<ImportStep key="import" />,
+			<PromptingStep key="prompting" />,
+			<FinalizeStep key="finalize" />,
+		],
 		[],
 	);
 
