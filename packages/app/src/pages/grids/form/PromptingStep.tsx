@@ -72,7 +72,7 @@ export const PromptingStep = () => {
 						<br />
 						<p>Il est recommandé : </p>
 						<p>- d'évaluer 6 à 8 compétences</p>
-						<p>- de poser 2 à 3 questions par compétences </p>
+						<p>- de poser 2 à 3 questions au total par compétence </p>
 					</div>
 				</div>
 			</legend>
@@ -92,7 +92,7 @@ export const PromptingStep = () => {
 					/>
 				</div>
 				<div className="px-12">
-					<h4>Questions pour chaque compétences techniques évaluées</h4>
+					<h4>Questions pour chaque compétence technique évaluée</h4>
 					<div className="flex flex-col gap-2">
 						<Input
 							name="techNbExperienceQuestions"
@@ -113,7 +113,7 @@ export const PromptingStep = () => {
 				</div>
 				<div className="px-12">
 					<div className="flex flex-col gap-2">
-						<h4>Questions pour chaque compétences comportementales évaluées</h4>
+						<h4>Questions pour chaque compétence comportementale évaluée</h4>
 						<Input
 							name="behavioralNbExperienceQuestions"
 							label="questions d'expérience"
