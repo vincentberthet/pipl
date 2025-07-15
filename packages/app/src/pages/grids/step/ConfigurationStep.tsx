@@ -13,6 +13,8 @@ import {
 } from "../form/gridsFormSchema.js";
 import { withForm } from "../form/useGridsForm.js";
 
+const MAX_QUESTION = 40;
+
 const KEYS: (keyof GridsFormSchema)[] = [
 	"nbJobQuestions",
 	"nbTechSkills",
@@ -26,16 +28,6 @@ const KEYS: (keyof GridsFormSchema)[] = [
 export const ConfigurationStep = withForm({
 	defaultValues: {} as GridsFormSchema,
 	render({ form }) {
-		const isStepValid = useStore(form.store, (state) => {
-			for (const key of KEYS) {
-				const meta = state.fieldMeta[key];
-				if (!meta?.isValid) {
-					return false;
-				}
-			}
-			return true;
-		});
-
 		const values = useStore(form.store, ({ values }) => {
 			return values;
 		});
@@ -51,9 +43,19 @@ export const ConfigurationStep = withForm({
 			[values],
 		);
 
+		const isStepValid = useStore(form.store, (state) => {
+			for (const key of KEYS) {
+				const meta = state.fieldMeta[key];
+				if (!meta?.isValid) {
+					return false;
+				}
+			}
+			return true;
+		});
+
 		return (
 			<FormStep
-				isStepValid={isStepValid}
+				isStepValid={isStepValid && totalQuestions <= MAX_QUESTION}
 				label="Etape 2/3 : Personnalisez la grille d'entretien "
 				tooltip={
 					<>
@@ -196,9 +198,9 @@ export const ConfigurationStep = withForm({
 						</div>
 					</div>
 					<div
-						className={`mt-4${totalQuestions > 40 ? " text-error font-semibold" : ""}`}
+						className={`mt-4${totalQuestions > MAX_QUESTION ? " text-error font-semibold" : ""}`}
 					>
-						Total: {totalQuestions} / 40 questions
+						Total: {totalQuestions} / {MAX_QUESTION} questions
 					</div>
 				</div>
 			</FormStep>

@@ -20,9 +20,11 @@ export function ConfigurationInput({
 	const fieldError = field.state.meta.errors?.at(0)?.message;
 
 	return (
-		<div className="form-inline flex items-center gap-2">
+		<div
+			className={`form-inline flex items-center gap-2${isDirty && fieldError ? " text-red-700" : ""}`}
+		>
 			<input
-				type="text"
+				type="number"
 				className={`input !w-10 ${isDirty && fieldError ? " border-red-700" : ""}`}
 				id={id}
 				name={field.name}
