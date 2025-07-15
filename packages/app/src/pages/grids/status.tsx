@@ -10,7 +10,7 @@ export function GridStatusPage() {
 		<div className="flex flex-col items-center justify-center flex-1">
 			<div className="card card-border max-w-96">
 				<div className="card-body flex flex-col items-center justify-center gap-4">
-					<h1 aria-label="Exécution en cours">Analyser un entretien</h1>
+					<h1 aria-label="Exécution en cours">Générer une grille</h1>
 					{status === "running" && (
 						<>
 							<span className="loading loading-spinner w-12 text-primary" />
