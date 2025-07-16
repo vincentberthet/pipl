@@ -1,6 +1,5 @@
 import * as fs from "node:fs/promises";
 import * as docx from "docx";
-import levenshtein from "js-levenshtein-esm";
 import type { GroupedBySkill } from "./utils.js";
 
 const printBehavioralQuestion = (questionText: string) => [
@@ -97,7 +96,8 @@ const printQuestion = (
 	index: number,
 ) => {
 	const isBehavioralQuestions =
-		levenshtein("comportementale", question.questionType) < 3;
+		question.questionType.toLowerCase() === "comportementale" ||
+		question.questionType.toLowerCase() === "comportementales";
 
 	const questionTypeText =
 		question.category === "Connaissances liées au poste"
