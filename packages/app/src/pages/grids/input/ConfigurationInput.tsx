@@ -13,6 +13,8 @@ export function ConfigurationInput({
 	label,
 	required,
 	placeholder,
+	min,
+	max,
 }: ConfigurationInputProps) {
 	const id = useId();
 	const field = useFieldContext<number | null>();
@@ -37,6 +39,8 @@ export function ConfigurationInput({
 					field.handleChange(Number.isNaN(parsedValue) ? null : parsedValue);
 				}}
 				required={required}
+				min={min}
+				max={max}
 			/>
 
 			<label htmlFor={id} className="">

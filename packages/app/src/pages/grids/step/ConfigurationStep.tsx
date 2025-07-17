@@ -8,6 +8,10 @@ import {
 	nbBehavioralSkillsSchema,
 	nbJobQuestionsSchema,
 	nbTechSkillsSchema,
+	QUESTION_MAX,
+	QUESTIONS_MIN,
+	SKILLS_MAX,
+	SKILLS_MIN,
 	techNbExperienceQuestionsSchema,
 	techNbSituationQuestionsSchema,
 } from "../form/gridsFormSchema.js";
@@ -95,6 +99,8 @@ export const ConfigurationStep = withForm({
 								<field.ConfigurationInput
 									label="questions de connaissances liées au poste"
 									required
+									min={QUESTIONS_MIN}
+									max={QUESTION_MAX}
 								/>
 							)}
 						</form.AppField>
@@ -112,6 +118,8 @@ export const ConfigurationStep = withForm({
 								<field.ConfigurationInput
 									label="comptétences techniques à évaluer"
 									required
+									min={SKILLS_MIN}
+									max={SKILLS_MAX}
 								/>
 							)}
 						</form.AppField>
@@ -129,6 +137,8 @@ export const ConfigurationStep = withForm({
 									<field.ConfigurationInput
 										label="questions d'expérience"
 										required
+										min={QUESTIONS_MIN}
+										max={QUESTION_MAX}
 									/>
 								)}
 							</form.AppField>
@@ -143,6 +153,8 @@ export const ConfigurationStep = withForm({
 									<field.ConfigurationInput
 										label="questions de mise en situation"
 										required
+										min={QUESTIONS_MIN}
+										max={QUESTION_MAX}
 									/>
 								)}
 							</form.AppField>
@@ -161,6 +173,8 @@ export const ConfigurationStep = withForm({
 								<field.ConfigurationInput
 									label="comptétences comportementales à évaluer"
 									required
+									min={SKILLS_MIN}
+									max={SKILLS_MAX}
 								/>
 							)}
 						</form.AppField>
@@ -178,6 +192,8 @@ export const ConfigurationStep = withForm({
 									<field.ConfigurationInput
 										label="questions d'expérience"
 										required
+										min={QUESTIONS_MIN}
+										max={QUESTION_MAX}
 									/>
 								)}
 							</form.AppField>
@@ -192,6 +208,8 @@ export const ConfigurationStep = withForm({
 									<field.ConfigurationInput
 										label="questions de mise en situation"
 										required
+										min={QUESTIONS_MIN}
+										max={QUESTION_MAX}
 									/>
 								)}
 							</form.AppField>
