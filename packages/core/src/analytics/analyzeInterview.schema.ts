@@ -7,6 +7,10 @@ export const filledGridSchema = z.array(
 		category: z.string().meta({
 			description: "La catégorie de la grille d'évaluation",
 		}),
+		isSkill: z.boolean().meta({
+			description:
+				"Si la catégorie de la grille d'évaluation est une compétence (true) sinon (false)",
+		}),
 		questions: z
 			.array(
 				z.object({

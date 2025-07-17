@@ -5,6 +5,10 @@ export const questionsSchema = z.array(
 		category: z.string().meta({
 			description: "La catégorie de la question",
 		}),
+		isSkill: z.boolean().meta({
+			description:
+				"Si la catégorie extraite est une compétence (true) sinon (false)",
+		}),
 		questions: z
 			.array(
 				z.object({
