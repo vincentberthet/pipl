@@ -45,7 +45,8 @@ export function ConfigurationInput({
 
 			<label htmlFor={id} className="">
 				{label}
-				{required ? " *" : null}
+				{max != null ? ` (max. ${max})` : ""}
+				&nbsp;{required ? "*" : null}
 			</label>
 		</div>
 	);

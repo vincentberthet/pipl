@@ -68,21 +68,20 @@ export const ConfigurationStep = withForm({
 							sur des situations réelles qu’il a vécues. Exemple : « Parlez-moi
 							d’un cas où… »
 						</p>
-						<br />
 						<p>
 							Questions de mise en situation : elles placent le candidat dans un
 							contexte hypothétique. Exemple : « Imaginez que… »
 						</p>
-						<br />
 						<p>
 							Les questions d’expérience sont à privilégier car elles reflètent
 							les comportements réels du candidat. Les mises en situation sont
 							plus adaptées aux profils avec moins d’expérience.
 						</p>
-						<br />
-						<p>Il est recommandé : </p>
-						<p>- d'évaluer 6 à 8 compétences</p>
-						<p>- de poser 2 à 3 questions au total par compétence </p>
+						<div className="flex flex-col gap-0">
+							<p>Il est recommandé : </p>
+							<p>- d'évaluer 6 à 8 compétences</p>
+							<p>- de poser 2 à 3 questions au total par compétence </p>
+						</div>
 					</>
 				}
 			>
@@ -216,9 +215,9 @@ export const ConfigurationStep = withForm({
 						</div>
 					</div>
 					<div
-						className={`mt-4${totalQuestions > MAX_QUESTION ? " text-error font-semibold" : ""}`}
+						className={`mt-4 font-bold text-right${totalQuestions > MAX_QUESTION ? " text-error" : ""}`}
 					>
-						Total: {totalQuestions} / {MAX_QUESTION} questions
+						Total : {totalQuestions} / {MAX_QUESTION} questions
 					</div>
 				</div>
 			</FormStep>

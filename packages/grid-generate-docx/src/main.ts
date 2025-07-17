@@ -18,7 +18,7 @@ export const handler = async (event: GenerateGridProps) => {
 
 	await fs.mkdir("/tmp", { recursive: true });
 
-	const filename = `grid-${data.jobName.toLocaleLowerCase().replace(/\s+/g, "-")}.docx`;
+	const filename = `grille-${data.jobName.toLocaleLowerCase().replace(/\s+/g, "-")}.docx`;
 	const tmpFilePath = `/tmp/${filename}`;
 	console.log(`Writing DOCX output to ${tmpFilePath}`);
 	await printGridDocx(tmpFilePath, data.grid, data.jobName);
@@ -37,7 +37,7 @@ export const handler = async (event: GenerateGridProps) => {
 
 	return {
 		recipient: data.email,
-		subject: `Grille d'entretien structuré pour le poste ${data.jobName}`,
+		subject: `Grille d'entretien structuré pour le poste de ${data.jobName}`,
 		body: `Voici ci-joint la grille d'entretien générée pour le poste de ${data.jobName}.\nCette grille d’entretien est un draft et non un document définitif. N'hésitez pas à éditer ce document (par exemple, modifier des questions ou des critères) pour l'adapter à vos besoins.`,
 		attachments: [outputKey],
 	};

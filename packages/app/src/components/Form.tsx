@@ -1,6 +1,4 @@
-import { X } from "lucide-react";
 import { useCallback } from "react";
-import { Link } from "react-router";
 
 export type FormProps = {
 	pageTitle: string;
@@ -21,11 +19,8 @@ export function Form({ pageTitle, onSubmit, children }: FormProps) {
 	return (
 		<form onSubmit={handleSubmit}>
 			<div className="p-2">
-				<h1 className="flex flex-row justify-between items-center">
+				<h1 className="flex flex-row justify-between items-center p-2">
 					{pageTitle}
-					<Link to="/">
-						<X />
-					</Link>
 				</h1>
 				{children}
 			</div>

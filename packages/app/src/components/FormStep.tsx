@@ -1,4 +1,6 @@
+import { ChevronLeft, ChevronRight, CircleQuestionMark } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router";
 import { useFormStepContext } from "./FormStepContext.js";
 import { useFormStepperContext } from "./FormStepperContext.js";
 
@@ -58,14 +60,12 @@ export function FormStep({
 
 	return (
 		<fieldset className="fieldset" style={style}>
-			<legend className="fieldset-legend">
+			<legend className="fieldset-legend flex flex-row items-center gap-2">
 				<h2>{label}</h2>
 				{tooltip ? (
 					<div className="tooltip tooltip-bottom">
-						<div className="border rounded-full w-5 h-5 flex justify-center text-sm font-light cursor-default">
-							?
-						</div>
-						<div className="tooltip-content -translate-x-24 text-start flex flex-col gap-5">
+						<CircleQuestionMark size={14} className="text-secondary" />
+						<div className="tooltip-content -translate-x-24 text-start flex flex-col gap-4 p-6">
 							{tooltip}
 						</div>
 					</div>
@@ -74,16 +74,22 @@ export function FormStep({
 
 			{children}
 
-			<div
-				className={`flex flex-row ${isFirstStep ? "justify-end" : "justify-between"} items-center mt-4`}
-			>
-				{!isFirstStep && (
+			<div className={`flex flex-row justify-between items-center mt-4`}>
+				{isFirstStep ? (
+					<Link
+						to="/"
+						className="btn btn-outline border-none text-gray-500 hover:text-gray-700"
+						onClick={onPrevious}
+					>
+						<ChevronLeft /> Retour
+					</Link>
+				) : (
 					<button
 						type="button"
 						className="btn btn-outline border-none text-gray-500 hover:text-gray-700"
 						onClick={onPrevious}
 					>
-						&#x3C; Retour
+						<ChevronLeft /> Retour
 					</button>
 				)}
 
@@ -96,7 +102,7 @@ export function FormStep({
 						{isSubmitting && (
 							<span className="loading loading-spinner loading-xs text-white"></span>
 						)}
-						{submitLabel} &#x3E;
+						{submitLabel} <ChevronRight />
 					</button>
 				) : (
 					<button
@@ -105,7 +111,7 @@ export function FormStep({
 						onClick={onNext}
 						disabled={isSubmitting || !isStepValid}
 					>
-						Suivant &#x3E;
+						Suivant <ChevronRight />
 					</button>
 				)}
 			</div>

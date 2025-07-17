@@ -1,5 +1,5 @@
 import { CircleCheck, CircleX } from "lucide-react";
-import { useParams } from "react-router";
+import { Link, useParams } from "react-router";
 import { useGetStatus } from "../../components/useGetStatus.js";
 
 export function AnalyticsStatusPage() {
@@ -29,6 +29,9 @@ export function AnalyticsStatusPage() {
 								Vous pouvez consulter le résultat de l'analyse dans votre boite
 								mail
 							</p>
+							<Link to="/" className="btn btn-primary">
+								Aller à l'accueil
+							</Link>
 						</>
 					)}
 					{status === "failed" && (
@@ -39,6 +42,9 @@ export function AnalyticsStatusPage() {
 								Veuillez réessayer plus tard ou contacter le support si le
 								problème persiste
 							</p>
+							<Link to="/" className="btn btn-primary">
+								Aller à l'accueil
+							</Link>
 						</>
 					)}
 					{status === "error" && (
@@ -49,6 +55,9 @@ export function AnalyticsStatusPage() {
 								Veuillez réessayer plus tard ou contacter le support si le
 								problème persiste
 							</p>
+							<Link to="/" className="btn btn-primary">
+								Aller à l'accueil
+							</Link>
 						</>
 					)}
 				</div>

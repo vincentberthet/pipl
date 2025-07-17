@@ -22,7 +22,7 @@ export function GridsPage() {
 	}, [form]);
 
 	return (
-		<Form onSubmit={handleSubmit} pageTitle="Analyser un entretien">
+		<Form onSubmit={handleSubmit} pageTitle="Générer une grille d'entretien">
 			<FormStepper
 				isSubmitting={isPending}
 				submitLabel="Générer la grille"

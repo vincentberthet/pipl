@@ -21,8 +21,8 @@ export function FileInput({
 				htmlFor={id}
 				className={`${isDirty && fieldError ? " text-red-700" : ""}`}
 			>
-				{label}
-				{required ? " *" : null}
+				{label}&nbsp;
+				{required ? "*" : null}
 			</label>
 			<input
 				type="file"
