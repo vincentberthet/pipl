@@ -15,11 +15,10 @@ export const filesSchema = z
 				[
 					"application/pdf",
 					"application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-					"application/vnd.ms-excel",
 					"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
 					"text/csv",
 				],
-				"Les fichiers doivent être au format PDF, DOCX, XLS, XLSX ou CSV",
+				"Les fichiers doivent être au format PDF, DOCX, XLSX ou CSV",
 			),
 	)
 	.min(1, "Au moins un fichier est requis");

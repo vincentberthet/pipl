@@ -31,7 +31,7 @@ async function getPresignedUrls(fileTypes: string[]) {
 export async function uploadFiles(files: File[]) {
 	const transformedFiles = await Promise.all(
 		files.map(async (file) => {
-			if (file.name.endsWith(".xlsx") || file.name.endsWith(".xls")) {
+			if (file.name.endsWith(".xlsx")) {
 				return convertExcelToCSV(file);
 			}
 			return file;
@@ -77,9 +77,8 @@ async function convertExcelToCSV(file: File): Promise<File> {
 	}
 
 	const csv = await workbook.csv.writeBuffer();
-	console.log("CSV content:", csv.toString());
 	const blob = new Blob([csv], { type: "text/csv" });
-	return new File([blob], file.name.replace(/\.(xlsx|xls)$/i, ".csv"), {
+	return new File([blob], file.name.replace(".xlsx", ".csv"), {
 		type: "text/csv",
 	});
 }

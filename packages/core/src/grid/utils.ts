@@ -113,7 +113,8 @@ const questionSchema = z
 			.string()
 			.meta({ description: "La question de la grille d'évaluation" }),
 		questionType: z.enum(["comportementale", "situationnelle"]).meta({
-			description: "Le type de la question (comportementale ou situationnelle)",
+			description:
+				"Le type de la question (`comportementale` ou `situationnelle`)",
 		}),
 		category: z.string().meta({ description: "La catégorie de la question" }),
 		criterias: z.optional(
@@ -123,9 +124,10 @@ const questionSchema = z
 				}),
 			),
 		),
-		competence: z.optional(
-			z.string().meta({ description: "La compétence associée à la question" }),
-		),
+		competence: z.optional(z.string()).meta({
+			description:
+				"Si la catégorie est `connaissances liées au poste` ne pas inclure de compétence, sinon la compétence associée à la question",
+		}),
 	})
 	.meta({
 		description: "Une question de la grille d'entretien structurée",
@@ -153,11 +155,10 @@ export const groupedQuestionBySkillSchema = z.object({
 	category: z.string().meta({ description: "La catégorie de la question" }),
 	questionsGroups: z.array(
 		z.object({
-			competence: z.optional(
-				z
-					.string()
-					.meta({ description: "La compétence associée à la question" }),
-			),
+			competence: z.optional(z.string()).meta({
+				description:
+					"Si la catégorie est `connaissances liées au poste` ne pas inclure de compétence, sinon la compétence associée à la question",
+			}),
 			questions: z.array(questionSchema).meta({
 				description: "Les questions de la catégorie",
 			}),
