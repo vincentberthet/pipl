@@ -5,10 +5,12 @@ export function FileInput({
 	label,
 	accept,
 	required,
+	size,
 }: {
 	label: string;
 	accept?: string;
 	required?: boolean;
+	size?: number;
 }) {
 	const id = useId();
 	const field = useFieldContext<File | null>();
@@ -34,6 +36,7 @@ export function FileInput({
 				className={`file-input ${isDirty && fieldError ? " border-red-700" : ""}`}
 				accept={accept}
 				required={required}
+				size={size}
 			/>
 			{isDirty && fieldError ? (
 				<div className="error text-red-700">{fieldError}</div>
