@@ -137,31 +137,40 @@ export const gridSchema = z
 	.meta({ description: "La grille d'entretien structurée" });
 export type GridSchema = z.infer<typeof gridSchema>;
 
-export const groupedDataSchema = z.array(
-	z.object({
-		category: z.string().meta({ description: "La catégorie de la question" }),
-		questions: z.array(questionSchema).meta({
-			description: "Les questions de la catégorie",
-		}),
+export const groupedQuestionByCategorySchema = z.object({
+	category: z.string().meta({ description: "La catégorie de la question" }),
+	questions: z.array(questionSchema).meta({
+		description: "Les questions de la catégorie",
 	}),
-);
-export type GroupedData = z.infer<typeof groupedDataSchema>;
+});
+export type GroupedQuestionByCategory = z.infer<
+	typeof groupedQuestionByCategorySchema
+>;
+export const groupedDataSchema = z.array(groupedQuestionByCategorySchema);
+export type GroupedDataByCategory = z.infer<typeof groupedDataSchema>;
 
-export const groupedBySkillSchema = z.array(
-	z.object({
-		category: z.string().meta({ description: "La catégorie de la question" }),
-		questionsGroups: z.array(
-			z.object({
-				competence: z.optional(
-					z
-						.string()
-						.meta({ description: "La compétence associée à la question" }),
-				),
-				questions: z.array(questionSchema).meta({
-					description: "Les questions de la catégorie",
-				}),
+export const groupedQuestionBySkillSchema = z.object({
+	category: z.string().meta({ description: "La catégorie de la question" }),
+	questionsGroups: z.array(
+		z.object({
+			competence: z.optional(
+				z
+					.string()
+					.meta({ description: "La compétence associée à la question" }),
+			),
+			questions: z.array(questionSchema).meta({
+				description: "Les questions de la catégorie",
 			}),
-		),
-	}),
+		}),
+	),
+});
+export type GroupedQuestionBySkill = z.infer<
+	typeof groupedQuestionBySkillSchema
+>;
+export const groupedDataBySkillSchema = z.array(groupedQuestionBySkillSchema);
+export type GroupedDataBySkill = z.infer<typeof groupedDataBySkillSchema>;
+
+export const finalGroupedDataSchema = z.array(
+	z.union([groupedQuestionByCategorySchema, groupedQuestionBySkillSchema]),
 );
-export type GroupedBySkill = z.infer<typeof groupedBySkillSchema>;
+export type FinalGroupedData = z.infer<typeof finalGroupedDataSchema>;

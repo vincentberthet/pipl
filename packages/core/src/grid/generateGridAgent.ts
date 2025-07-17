@@ -16,13 +16,13 @@ export const generateGridAgent = async (
 	);
 
 	const nbQuestions = {
-		nbJobQuestions: 1,
+		nbJobQuestions: 3,
 
-		nbTechSkills: 0,
+		nbTechSkills: 2,
 		techNbExperienceQuestions: 1,
 		techNbSituationQuestions: 1,
 
-		nbBehavioralSkills: 1,
+		nbBehavioralSkills: 2,
 		behavioralNbExperienceQuestions: 1,
 		behavioralNbSituationQuestions: 1,
 	};
