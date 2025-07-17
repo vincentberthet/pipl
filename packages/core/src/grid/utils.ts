@@ -97,7 +97,6 @@ Les critères binaires utilisés pour les questions de connaissances et les ques
 IMPORTANT: Les questions ne doivent pas dépasser 1 phrase.
 IMPORTANT: Les questions doivent être courtes et concises.
 IMPORTANT: Les questions doivent faire maximum 20 mots.
-IMPORTANT: Les questions de connaissances liées au poste ne doivent pas avoir de compétence liée.
 
 Voici ${nbDocuments} documents relatifs au métier de ${jobName}. A partir de ces documents, je voudrais que tu génères une grille d’entretien pour évaluer des candidats à ce poste :${jobQuestions()}${techSkillQuestions()}${comportementaleSkillQuestions()}
 
@@ -140,30 +139,39 @@ export const gridSchema = z
 	.meta({ description: "La grille d'entretien structurée" });
 export type GridSchema = z.infer<typeof gridSchema>;
 
-export const groupedDataSchema = z.array(
-	z.object({
-		category: z.string().meta({ description: "La catégorie de la question" }),
-		questions: z.array(questionSchema).meta({
-			description: "Les questions de la catégorie",
-		}),
+export const groupedQuestionByCategorySchema = z.object({
+	category: z.string().meta({ description: "La catégorie de la question" }),
+	questions: z.array(questionSchema).meta({
+		description: "Les questions de la catégorie",
 	}),
-);
-export type GroupedData = z.infer<typeof groupedDataSchema>;
+});
+export type GroupedQuestionByCategory = z.infer<
+	typeof groupedQuestionByCategorySchema
+>;
+export const groupedDataSchema = z.array(groupedQuestionByCategorySchema);
+export type GroupedDataByCategory = z.infer<typeof groupedDataSchema>;
 
-export const groupedBySkillSchema = z.array(
-	z.object({
-		category: z.string().meta({ description: "La catégorie de la question" }),
-		questionsGroups: z.array(
-			z.object({
-				competence: z.optional(z.string()).meta({
-					description:
-						"Si la catégorie est `connaissances liées au poste` ne pas inclure de compétence, sinon la compétence associée à la question",
-				}),
-				questions: z.array(questionSchema).meta({
-					description: "Les questions de la catégorie",
-				}),
+export const groupedQuestionBySkillSchema = z.object({
+	category: z.string().meta({ description: "La catégorie de la question" }),
+	questionsGroups: z.array(
+		z.object({
+			competence: z.optional(z.string()).meta({
+				description:
+					"Si la catégorie est `connaissances liées au poste` ne pas inclure de compétence, sinon la compétence associée à la question",
 			}),
-		),
-	}),
+			questions: z.array(questionSchema).meta({
+				description: "Les questions de la catégorie",
+			}),
+		}),
+	),
+});
+export type GroupedQuestionBySkill = z.infer<
+	typeof groupedQuestionBySkillSchema
+>;
+export const groupedDataBySkillSchema = z.array(groupedQuestionBySkillSchema);
+export type GroupedDataBySkill = z.infer<typeof groupedDataBySkillSchema>;
+
+export const finalGroupedDataSchema = z.array(
+	z.union([groupedQuestionByCategorySchema, groupedQuestionBySkillSchema]),
 );
-export type GroupedBySkill = z.infer<typeof groupedBySkillSchema>;
+export type FinalGroupedData = z.infer<typeof finalGroupedDataSchema>;

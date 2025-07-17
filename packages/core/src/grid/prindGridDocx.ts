@@ -1,6 +1,6 @@
 import * as fs from "node:fs/promises";
 import * as docx from "docx";
-import type { GroupedBySkill } from "./utils.js";
+import type { FinalGroupedData, GroupedDataBySkill } from "./utils.js";
 
 const printBehavioralQuestion = (questionText: string) => [
 	new docx.Paragraph({
@@ -92,7 +92,7 @@ const printSituationQuestion = (questionText: string, criterias: string[]) => {
 };
 
 const printQuestion = (
-	question: GroupedBySkill[0]["questionsGroups"][0]["questions"][0],
+	question: GroupedDataBySkill[0]["questionsGroups"][0]["questions"][0],
 	index: number,
 ) => {
 	const isBehavioralQuestions =
@@ -113,7 +113,7 @@ const printQuestion = (
 };
 
 const printQuestionsGroups = (
-	questionsGroups: GroupedBySkill[0]["questionsGroups"][0],
+	questionsGroups: GroupedDataBySkill[0]["questionsGroups"][0],
 ) => {
 	const questions = questionsGroups.questions.flatMap(printQuestion);
 
@@ -136,37 +136,65 @@ const printQuestionsGroups = (
 	return [...questions];
 };
 
-const printCategory = (category: GroupedBySkill[0]) => {
-	if (category.questionsGroups.length === 0) {
+const printCategory = (category: FinalGroupedData[0]) => {
+	if ("questionsGroups" in category) {
+		if (category.questionsGroups.length === 0) {
+			return [
+				new docx.Paragraph({
+					children: [
+						new docx.TextRun({
+							text: `Aucune question trouvée pour la catégorie ${category.category}.`,
+						}),
+					],
+					heading: docx.HeadingLevel.HEADING_3,
+				}),
+			];
+		}
+		const categoryText = `Catégorie : ${category.category}`;
 		return [
 			new docx.Paragraph({
 				children: [
 					new docx.TextRun({
-						text: `Aucune question trouvée pour la catégorie ${category.category}.`,
+						text: categoryText,
+						bold: true,
 					}),
 				],
-				heading: docx.HeadingLevel.HEADING_3,
+				heading: docx.HeadingLevel.HEADING_2,
 			}),
+			...category.questionsGroups.flatMap(printQuestionsGroups),
+		];
+	} else {
+		if (category.questions.length === 0) {
+			return [
+				new docx.Paragraph({
+					children: [
+						new docx.TextRun({
+							text: `Aucune question trouvée pour la catégorie ${category.category}.`,
+						}),
+					],
+					heading: docx.HeadingLevel.HEADING_3,
+				}),
+			];
+		}
+		const categoryText = `Catégorie : ${category.category}`;
+		return [
+			new docx.Paragraph({
+				children: [
+					new docx.TextRun({
+						text: categoryText,
+						bold: true,
+					}),
+				],
+				heading: docx.HeadingLevel.HEADING_2,
+			}),
+			...category.questions.flatMap(printQuestion),
 		];
 	}
-	const categoryText = `Catégorie : ${category.category}`;
-	return [
-		new docx.Paragraph({
-			children: [
-				new docx.TextRun({
-					text: categoryText,
-					bold: true,
-				}),
-			],
-			heading: docx.HeadingLevel.HEADING_2,
-		}),
-		...category.questionsGroups.flatMap(printQuestionsGroups),
-	];
 };
 
 export const printGridDocx = async (
 	filePath: string,
-	grid: GroupedBySkill,
+	grid: FinalGroupedData,
 	jobName: string,
 ) => {
 	const document = new docx.Document({

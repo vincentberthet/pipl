@@ -2,9 +2,10 @@ import type { Content } from "@google/genai";
 import { z } from "zod/v4";
 import { gemini } from "../commons/gemini.js";
 import {
+	type FinalGroupedData,
 	type GridSchema,
-	type GroupedBySkill,
-	type GroupedData,
+	type GroupedDataByCategory,
+	type GroupedQuestionBySkill,
 	gridSchema,
 	type QuestionSchema,
 } from "./utils.js";
@@ -22,7 +23,7 @@ export const generateGrid = async (contents: Content) => {
 
 export const parseResponse = async (
 	response: AsyncIterable<{ text?: string }>,
-): Promise<GroupedBySkill> => {
+): Promise<FinalGroupedData> => {
 	const chunks = [];
 	for await (const chunk of response) {
 		chunks.push(chunk.text ?? "");
@@ -38,12 +39,12 @@ export const parseResponse = async (
 	}
 
 	const groupedData = groupByCategory(data);
-	const groupedQuestionsByCompetence = groupQuestionsByCompetence(groupedData);
+	const groupedDataBySkills = groupDataBySkills(groupedData);
 
-	return groupedQuestionsByCompetence;
+	return groupedDataBySkills;
 };
 
-const groupByCategory = (grid: GridSchema): GroupedData => {
+const groupByCategory = (grid: GridSchema): GroupedDataByCategory => {
 	const categrories = grid
 		.map((item) => item.category || "Sans catégorie")
 		.filter((category, index, self) => self.indexOf(category) === index);
@@ -56,32 +57,42 @@ const groupByCategory = (grid: GridSchema): GroupedData => {
 	return groupedData;
 };
 
-const groupQuestionsByCompetence = (
-	groupedData: GroupedData,
-): GroupedBySkill => {
-	const groupedBySkill: GroupedBySkill = groupedData.map((categoryGroup) => {
-		const questionsGroups = categoryGroup.questions.reduce(
-			(acc, question) => {
-				const competence = question.competence || "Sans compétence";
-				if (!acc[competence]) {
-					acc[competence] = [];
-				}
-				acc[competence].push(question);
-				return acc;
-			},
-			{} as Record<string, QuestionSchema[]>,
-		);
+const groupDataBySkills = (
+	groupedData: GroupedDataByCategory,
+): FinalGroupedData => {
+	const shouldGroupBySkill = (categoryGroup: GroupedDataByCategory[0]) =>
+		categoryGroup.category.startsWith("Compétence");
 
-		return {
-			category: categoryGroup.category,
-			questionsGroups: Object.entries(questionsGroups).map(
-				([competence, questions]) => ({
-					competence,
-					questions,
-				}),
-			),
-		};
+	const groupedDataBySkills = groupedData.map((categoryGroup) => {
+		if (shouldGroupBySkill(categoryGroup)) return groupBySkill(categoryGroup);
+		return categoryGroup;
 	});
 
-	return groupedBySkill;
+	return groupedDataBySkills;
+};
+
+const groupBySkill = (
+	categoryGroup: GroupedDataByCategory[0],
+): GroupedQuestionBySkill => {
+	const questionsGroups = categoryGroup.questions.reduce(
+		(acc, question) => {
+			const competence = question.competence || "Sans compétence";
+			if (!acc[competence]) {
+				acc[competence] = [];
+			}
+			acc[competence].push(question);
+			return acc;
+		},
+		{} as Record<string, QuestionSchema[]>,
+	);
+
+	return {
+		category: categoryGroup.category,
+		questionsGroups: Object.entries(questionsGroups).map(
+			([competence, questions]) => ({
+				competence,
+				questions,
+			}),
+		),
+	};
 };
