@@ -17,7 +17,10 @@ export function FileInput({
 
 	return (
 		<>
-			<label htmlFor={id}>
+			<label
+				htmlFor={id}
+				className={`${isDirty && fieldError ? " text-red-700" : ""}`}
+			>
 				{label}
 				{required ? " *" : null}
 			</label>
@@ -28,7 +31,7 @@ export function FileInput({
 				onChange={(e) => {
 					field.handleChange(e.target.files?.[0] || null);
 				}}
-				className="file-input"
+				className={`file-input ${isDirty && fieldError ? " border-red-700" : ""}`}
 				accept={accept}
 				required={required}
 			/>

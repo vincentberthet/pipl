@@ -34,7 +34,7 @@ export const ImportFilesStep = withForm({
 				>
 					{(field) => (
 						<field.FileInput
-							label="Sélectionner l'enregistrement de l'entretien"
+							label="Sélectionner l'enregistrement de l'entretien (MP3 ou MP4)"
 							accept=".mp3,.mp4"
 							required
 						/>
@@ -49,7 +49,7 @@ export const ImportFilesStep = withForm({
 				>
 					{(field) => (
 						<field.FileInput
-							label="Sélectionner la grille d'entretien"
+							label="Sélectionner la grille d'entretien (PDF ou DOCX)"
 							accept=".pdf,.docx"
 							required
 						/>

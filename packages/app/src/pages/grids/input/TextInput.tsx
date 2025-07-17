@@ -15,13 +15,16 @@ export function TextInput({ label, required, placeholder }: TextInputProps) {
 
 	return (
 		<>
-			<label htmlFor={id}>
+			<label
+				htmlFor={id}
+				className={`${isDirty && fieldError ? " text-red-700" : ""}`}
+			>
 				{label}
 				{required ? " *" : null}
 			</label>
 			<input
 				type="text"
-				className="input"
+				className={`input ${isDirty && fieldError ? " border-red-700" : ""}`}
 				id={id}
 				name={field.name}
 				value={field.state.value}

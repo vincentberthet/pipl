@@ -18,13 +18,24 @@ export const filesSchema = z
 			),
 	)
 	.min(1, "Au moins un fichier est requis");
-export const nbJobQuestionsSchema = z.int("Le nombre de questions est requis");
-export const nbTechSkillsSchema = z.int(
-	"Le nombre de compétences techniques est requis",
-);
-export const techNbExperienceQuestionsSchema = z.int(
-	"Le nombre de questions d'expérience technique est requis",
-);
+export const nbJobQuestionsSchema = z
+	.int("Le nombre de questions est requis")
+	.min(0, "Le nombre de questions ne peut pas être négatif")
+	.max(8, "Le nombre de questions ne peut pas dépasser 8");
+export const nbTechSkillsSchema = z
+	.int("Le nombre de compétences techniques est requis")
+	.min(0, "Le nombre de compétences techniques ne peut pas être négatif")
+	.max(4, "Le nombre de compétences techniques ne peut pas dépasser 4");
+export const techNbExperienceQuestionsSchema = z
+	.int("Le nombre de questions d'expérience technique est requis")
+	.min(
+		0,
+		"Le nombre de questions d'expérience technique ne peut pas être négatif",
+	)
+	.max(
+		8,
+		"Le nombre de questions d'expérience technique ne peut pas dépasser 8",
+	);
 export const techNbSituationQuestionsSchema = z.int(
 	"Le nombre de questions de situation est requis",
 );

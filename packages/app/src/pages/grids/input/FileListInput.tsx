@@ -19,7 +19,10 @@ export function FileListInput({
 
 	return (
 		<>
-			<label htmlFor={id}>
+			<label
+				htmlFor={id}
+				className={`${isDirty && fieldError ? " text-red-700" : ""}`}
+			>
 				{label}
 				{required ? " *" : null}
 			</label>
@@ -30,7 +33,7 @@ export function FileListInput({
 				onChange={(e) => {
 					field.handleChange(Array.from(e.target.files ?? []));
 				}}
-				className={`file-input h-50`}
+				className={`file-input h-50 ${isDirty && fieldError ? " border-red-700" : ""}`}
 				accept={accept}
 				required={required}
 				placeholder={placeholder}
