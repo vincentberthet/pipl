@@ -7,7 +7,7 @@ import {
 	getMimeTypeFromExtension,
 } from "../commons/file.js";
 import { gemini } from "../commons/gemini.js";
-import { questionsSchema } from "./question.schema.js";
+import { type Questions, questionsSchema } from "./question.schema.js";
 
 const QUESTIONS_PROMPT = `Tu es un responsable des ressources humaines.
 
@@ -18,6 +18,7 @@ Tu respectes les instructions suivantes :
 - N'ajoute pas de questions ni de critères autres que ceux présents dans le document.
 - Ne modifie pas les questions existantes ni les critères, tu dois les reprendre tels quels.
 - Ne réponds pas aux questions, tu dois uniquement extraire les questions et les critères de validation.
+- Pour les catégories compétences comportementales et compétences techniques, tu dois reprendre les compétences en tant que catégories.
 - Tu ignores le label Question et le numéro de la question.
 - Tu ignores le label Critères et le numéro du critère.
 
@@ -42,7 +43,9 @@ export async function mapGridToUserContent(documentPath: string) {
 	}
 }
 
-export async function extractQuestionsFromGrid(gridPath: string) {
+export async function extractQuestionsFromGrid(
+	gridPath: string,
+): Promise<Questions> {
 	const contents = await mapGridToUserContent(gridPath);
 
 	const response = await gemini.models.generateContent({
@@ -64,9 +67,10 @@ export async function extractQuestionsFromGrid(gridPath: string) {
 		throw new Error("parse_message_error");
 	}
 
-	return data.map(({ category, questions }) => {
+	return data.map(({ category, isSkill, questions }) => {
 		return {
 			category,
+			isSkill,
 			questions: questions.map(({ question, criterias }) => {
 				return {
 					question: question.trim(),

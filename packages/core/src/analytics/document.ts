@@ -91,7 +91,7 @@ export async function writeDocxOutput(
 						],
 						heading: docx.HeadingLevel.HEADING_2,
 					}),
-					...filledGrid.flatMap(({ category, questions }) => {
+					...filledGrid.flatMap(({ category, isSkill, questions }) => {
 						const passedCriteriaCount = questions.reduce(
 							(count, question) =>
 								count +
@@ -106,7 +106,7 @@ export async function writeDocxOutput(
 							new docx.Paragraph({
 								children: [
 									new docx.TextRun({
-										text: `${category} (Score: ${passedCriteriaCount} / ${totalCriteriaCount})`,
+										text: `${isSkill ? "Compétence : " : ""} ${category} (Score: ${passedCriteriaCount} / ${totalCriteriaCount})`,
 										bold: true,
 									}),
 								],
