@@ -97,6 +97,7 @@ Les critères binaires utilisés pour les questions de connaissances et les ques
 IMPORTANT: Les questions ne doivent pas dépasser 1 phrase.
 IMPORTANT: Les questions doivent être courtes et concises.
 IMPORTANT: Les questions doivent faire maximum 20 mots.
+IMPORTANT: Les questions comportementales doivent être formulées de manière à ce que le candidat puisse répondre en utilisant la méthode STAR. Elles doivent être formulées sous la forme d'une phrase, sans question directe.
 
 Voici ${nbDocuments} documents relatifs au métier de ${jobName}. A partir de ces documents, je voudrais que tu génères une grille d’entretien pour évaluer des candidats à ce poste :${jobQuestions()}${techSkillQuestions()}${comportementaleSkillQuestions()}
 
@@ -114,7 +115,7 @@ const questionSchema = z
 			.meta({ description: "La question de la grille d'évaluation" }),
 		questionType: z.enum(["comportementale", "situationnelle"]).meta({
 			description:
-				"Le type de la question (`comportementale` ou `situationnelle`)",
+				"Le type de la question (`comportementale` ou `situationnelle`). Les questions de la catégorie `Connaissances liées au poste` sont forcément de type `situationnelle`",
 		}),
 		category: z.string().meta({ description: "La catégorie de la question" }),
 		criterias: z.optional(
