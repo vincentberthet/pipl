@@ -33,11 +33,11 @@ body {
 }
 
 main {
-	@apply flex-1 p-4;
+	@apply flex-1 px-4;
 }
 
 header {
-	@apply w-full flex justify-between items-center p-2 bg-primary text-white font-bold;
+	@apply w-full flex justify-between items-center px-4 py-2 bg-primary text-white font-bold;
 }
 
 .container {
@@ -80,8 +80,13 @@ h4 {
 	@apply w-full;
 }
 
-.fieldset input + label {
+.fieldset input + label,
+.fieldset .error + label {
 	@apply mt-4;
+}
+
+.fieldset .form-inline input + label {
+	@apply mt-0;
 }
 
 .form-stepper {

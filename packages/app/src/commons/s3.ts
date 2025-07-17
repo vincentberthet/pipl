@@ -1,3 +1,5 @@
+import * as Excel from "exceljs";
+
 async function getPresignedUrls(fileTypes: string[]) {
 	const response = await fetch(
 		`${import.meta.env.VITE_API_ENDPOINT}/upload-urls`,
@@ -27,8 +29,17 @@ async function getPresignedUrls(fileTypes: string[]) {
 }
 
 export async function uploadFiles(files: File[]) {
+	const transformedFiles = await Promise.all(
+		files.map(async (file) => {
+			if (file.name.endsWith(".xlsx") || file.name.endsWith(".xls")) {
+				return convertExcelToCSV(file);
+			}
+			return file;
+		}),
+	);
+
 	const { presignedUrls } = await getPresignedUrls(
-		files.map((file) => {
+		transformedFiles.map((file) => {
 			const extension = file.name.split(".").pop();
 			if (!extension) {
 				throw new Error("File must have an extension");
@@ -38,7 +49,7 @@ export async function uploadFiles(files: File[]) {
 	);
 
 	return Promise.all(
-		files.map(async (file, index) => {
+		transformedFiles.map(async (file, index) => {
 			const presignedUrl = presignedUrls[index];
 			if (!presignedUrl) {
 				throw new Error("Missing presigned URL for file upload");
@@ -52,4 +63,23 @@ export async function uploadFiles(files: File[]) {
 			return presignedUrl.objectKey;
 		}),
 	);
+}
+
+async function convertExcelToCSV(file: File): Promise<File> {
+	const fileContent = await file.arrayBuffer();
+
+	const workbook = new Excel.Workbook();
+	await workbook.xlsx.load(fileContent);
+
+	const worksheet = workbook.worksheets[0];
+	if (!worksheet) {
+		throw new Error("Feuille introuvable dans le fichier Excel.");
+	}
+
+	const csv = await workbook.csv.writeBuffer();
+	console.log("CSV content:", csv.toString());
+	const blob = new Blob([csv], { type: "text/csv" });
+	return new File([blob], file.name.replace(/\.(xlsx|xls)$/i, ".csv"), {
+		type: "text/csv",
+	});
 }

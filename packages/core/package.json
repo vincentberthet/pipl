@@ -34,7 +34,6 @@
 	"dependencies": {
 		"@google/genai": "^1.8.0",
 		"docx": "^9.5.1",
-		"mammoth": "^1.9.1",
-		"xlsx-to-csv": "^2.0.0"
+		"mammoth": "^1.9.1"
 	}
 }

@@ -43,7 +43,7 @@ export const handler = async (event: Document) => {
 	return {
 		recipient: data.email,
 		subject: `Compte-rendu de l'entretien de ${data.candidateName}`,
-		body: `Voici le compte rendu de l'entretien de ${data.candidateName} pour le poste de ${data.jobName}.`,
+		body: `Voici le compte-rendu de l'entretien de ${data.candidateName} pour le poste de ${data.jobName}.\nCe compte-rendu d'entretien est un draft et non un document définitif. N'hésitez pas à éditer ce document et vérifier la validation des critères d'évaluation en fonction des réponses du candidat.`,
 		attachments: [outputKey],
 	};
 };
