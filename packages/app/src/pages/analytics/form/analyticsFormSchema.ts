@@ -1,5 +1,8 @@
 import z from "zod/v4";
 
+export const GRID_MAX_SIZE = 67108864; // 64 MB
+export const AUDIO_MAX_SIZE = 536870912; // 512 MB
+
 export const candidateNameValidator = z
 	.string("Le nom du candidat est requis")
 	.min(1, "Le nom du candidat est requis");
@@ -12,6 +15,10 @@ export const audioValidator = z
 	.mime(
 		["audio/mpeg", "video/mp4"],
 		"Le fichier audio doit être un mp3 ou une vidéo au format mp4",
+	)
+	.max(
+		AUDIO_MAX_SIZE,
+		`La taille maximale de la grille d'entretien est de ${AUDIO_MAX_SIZE / 1024 / 1024} Mo`,
 	);
 export const gridValidator = z
 	.file("La grille d'entretien est requise")
@@ -21,6 +28,10 @@ export const gridValidator = z
 			"application/vnd.openxmlformats-officedocument.wordprocessingml.document",
 		],
 		"La grille d'entretien doit être au format PDF ou DOCX",
+	)
+	.max(
+		GRID_MAX_SIZE,
+		`La taille maximale de la grille d'entretien est de ${GRID_MAX_SIZE / 1024 / 1024} Mo`,
 	);
 
 export const analyticsFormSchema = z.object({

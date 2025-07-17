@@ -37,11 +37,11 @@ main {
 }
 
 header {
-	@apply w-full flex justify-between items-center px-4 py-2 bg-primary text-white font-bold;
+	@apply w-full flex flex-row justify-between p-4 items-center  bg-primary text-white font-bold;
 }
 
 .container {
-	@apply max-w-2xl mx-auto flex flex-col gap-4 sm:p-2;
+	@apply max-w-3xl mx-auto flex flex-col gap-4 sm:p-2;
 	width: 100%;
 }
 
@@ -51,7 +51,7 @@ form {
 }
 
 form {
-	@apply w-full flex flex-col gap-2 p-4;
+	@apply w-full flex flex-col gap-2 p-2;
 }
 
 h1 {
@@ -59,15 +59,15 @@ h1 {
 }
 
 h2 {
-	@apply text-xl font-bold text-secondary;
+	@apply text-xl font-medium text-secondary;
 }
 
 h3 {
-	@apply text-xl font-semibold;
+	@apply text-xl font-medium;
 }
 
 h4 {
-	@apply text-lg font-semibold text-gray-600;
+	@apply text-lg font-medium text-gray-600;
 }
 
 .fieldset {

@@ -32,7 +32,7 @@ export async function generateTranscript(audioPath: string) {
 			httpOptions: {
 				timeout: 15 * 60 * 1000,
 			},
-			maxOutputTokens: 256_000,
+			maxOutputTokens: 512_000,
 			responseMimeType: "application/json",
 			responseJsonSchema: z.toJSONSchema(transcriptSchema),
 			temperature: 0,
