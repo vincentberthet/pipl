@@ -51,8 +51,8 @@ export const ImportStep = withForm({
 						<field.FileListInput
 							label="Fiche de poste, offre d'emploi, fiche de compétences, tâches clés du
 					poste, etc."
-							accept=".pdf,.docx,.xlsx,.xls,.csv"
-							placeholder="Fichiers PDF, DOCX, XLS, XLSX ou CSV utilisés pour générer la grille d'entretien"
+							accept=".pdf,.docx,.xlsx,.csv"
+							placeholder="Fichiers PDF, DOCX ou XLSX ou CSV utilisés pour générer la grille d'entretien"
 							required
 						/>
 					)}

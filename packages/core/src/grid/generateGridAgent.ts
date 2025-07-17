@@ -16,15 +16,15 @@ export const generateGridAgent = async (
 	);
 
 	const nbQuestions = {
-		nbJobQuestions: 1,
+		nbJobQuestions: 3,
 
-		nbTechSkills: 0,
-		techNbExperienceQuestions: 1,
-		techNbSituationQuestions: 1,
+		nbTechSkills: 3,
+		techNbExperienceQuestions: 2,
+		techNbSituationQuestions: 2,
 
-		nbBehavioralSkills: 1,
-		behavioralNbExperienceQuestions: 1,
-		behavioralNbSituationQuestions: 1,
+		nbBehavioralSkills: 3,
+		behavioralNbExperienceQuestions: 2,
+		behavioralNbSituationQuestions: 2,
 	};
 
 	const contents = createUserContent([
@@ -40,5 +40,8 @@ export const generateGridAgent = async (
 
 	const grid = await parseResponse(response);
 
-	await printGridDocx("out/grid-result.docx", grid, jobName);
+	await Promise.all([
+		fs.writeFile("out/grid-result.json", JSON.stringify(grid, null, 2)),
+		printGridDocx("out/grid-result.docx", grid, jobName),
+	]);
 };

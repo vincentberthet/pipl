@@ -97,6 +97,7 @@ Les critères binaires utilisés pour les questions de connaissances et les ques
 IMPORTANT: Les questions ne doivent pas dépasser 1 phrase.
 IMPORTANT: Les questions doivent être courtes et concises.
 IMPORTANT: Les questions doivent faire maximum 20 mots.
+IMPORTANT: Les questions de connaissances liées au poste ne doivent pas avoir de compétence liée.
 
 Voici ${nbDocuments} documents relatifs au métier de ${jobName}. A partir de ces documents, je voudrais que tu génères une grille d’entretien pour évaluer des candidats à ce poste :${jobQuestions()}${techSkillQuestions()}${comportementaleSkillQuestions()}
 
@@ -113,7 +114,8 @@ const questionSchema = z
 			.string()
 			.meta({ description: "La question de la grille d'évaluation" }),
 		questionType: z.enum(["comportementale", "situationnelle"]).meta({
-			description: "Le type de la question (comportementale ou situationnelle)",
+			description:
+				"Le type de la question (`comportementale` ou `situationnelle`)",
 		}),
 		category: z.string().meta({ description: "La catégorie de la question" }),
 		criterias: z.optional(
@@ -123,9 +125,10 @@ const questionSchema = z
 				}),
 			),
 		),
-		competence: z.optional(
-			z.string().meta({ description: "La compétence associée à la question" }),
-		),
+		competence: z.optional(z.string()).meta({
+			description:
+				"Si la catégorie est `connaissances liées au poste` ne pas inclure de compétence, sinon la compétence associée à la question",
+		}),
 	})
 	.meta({
 		description: "Une question de la grille d'entretien structurée",
@@ -152,11 +155,10 @@ export const groupedBySkillSchema = z.array(
 		category: z.string().meta({ description: "La catégorie de la question" }),
 		questionsGroups: z.array(
 			z.object({
-				competence: z.optional(
-					z
-						.string()
-						.meta({ description: "La compétence associée à la question" }),
-				),
+				competence: z.optional(z.string()).meta({
+					description:
+						"Si la catégorie est `connaissances liées au poste` ne pas inclure de compétence, sinon la compétence associée à la question",
+				}),
 				questions: z.array(questionSchema).meta({
 					description: "Les questions de la catégorie",
 				}),

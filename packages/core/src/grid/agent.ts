@@ -9,8 +9,8 @@ import {
 	type QuestionSchema,
 } from "./utils.js";
 
-export const generateGrid = async (contents: Content) =>
-	await gemini.models.generateContentStream({
+export const generateGrid = async (contents: Content) => {
+	return gemini.models.generateContentStream({
 		model: "gemini-2.5-flash",
 		contents,
 		config: {
@@ -18,6 +18,7 @@ export const generateGrid = async (contents: Content) =>
 			responseJsonSchema: z.toJSONSchema(gridSchema),
 		},
 	});
+};
 
 export const parseResponse = async (
 	response: AsyncIterable<{ text?: string }>,
