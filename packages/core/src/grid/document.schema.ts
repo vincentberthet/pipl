@@ -1,11 +1,11 @@
 import * as z from "zod/v4";
-import { groupedBySkillSchema } from "./utils.js";
+import { groupedDataBySkillSchema } from "./utils.js";
 
 // grid-generate-docx
 export const generateGridPropsSchema = z.object({
 	email: z.email(),
 	jobName: z.string().min(1).max(100),
-	grid: groupedBySkillSchema,
+	grid: groupedDataBySkillSchema,
 });
 export type GenerateGridProps = z.infer<typeof generateGridPropsSchema>;
 
