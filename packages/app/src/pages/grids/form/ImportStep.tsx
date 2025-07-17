@@ -1,4 +1,14 @@
-export const ImportStep = () => (
+import type { ChangeEvent, RefObject } from "react";
+
+type ImportStepProps = {
+	handleFileChange: (event: ChangeEvent<HTMLInputElement>) => void;
+	fileInputRef: RefObject<HTMLInputElement | null>;
+};
+
+export const ImportStep = ({
+	handleFileChange,
+	fileInputRef,
+}: ImportStepProps) => (
 	<>
 		<legend className="fieldset-legend">
 			<h2>Etape 1/3 : Importez les documents PDF relatifs au poste</h2>
@@ -34,9 +44,11 @@ export const ImportStep = () => (
 			className="file-input h-50 rounded-md"
 			id="grid-files"
 			name="files"
-			placeholder="Fichiers PDF"
-			accept=".pdf,.docx"
+			placeholder="Fichiers"
+			accept=".pdf,.docx,.xlsx,.xls,.csv"
 			multiple
+			onChange={handleFileChange}
+			ref={fileInputRef}
 		/>
 	</>
 );

@@ -1,6 +1,7 @@
 import * as fs from "node:fs/promises";
 import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { createPartFromBase64, createUserContent } from "@google/genai";
+import { getMimeTypeFromFileName } from "@pipl-analytics/core/commons/file";
 import { generateGrid, parseResponse } from "@pipl-analytics/core/grid/agent";
 import {
 	type AgentProps,
@@ -34,12 +35,15 @@ export const handler = async (
 			]);
 
 			if (!Body) throw new Error(`File not found: ${pathToFile}`);
-			return Body.transformToString("base64");
+			return {
+				body: await Body.transformToString("base64"),
+				mimeType: getMimeTypeFromFileName(pathToFile),
+			};
 		}),
 	);
 
 	const encodedFiles = readedFiles.map((file) =>
-		createPartFromBase64(file, "application/pdf"),
+		createPartFromBase64(file.body, file.mimeType),
 	);
 
 	const contents = createUserContent([

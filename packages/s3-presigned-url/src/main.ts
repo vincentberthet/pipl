@@ -13,7 +13,7 @@ const BUCKET_NAME = process.env.S3_BUCKET;
 
 const presignedUrlSchema = z.object({
 	accessToken: z.string(),
-	fileTypes: z.array(z.enum(["pdf", "docx", "mp3", "mp4"])),
+	fileTypes: z.array(z.enum(["pdf", "docx", "mp3", "mp4", "csv"])),
 });
 
 export type Payload = z.infer<typeof presignedUrlSchema>;
