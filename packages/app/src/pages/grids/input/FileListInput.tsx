@@ -1,7 +1,13 @@
 import { CircleX } from "lucide-react";
 import { useId } from "react";
-import { shallowEqual } from "../../../commons/shallowEqual.js";
 import { useFieldContext } from "../form/useGridsForm.js";
+
+const acceptedFileTypes = [
+	"application/pdf",
+	"application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+	"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+	"text/csv",
+];
 
 const isEqual = (a: File, b: File) =>
 	a.type === b.type &&
@@ -27,24 +33,38 @@ export function FileListInput({
 
 	const files: File[] = field.form.getFieldValue(field.name);
 
-	// TODO: fix this type
-	// TODO: allow to add same file multiple times
-	const handleAddFile = (e: any) => {
+	const handleAddFile = (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (!e.target.files || e.target.files.length === 0) {
 			console.warn("No files selected.");
 			return;
 		}
-		console.log("Adding files:", e.target.files);
-		console.log("Current files:", files);
 
-		const newFile = e.target.files[0];
-		const isAlreadyAdded = files.some((file) => isEqual(file, newFile));
+		const addedFiles: File[] = Array.from(e.target.files);
+		const newFiles = [...files];
 
-		if (!isAlreadyAdded) {
-			const newFiles = [...files, newFile];
+		addedFiles.forEach((file: File) => {
+			const isAlreadyAdded = files.some((f) => isEqual(f, file));
+			if (!isAlreadyAdded) {
+				if (!acceptedFileTypes.includes(file.type)) {
+					console.warn(
+						`"${file.name}": File type "${file.type}" is not accepted.`,
+					);
+				} else {
+					newFiles.push(file);
+					console.log(`File "${file.name}" added successfully.`);
+				}
+			} else {
+				console.warn(`File "${file.name}" is already added, skipping.`);
+			}
+		});
+
+		if (newFiles.length === files.length) {
+			console.warn(
+				"No new files added, all selected files are already present.",
+			);
+		} else {
 			field.handleChange(newFiles);
 			field.handleBlur();
-			console.log("New files added:", newFiles);
 		}
 	};
 
@@ -84,7 +104,6 @@ export function FileListInput({
 						<FilePreview
 							file={file}
 							key={`${file.name}-${file.size}-${file.lastModified}`}
-							handleAddFile={handleAddFile}
 							handleRemoveFile={() => handleRemoveFile(file)}
 						/>
 					))}
@@ -99,7 +118,6 @@ const FilePreview = ({
 	handleRemoveFile,
 }: {
 	file: File;
-	handleAddFile: React.FormEventHandler<HTMLButtonElement>;
 	handleRemoveFile: () => void;
 }) => {
 	const fileType = getFileType(file.type);
@@ -113,11 +131,13 @@ const FilePreview = ({
 			>
 				<CircleX size={18} />
 			</button>
-			<div
-				className={`badge badge-ghost ${fileType === "other" ? "error text-red-700" : ""}`}
-			>
-				<FileIcon fileType={fileType} />
-				{file.name} ({(file.size / 1024).toFixed(2)} KB)
+			<div className="badge badge-neutral badge-outline badge-ghost">
+				<img
+					src={`/assets/${fileType}-icon.svg`}
+					alt={`${fileType} Icon`}
+					width={18}
+				/>
+				{file.type}---{file.name} ({(file.size / 1024).toFixed(2)} KB)
 			</div>
 		</div>
 	);
@@ -130,28 +150,9 @@ const getFileType = (type: string) => {
 		case "application/pdf":
 			return "pdf";
 		case "sheet":
-			return "xlsx";
 		case "text/csv":
-			return "csv";
+			return "sheet";
 		default:
-			return "other";
-	}
-};
-
-const FileIcon = ({
-	fileType,
-}: {
-	fileType: ReturnType<typeof getFileType>;
-}) => {
-	switch (fileType) {
-		case "docx":
-			return <span className="icon-docx">📘</span>;
-		case "pdf":
-			return <span className="icon-pdf">📕</span>;
-		case "xlsx":
-		case "csv":
-			return <span className="icon-xlsx">📊</span>;
-		default:
-			return <span className="icon-file">📄</span>;
+			return "file";
 	}
 };
