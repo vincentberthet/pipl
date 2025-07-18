@@ -50,7 +50,7 @@ export const handler = async (event: MailEvent) => {
 	);
 
 	const command = new SendEmailCommand({
-		Destination: { ToAddresses: [event.recipient] },
+		Destination: { ToAddresses: [event.recipient.toLowerCase()] },
 		Content: {
 			Simple: {
 				Subject: {
