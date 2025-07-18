@@ -32,7 +32,9 @@ export function FileListInput({
 	const files: File[] = field.form.getFieldValue(field.name);
 
 	const handleAddFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-		if (!e.target.files || e.target.files.length === 0) return;
+		if (!e.target.files || e.target.files.length === 0) {
+			return;
+		}
 
 		const addedFiles: File[] = Array.from(e.target.files);
 		const newFiles = [...files];
@@ -40,7 +42,9 @@ export function FileListInput({
 		addedFiles.forEach((file: File) => {
 			const isAlreadyAdded = files.some((f) => areFilesEqual(f, file));
 
-			if (isAlreadyAdded) return;
+			if (isAlreadyAdded) {
+				return;
+			}
 
 			if (!ACCEPTED_FILE_TYPES.includes(file.type)) {
 				toast.error(
@@ -54,7 +58,9 @@ export function FileListInput({
 			}
 		});
 
-		if (newFiles.length === files.length) return;
+		if (newFiles.length === files.length) {
+			return;
+		}
 
 		field.handleChange(newFiles);
 		field.handleBlur();
