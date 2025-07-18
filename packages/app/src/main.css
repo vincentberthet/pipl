@@ -97,3 +97,7 @@ h4 {
 	@apply w-full min-w-full flex-1 shrink-0;
 	transition: transform 0.3s ease-in-out;
 }
+
+.badge {
+	--size: unset;
+}
