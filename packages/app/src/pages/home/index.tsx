@@ -15,7 +15,7 @@ export function HomePage() {
 					>
 						entretiens structurés
 					</a>{" "}
-					ou semi-structurés.{" "}
+					et semi-structurés.{" "}
 					<b>
 						Sia vous aide à concevoir vos grilles d’entretien et à analyser vos
 						entretiens, en quelques clics.
