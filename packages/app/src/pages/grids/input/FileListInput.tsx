@@ -51,7 +51,7 @@ export function FileListInput({
 						`"${file.name}": File type "${file.type}" is not accepted.`,
 					);
 					toast.error(
-						`"${file.name}": Non ajouté.\n "${file.name}" n'est pas accepté. Veuillez sélectionner un fichier avec un type "docx", "pdf", "xlsx" ou "csv".`,
+						`Le fichier "${file.name}" n'a pas été ajouté car le format n'est pas valide. Veuillez sélectionner un fichier avec un type "docx", "pdf", "xlsx" ou "csv".`,
 						{
 							autoClose: 10000,
 						},
