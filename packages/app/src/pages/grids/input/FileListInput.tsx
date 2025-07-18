@@ -1,5 +1,6 @@
 import { CircleX } from "lucide-react";
 import { useId } from "react";
+import { toast } from "react-toastify";
 import { useFieldContext } from "../form/useGridsForm.js";
 
 const acceptedFileTypes = [
@@ -48,6 +49,12 @@ export function FileListInput({
 				if (!acceptedFileTypes.includes(file.type)) {
 					console.warn(
 						`"${file.name}": File type "${file.type}" is not accepted.`,
+					);
+					toast.error(
+						`"${file.name}": Non ajouté.\n "${file.name}" n'est pas accepté. Veuillez sélectionner un fichier avec un type "docx", "pdf", "xlsx" ou "csv".`,
+						{
+							autoClose: 10000,
+						},
 					);
 				} else {
 					newFiles.push(file);
