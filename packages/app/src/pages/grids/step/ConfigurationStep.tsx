@@ -59,7 +59,9 @@ export const ConfigurationStep = withForm({
 
 		return (
 			<FormStep
-				isStepValid={isStepValid && totalQuestions <= MAX_QUESTION}
+				isStepValid={
+					isStepValid && totalQuestions <= MAX_QUESTION && totalQuestions > 0
+				}
 				label="Etape 2/3 : Personnalisez la grille d'entretien "
 				tooltip={
 					<>
@@ -215,7 +217,11 @@ export const ConfigurationStep = withForm({
 						</div>
 					</div>
 					<div
-						className={`mt-4 font-bold text-right${totalQuestions > MAX_QUESTION ? " text-error" : ""}`}
+						className={`mt-4 font-bold text-right${
+							!(totalQuestions <= MAX_QUESTION && totalQuestions > 0)
+								? " text-error"
+								: ""
+						}`}
 					>
 						Total : {totalQuestions} / {MAX_QUESTION} questions
 					</div>
