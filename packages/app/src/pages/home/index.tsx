@@ -8,8 +8,14 @@ export function HomePage() {
 					Bienvenue dans la version beta de Sia
 				</h1>
 				<p className="md:col-span-2">
-					L’assistant IA vous accompagne dans vos{" "}
-					<a href="/">entretiens structurés</a> ou semi-structurés.{" "}
+					Notre assistant IA vous accompagne dans vos{" "}
+					<a
+						className="link link-primary"
+						href="https://www.piplanalytics.com/blog/entretien-structure"
+					>
+						entretiens structurés
+					</a>{" "}
+					ou semi-structurés.{" "}
 					<b>
 						Sia vous aide à concevoir vos grilles d’entretien et à analyser vos
 						entretiens, en quelques clics.
