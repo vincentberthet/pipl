@@ -1,20 +1,17 @@
 import { CircleX } from "lucide-react";
 import { useId } from "react";
 import { toast } from "react-toastify";
+import { ACCEPTED_FILE_TYPES } from "../form/gridsFormSchema.js";
 import { useFieldContext } from "../form/useGridsForm.js";
 
-const acceptedFileTypes = [
-	"application/pdf",
-	"application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-	"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-	"text/csv",
-];
-
-const isEqual = (a: File, b: File) =>
-	a.type === b.type &&
-	a.size === b.size &&
-	a.name === b.name &&
-	a.lastModified === b.lastModified;
+const areFilesEqual = (a: File, b: File) => {
+	return (
+		a.type === b.type &&
+		a.size === b.size &&
+		a.name === b.name &&
+		a.lastModified === b.lastModified
+	);
+};
 
 export function FileListInput({
 	label,
@@ -35,50 +32,36 @@ export function FileListInput({
 	const files: File[] = field.form.getFieldValue(field.name);
 
 	const handleAddFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-		if (!e.target.files || e.target.files.length === 0) {
-			console.warn("No files selected.");
-			return;
-		}
+		if (!e.target.files || e.target.files.length === 0) return;
 
 		const addedFiles: File[] = Array.from(e.target.files);
 		const newFiles = [...files];
 
 		addedFiles.forEach((file: File) => {
-			const isAlreadyAdded = files.some((f) => isEqual(f, file));
-			if (!isAlreadyAdded) {
-				if (!acceptedFileTypes.includes(file.type)) {
-					console.warn(
-						`"${file.name}": File type "${file.type}" is not accepted.`,
-					);
-					toast.error(
-						`Le fichier "${file.name}" n'a pas été ajouté car le format n'est pas valide. Veuillez sélectionner un fichier avec un type "docx", "pdf", "xlsx" ou "csv".`,
-						{
-							autoClose: 10000,
-						},
-					);
-				} else {
-					newFiles.push(file);
-					console.log(`File "${file.name}" added successfully.`);
-				}
+			const isAlreadyAdded = files.some((f) => areFilesEqual(f, file));
+
+			if (isAlreadyAdded) return;
+
+			if (!ACCEPTED_FILE_TYPES.includes(file.type)) {
+				toast.error(
+					`Le fichier "${file.name}" n'a pas été ajouté car le format n'est pas valide. Veuillez sélectionner un fichier avec un type "docx", "pdf", "xlsx" ou "csv".`,
+					{
+						autoClose: 10000,
+					},
+				);
 			} else {
-				console.warn(`File "${file.name}" is already added, skipping.`);
+				newFiles.push(file);
 			}
 		});
 
-		if (newFiles.length === files.length) {
-			console.warn(
-				"No new files added, all selected files are already present.",
-			);
-		} else {
-			field.handleChange(newFiles);
-			field.handleBlur();
-		}
+		if (newFiles.length === files.length) return;
+
+		field.handleChange(newFiles);
+		field.handleBlur();
 	};
 
 	const handleRemoveFile = (file: File) => {
-		const filteredFiles = files.filter((f) => !isEqual(f, file));
-
-		field.handleChange(filteredFiles);
+		field.handleChange(files.filter((f) => !areFilesEqual(f, file)));
 		field.handleBlur();
 	};
 

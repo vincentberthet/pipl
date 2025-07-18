@@ -4,6 +4,12 @@ export const QUESTIONS_MIN = 0;
 export const QUESTION_MAX = 3;
 export const SKILLS_MIN = 0;
 export const SKILLS_MAX = 8;
+export const ACCEPTED_FILE_TYPES = [
+	"application/pdf",
+	"application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+	"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+	"text/csv",
+];
 
 export const jobNameSchema = z.string().min(1, "Le nom du poste est requis");
 export const emailSchema = z.email("L'email doit être valide");
@@ -12,12 +18,7 @@ export const filesSchema = z
 		z
 			.file("Au moins un fichier est requis")
 			.mime(
-				[
-					"application/pdf",
-					"application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-					"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-					"text/csv",
-				],
+				ACCEPTED_FILE_TYPES,
 				"Les fichiers doivent être au format PDF, DOCX, XLSX ou CSV",
 			),
 	)
