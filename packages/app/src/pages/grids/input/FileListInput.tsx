@@ -82,6 +82,22 @@ export function FileListInput({
 		field.handleBlur();
 	};
 
+	const handleDrop = (e: React.DragEvent<HTMLButtonElement>) => {
+		e.preventDefault();
+		e.stopPropagation();
+		const input = document.getElementById(id) as HTMLInputElement;
+		if (input && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+			input.files = e.dataTransfer.files;
+			const event = new Event("change", { bubbles: true });
+			input.dispatchEvent(event);
+		}
+	};
+
+	const handleDragOver = (e: React.DragEvent<HTMLButtonElement>) => {
+		e.preventDefault();
+		e.stopPropagation();
+	};
+
 	return (
 		<>
 			<label
@@ -95,6 +111,8 @@ export function FileListInput({
 				type="button"
 				className={`flex flex-col justify-center items-center w-full h-28 rounded border border-gray-300 bg-gray-100 cursor-pointer ${isDirty && fieldError ? " border-red-700" : ""}`}
 				onClick={() => document.getElementById(id)?.click()}
+				onDrop={handleDrop}
+				onDragOver={handleDragOver}
 			>
 				<p>Déposez des fichiers pour les télécharger,</p>
 				<p>ou cliquez pour en sélectionner</p>
