@@ -37,8 +37,14 @@ export function GridStatusPage() {
 							<CircleX size={48} className="text-red-700" />
 							<h2>Échec de la génération de la grille</h2>
 							<p className="text-center">
-								Veuillez réessayer plus tard ou contacter le support si le
-								problème persiste.
+								Veuillez réessayer plus tard ou contacter le support (
+								<a
+									href="mailto:contact@piplanalytics.com"
+									className="link link-primary"
+								>
+									contact@piplanalytics.com
+								</a>
+								) si le problème persiste.
 							</p>
 							<Link to="/" className="btn btn-primary">
 								Aller à l'accueil
@@ -50,8 +56,14 @@ export function GridStatusPage() {
 							<CircleX size={48} className="text-red-700" />
 							<h2>Échec de la récupération du statut de la grille</h2>
 							<p className="text-center">
-								Veuillez réessayer plus tard ou contacter le support si le
-								problème persiste.
+								Veuillez réessayer plus tard ou contacter le support (
+								<a
+									href="mailto:contact@piplanalytics.com"
+									className="link link-primary"
+								>
+									contact@piplanalytics.com
+								</a>
+								) si le problème persiste.
 							</p>
 							<Link to="/" className="btn btn-primary">
 								Aller à l'accueil
