@@ -139,7 +139,7 @@ const FilePreview = ({
 			>
 				<CircleX size={18} />
 			</button>
-			<div className="badge badge-neutral badge-outline badge-ghost">
+			<div className="badge border-none pl-0">
 				<img
 					src={`/assets/${fileType}-icon.svg`}
 					alt={`${fileType} Icon`}
