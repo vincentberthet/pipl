@@ -27,7 +27,17 @@ export function AnalyticsStatusPage() {
 							<h2>Analyse réussie</h2>
 							<p className="text-center">
 								Vous pouvez consulter le résultat de l'analyse dans votre boite
-								mail
+								mail.
+							</p>
+							<p className="text-center">
+								En cas de problème, veuillez contacter le support (
+								<a
+									href="mailto:contact@piplanalytics.com"
+									className="link link-primary"
+								>
+									contact@piplanalytics.com
+								</a>
+								).
 							</p>
 							<Link to="/" className="btn btn-primary">
 								Aller à l'accueil
