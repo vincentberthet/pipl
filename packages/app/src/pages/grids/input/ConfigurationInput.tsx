@@ -27,7 +27,7 @@ export function ConfigurationInput({
 		>
 			<input
 				type="number"
-				className={`input !w-10 ${isDirty && fieldError ? " border-red-700" : ""}`}
+				className={`input !w-14 ${isDirty && fieldError ? " border-red-700" : ""}`}
 				id={id}
 				name={field.name}
 				value={field.state.value?.toString(10) ?? ""}
