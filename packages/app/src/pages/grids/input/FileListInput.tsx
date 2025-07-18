@@ -84,12 +84,20 @@ export function FileListInput({
 				{label}
 				{required ? " *" : null}
 			</label>
+			<button
+				type="button"
+				className={`flex flex-col justify-center items-center w-full h-28 rounded border border-gray-300 bg-gray-100 cursor-pointer ${isDirty && fieldError ? " border-red-700" : ""}`}
+				onClick={() => document.getElementById(id)?.click()}
+			>
+				<p>Déposez des fichiers pour les télécharger,</p>
+				<p>ou cliquez pour en sélectionner</p>
+			</button>
 			<input
 				type="file"
 				id={id}
 				name={field.name}
 				onChange={handleAddFile}
-				className={`file-input h-50 ${isDirty && fieldError ? " border-red-700" : ""}`}
+				className={`file-input h-50 hidden ${isDirty && fieldError ? " border-red-700" : ""}`}
 				accept={accept}
 				required={required}
 				placeholder={placeholder}
@@ -137,7 +145,7 @@ const FilePreview = ({
 					alt={`${fileType} Icon`}
 					width={18}
 				/>
-				{file.type}---{file.name} ({(file.size / 1024).toFixed(2)} KB)
+				{file.name} ({(file.size / 1024).toFixed(2)} KB)
 			</div>
 		</div>
 	);
