@@ -4,6 +4,12 @@ export function HomePage() {
 	return (
 		<div className="flex flex-col justify-center items-center grow">
 			<div className="grid grid-cols-1 md:grid-cols-2 auto-rows-auto gap-4">
+				<p className="md:col-span-2">
+					Note : Si vous faites un entretien semi-structuré (contenant une
+					partie structurée et une partie libre), nous vous conseillons
+					d’enregistrer uniquement la partie structurée de l’entretien et
+					d’uploader le ficher correspondant (dans Analyser un entretien).
+				</p>
 				<div className="card card-border">
 					<div className="card-body">
 						<h2 className="card-title">Générer une grille d’entretien</h2>
